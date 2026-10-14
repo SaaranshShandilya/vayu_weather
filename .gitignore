@@ -1,0 +1,19 @@
+.DS_Store
+.env
+.env.*
+.venv/
+__pycache__/
+*.py[cod]
+*.duckdb
+node_modules/
+dist/
+*.tsbuildinfo
+outputs/
+work/
+!.env.example
+
+# Large files tracked by Git LFS (see .gitattributes)
+data/AQ_met_data.csv
+data/AQ_met_data_2025.csv
+public/vayuchat-logo.png
+data/gridded/*.npz

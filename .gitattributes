@@ -1,0 +1,4 @@
+data/AQ_met_data.csv filter=lfs diff=lfs merge=lfs -text
+data/AQ_met_data_2025.csv filter=lfs diff=lfs merge=lfs -text
+public/vayuchat-logo.png filter=lfs diff=lfs merge=lfs -text
+data/gridded/*.npz filter=lfs diff=lfs merge=lfs -text

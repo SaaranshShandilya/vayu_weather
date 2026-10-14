@@ -1,0 +1,536 @@
+site_id,state,city,station,address,latitude,longitude
+site_1406,Andhra Pradesh,Amaravati,"Secretariat, Amaravati - APPCB","CAAQM Station, Security Building Terrace, Gate No.- 2, Secretariat, Velagapudi",16.515083,80.518167
+site_5632,Andhra Pradesh,Anantapur,"Gulzarpet, Anantapur - APPCB","Public Health Office, Court Road, Anantapur.",14.675886,77.593027
+site_5665,Andhra Pradesh,Chittoor,"Gangineni Cheruvu, Chittoor - APPCB","Andhra Pradesh State Pollution Control Board, Gangineri Cheruvu Park, Chittoor.",13.20488,79.097889
+site_5693,Andhra Pradesh,Kadapa,"Yerramukkapalli, Kadapa - APPCB","Municipal Corporation Office Complex, Railway Station Road, Kadapa.",14.465052,78.824187
+site_1399,Andhra Pradesh,Rajamahendravaram,"Anand Kala Kshetram, Rajamahendravaram - APPCB","Sri Venkateswara Anam Kala Kendram, Lakshmivarapu Pet, Seshayyamet, Rajamahendravaram, Andhra Pradesh - 533101",16.987287,81.736318
+site_5666,Andhra Pradesh,Tirupati,"Vaikuntapuram, Tirupati - APPCB","Andhra Pradesh State Pollution Control Board, Vaikuntapuram Park, Tirupathi.",13.615387,79.40923
+site_5848,Andhra Pradesh,Vijayawada,"HB Colony, Vijayawada - APPCB","Near Water Tank, Water Tank Road, HB Colony, Bhavanipuram, Vijayawada.",16.536107,80.594233
+site_5685,Andhra Pradesh,Vijayawada,"Kanuru, Vijayawada - APPCB","VR Siddhartha Engineering College, Kanuru, Vijayawada",16.486692,80.699436
+site_257,Andhra Pradesh,Vijayawada,"PWD Grounds, Vijayawada - APPCB","MUNICIPAL GUEST HOUSE COMPOUND, OPP VICTORIA JUBILEE MUSEUM, VIJAYWADA, KRISHNA DIST, ANDHRA PRADESH -520002",16.507014,80.627767
+site_5849,Andhra Pradesh,Vijayawada,"Rajiv Gandhi Park, Vijayawada - APPCB","Inside Rajiv Gandhi Park, Near RTC Bus Stand, Vijayawada.",16.509717,80.612222
+site_5981,Andhra Pradesh,Vijayawada,"Rajiv Nagar, Vijayawada - APPCB","Water Tank, Near Government Hospital, Rajiv Nagar, Payakapuram, Vijayawada.",16.554731,80.64911
+site_260,Andhra Pradesh,Visakhapatnam,"GVM Corporation, Visakhapatnam - APPCB","GVMC Building, Jail Rd, Ram Nagar",17.72,83.3
+site_5446,Arunachal Pradesh,Naharlagun,"Naharlagun, Naharlagun - APSPCB","Arunachala Pradesh State Pollution Control Board, Department of Environment and Forest, Paryavaran Bhawan, Yupia Road, Naharlagun",27.103358,93.679645
+site_5669,Assam,Byrnihat,"Central Academy for SFS, Byrnihat - PCBA","Ministry of Environment Forest &amp; Climate change, Central academy for state forest service, Bernihat, Guwahati Assam.",26.071318,91.87488
+site_5651,Assam,Guwahati,"IITG, Guwahati - PCBA","IIT GUWAHATI CAMPUS, NEAR BHUPEN HAZARIKA AUDITORIUM,NORTH GUWAHATI",26.202864,91.700464
+site_5683,Assam,Guwahati,"LGBI Airport, Guwahati - PCBA","LGBI Airport, Guwahati, Assam. Near: Adani admin office",26.10887,91.589544
+site_5417,Assam,Guwahati,"Pan Bazaar, Guwahati - PCBA","Department of Physics Cotton University, Panbazaar, Guwahati",26.1875,91.744194
+site_5073,Assam,Guwahati,"Railway Colony, Guwahati - PCBA","Pollution Control Board ,Assam, Bamunimaidam, Guwahati",26.181742,91.78063
+site_5706,Assam,Nagaon,"Christianpatty, Nagaon - PCBA","Nowgaon College (Autonomous), Old A.T. Road, Christianpatty, Nagaon, Assam.",26.349082,92.68449
+site_5668,Assam,Nalbari,"Bata Chowk, Nalbari - PCBA","Bata Chowk, K.C Das Road, Auto stand, Near Civil Hospital. Nalbari, Assam.",26.446912,91.439057
+site_5684,Assam,Silchar,"Tarapur, Silchar - PCBA","Development Authority Building, Pollution Control Board, Regional Laboratory Cum Office, PWD Road, Tarapur, Silchar, Assam.",24.82827,92.79525
+site_5658,Assam,Sivasagar,"Girls College, Sivasagar - PCBA","Science Block, Sivasagar Girls College, Fuleshwari School Road, Near Shiva Dol, Sivasagar, ASSAM.",26.987634,94.636574
+site_5539,Bihar,Araria,"Kharahiya Basti, Araria - BSPCB","DFO office, Gov. bus stand, kharahiya basti, Araria,Bihar",26.146529,87.454184
+site_5538,Bihar,Arrah,"New DM Office, Arrah - BSPCB","new dm office ramna , Arrah, Bihar",25.56261,84.663264
+site_5544,Bihar,Aurangabad,"Gurdeo Nagar, Aurangabad - BSPCB","District Agriculture office, Near Nagar Nigam, Aurangbad, Bihar",24.75746,84.366208
+site_5476,Bihar,Bettiah,"Kamalnath Nagar, Bettiah - BSPCB","CAAQMS, installed at DM Office, Kamalnath Nagar, Bettiah",26.80365,84.51954
+site_5543,Bihar,Bhagalpur,"DM Office_Kachari Chowk, Bhagalpur - BSPCB","RBSS Sahay Road, kachari chowk, Bhagalpur, Bihar",25.251013,86.989001
+site_5541,Bihar,Bhagalpur,"Mayaganj, Bhagalpur - BSPCB","DFO Nursery ,barari road , near hanuman mandir -bhagalpur bihar",25.265194,87.012947
+site_5481,Bihar,Bihar Sharif,"D M Colony, Bihar Sharif - BSPCB","CAAQMS, install in Red Cross Bhawan, Opp.-District Hospital, Bihar Sharif, District Nalanda",25.204762,85.51496
+site_5545,Bihar,Chhapra,"Darshan Nagar, Chhapra - BSPCB","S.D.M office(Near Vikas bhawan), Darshan Nagar, Chhapra, Bihar",25.780826,84.744677
+site_159,Bihar,Gaya,"Collectorate, Gaya - BSPCB",,24.7955,84.9994
+site_5548,Bihar,Gaya,"Kareemganj, Gaya - BSPCB","South Bihar Power Distribution Company LTD Kareem Ganj, Gaya, Bihar ( naar Mirza Ghalib College)",24.792403,84.992416
+site_5338,Bihar,Gaya,"SFTI Kusdihra, Gaya - BSPCB",State Forest Training Institute Premises Gaya,24.762518,84.982348
+site_5337,Bihar,Hajipur,"Industrial Area, Hajipur - BSPCB","Britannia Industries Limited Premises Industrial Area Hajipur, Vaishali",25.697189,85.2459
+site_5546,Bihar,Katihar,"Mirchaibari, Katihar - BSPCB","DM Office, NH31, Mirchaibari, Katihar, Bihar",25.560083,87.553265
+site_5547,Bihar,Kishanganj,"SDM Office_Khagra, Kishanganj - BSPCB","SDM office,kamrsal-dighli road,kishanganj,Bihar",26.088131,87.938403
+site_5550,Bihar,Manguraha,"Forest Rest House, Manguraha - BSPCB","DFO office ,bhikpur,miyan ke bhatkan road manguraha",27.308328,84.531742
+site_5478,Bihar,Motihari,"Gandak Colony, Motihari - BSPCB","CAAQMS installed at DM Office, Gandak Colony, Champaran",26.63086,84.90051
+site_5490,Bihar,Munger,"Town Hall, Munger - BSPCB","CAAQMS installed at Munger Town Hall, Hanuman Mandir, Bari Bazar Road, Quila Road, Munger Fort, Munger",25.376776,86.471523
+site_5370,Bihar,Muzaffarpur,"Buddha Colony, Muzaffarpur - BSPCB","Government Zila School Permises, Muzaffarpur",26.11442,85.39813
+site_5479,Bihar,Muzaffarpur,"MIT-Daudpur Kothi, Muzaffarpur - BSPCB","CAAQMS, install in Muzaffarpur Institute of Technology Campus, Lakshmi chowk, Daudpur Kothi, Muzaffarpur",26.140335,85.365019
+site_158,Bihar,Muzaffarpur,"Muzaffarpur Collectorate, Muzaffarpur - BSPCB",,26.1209,85.3647
+site_5336,Bihar,Patna,"DRM Office Danapur, Patna - BSPCB","DRM Office Premises, Danapur, Near Danapur Railway Station, Patna",25.586562,85.043586
+site_5335,Bihar,Patna,"Govt. High School Shikarpur, Patna - BSPCB","Government High School Premises, Shikarpur, Patna City, Patna",25.592539,85.227158
+site_157,Bihar,Patna,"IGSC Planetarium Complex, Patna - BSPCB",,25.610369,85.132568
+site_5261,Bihar,Patna,"Muradpur, Patna - BSPCB","S K Memorial Hall Premises, Near Gandhi Maidan Patna.",25.619651,85.147382
+site_5262,Bihar,Patna,"Rajbansi Nagar, Patna - BSPCB","Eco Park Premises, Rajdhani Vatika, Patna",25.599486,85.113666
+site_5263,Bihar,Patna,"Samanpura, Patna - BSPCB","BIT Mesra Ex Patna Branch Premises, Patna",25.596727,85.085624
+site_5549,Bihar,Purnia,"Mariam Nagar, Purnia - BSPCB","DM Office, Mariam Nagar, Purnia",25.366336,87.117468
+site_5489,Bihar,Rajgir,"Dangi Tola, Rajgir - BSPCB","CAAQMS installed in Jawahar Navodaya Vidyalaya, Rajgir Campus Rajgir, Nalanda.",25.0328,85.41948
+site_5551,Bihar,Saharsa,"Police Line, Saharsa - BSPCB",DFO rang office nera DM office Saharsa Bihar,25.892357,86.590325
+site_5552,Bihar,Samastipur,"DM Office_Kasipur, Samastipur - BSPCB",DM office Samastipur-Bihar,25.859655,85.77944
+site_5485,Bihar,Sasaram,"Dada Peer, Sasaram - BSPCB","Divisional Forest Office Campus, Awadhashram, House No.:2, State Bank Colony, Dada Peer, Fazalganj, Sasaram",24.952822,84.002396
+site_5553,Bihar,Siwan,"Chitragupta Nagar, Siwan - BSPCB","Statistical office, Kachehri Road, Near D.M ofiice, Siwan, Bihar-",26.227167,84.357043
+site_5491,Chandigarh,Chandigarh,"Sector 22, Chandigarh - CPCC","Govt. Model SR. SEC. School, Sector- 22-A, Chandigarh",30.735567,76.775714
+site_5127,Chandigarh,Chandigarh,"Sector-25, Chandigarh - CPCC","Panjab University South Campus, Opp.: Centre for Public Health Institute, Sector 25, Chandigarh.",30.751462,76.762879
+site_5582,Chandigarh,Chandigarh,"Sector-53, Chandigarh - CPCC","Forest Department Nursery, Sector-53, Chandigarh",30.719859,76.738637
+site_5660,Chhattisgarh,Bhilai,"32Bungalows, Bhilai - CECB","Bhilai RO Office, 5, 32 Bungalows, Bhilai, Dist.- Durg, Chhattisgarh",21.194815,81.31477
+site_5536,Chhattisgarh,Bhilai,"Civic Center, Bhilai - Bhilai Steel Plant","Back Side of Nehru Art Gallery, Civic center, Bhilai, Chattisgarh",21.185571,81.343175
+site_5659,Chhattisgarh,Bhilai,"Hathkhoj, Bhilai - CECB","CSIDC Office, Bhilai, Dist.- Durg, Chhattisgarh",21.224231,81.40835
+site_5503,Chhattisgarh,Bilaspur,"Mangala, Bilaspur - NTPC","Sanjay Taran Pushkar, 27 Kholi, Vikas Nagar, Mangla, Bilaspur, Chhattisgarh 495001",22.08815,82.13737
+site_5689,Chhattisgarh,Chhal,"Nawapara SECL Colony, Chhal - CECB","Nawapara SECL Colony, Chhal, Dist- Raigarh, Chhattisgarh.",22.118125,83.140608
+site_5656,Chhattisgarh,Korba,"Rampur, Korba - CECB","RO Office Korba, CECB, Near Tehsil Office, Rampur, Korba, Chhattisgarh",22.368195,82.746431
+site_5657,Chhattisgarh,Korba,"Urja Nagar, Korba - CECB","DAV Public School, Gerva, SECL Gevra Area, Korba, Chhattisgarh",22.348441,82.549611
+site_5690,Chhattisgarh,Kunjemura,"OP Jindal School, Kunjemura - CECB","OP Jindal School, Kunjemura, Tamnar, Distt - Raigarh, Chhattisgarh",22.12665,83.483212
+site_5691,Chhattisgarh,Milupara,"Govt. Higher Secondary School, Milupara - CECB","Govt. Higher Secondary School, Tamnar, Dist - Raigarh, Chhattisgarh",22.191017,83.519701
+site_5652,Chhattisgarh,Raipur,"AIIMS, Raipur - CECB","All India Institute Of Medical Science, Gate No. 4, Great Eastern Road, Tatibandh, Raipur, Chhattisgarh.",21.258815,81.578979
+site_5655,Chhattisgarh,Raipur,"Bhatagaon New ISBT, Raipur - CECB","Bhatagaon Interstate New Bus Stand, Raipur, Chhattisgarh",21.219665,81.630094
+site_5654,Chhattisgarh,Raipur,"Krishak Nagar, Raipur - CECB","Guest House, Indira Gandhi Krishi Vishwavidyalaya, Krishak Nagar, Raipur, Chhattisgarh",21.237755,81.705301
+site_5653,Chhattisgarh,Raipur,"Siltara Phase-II, Raipur - CECB","Chhattisgarh State Industrial Development Corporation Office, Murethi Road, Siltara, Raipur, Chhattisgarh",21.371751,81.664929
+site_5692,Chhattisgarh,Tumidih,"OP Jindal Industrial Park, Tumidih - CECB","OP Jindal Industrial Park, Tumidih, Dist.- Raigarh, Chhattisgarh",22.066315,83.338201
+site_5024,Delhi,Delhi,"Alipur, Delhi - DPCC","Mahatma Gandhi Insititute for Combating Climate Change, Bakthawarpur Road. Bakoli, Alipur Delhi-110036",28.815329,77.15301
+site_301,Delhi,Delhi,"Anand Vihar, Delhi - DPCC",,28.647622,77.315809
+site_1420,Delhi,Delhi,"Ashok Vihar, Delhi - DPCC",,28.695381,77.181665
+site_108,Delhi,Delhi,"Aya Nagar, Delhi - IMD",,28.470691,77.109936
+site_1560,Delhi,Delhi,"Bawana, Delhi - DPCC",,28.7762,77.051074
+site_104,Delhi,Delhi,"Burari Crossing, Delhi - IMD",,28.72565,77.201157
+site_103,Delhi,Delhi,"CRRI Mathura Road, Delhi - IMD",,28.551201,77.273574
+site_5393,Delhi,Delhi,"Chandni Chowk, Delhi - IITM","Town Hall, Chandni Chowk, New Delhi",28.656756,77.227234
+site_118,Delhi,Delhi,"DTU, Delhi - CPCB",,28.75005,77.111262
+site_1421,Delhi,Delhi,"Dr. Karni Singh Shooting Range, Delhi - DPCC"," Suraj Kund Road, Tughlakabad, New Delhi, Delhi 110044",28.498571,77.26484
+site_106,Delhi,Delhi,"IGI Airport (T3), Delhi - IMD",,28.562776,77.118005
+site_114,Delhi,Delhi,"IHBAS, Dilshad Garden, Delhi - CPCB",,28.681174,77.302523
+site_117,Delhi,Delhi,"ITO, Delhi - CPCB",,28.628624,77.24106
+site_1423,Delhi,Delhi,"Jahangirpuri, Delhi - DPCC",,28.73282,77.170633
+site_1424,Delhi,Delhi,"Jawaharlal Nehru Stadium, Delhi - DPCC"," Jawaharlal Nehru Stadium, Pragati Vihar, New Delhi, Delhi 110003",28.58028,77.233829
+site_5395,Delhi,Delhi,"Lodhi Road, Delhi - IITM","IMD, Lodhi Road, Opposite Lodhi Garden, New Delhi",28.588333,77.221667
+site_109,Delhi,Delhi,"Lodhi Road, Delhi - IMD",,28.591825,77.227307
+site_1425,Delhi,Delhi,"Major Dhyan Chand National Stadium, Delhi - DPCC"," National Stadium, India Gate, New Delhi, Delhi 110002",28.611281,77.237738
+site_122,Delhi,Delhi,"Mandir Marg, Delhi - DPCC",,28.636429,77.201067
+site_1561,Delhi,Delhi,"Mundka, Delhi - DPCC",,28.684678,77.076574
+site_115,Delhi,Delhi,"NSIT Dwarka, Delhi - CPCB",,28.60909,77.032541
+site_1427,Delhi,Delhi,"Najafgarh, Delhi - DPCC",,28.570173,76.933762
+site_1426,Delhi,Delhi,"Narela, Delhi - DPCC",Narela 110040,28.822836,77.101981
+site_1429,Delhi,Delhi,"Nehru Nagar, Delhi - DPCC",110065,28.56789,77.250515
+site_105,Delhi,Delhi,"North Campus, DU, Delhi - IMD",,28.657381,77.158545
+site_1428,Delhi,Delhi,"Okhla Phase-2, Delhi - DPCC",,28.530785,77.271255
+site_1431,Delhi,Delhi,"Patparganj, Delhi - DPCC","Patparganj , 110091",28.623763,77.287209
+site_125,Delhi,Delhi,"Punjabi Bagh, Delhi - DPCC",,28.674045,77.131023
+site_1563,Delhi,Delhi,"Pusa, Delhi - DPCC",,28.639652,77.146275
+site_107,Delhi,Delhi,"Pusa, Delhi - IMD",,28.63611,77.173332
+site_124,Delhi,Delhi,"R K Puram, Delhi - DPCC",,28.563262,77.186937
+site_1430,Delhi,Delhi,"Rohini, Delhi - DPCC",,28.732528,77.11992
+site_113,Delhi,Delhi,"Shadipur, Delhi - CPCB",,28.651478,77.147311
+site_119,Delhi,Delhi,"Sirifort, Delhi - CPCB",,28.550425,77.215938
+site_1432,Delhi,Delhi,"Sonia Vihar, Delhi - DPCC",,28.710508,77.249485
+site_1562,Delhi,Delhi,"Sri Aurobindo Marg, Delhi - DPCC",,28.531346,77.190156
+site_1435,Delhi,Delhi,"Vivek Vihar, Delhi - DPCC","Vivek Vihar, 110095",28.672342,77.31526
+site_1434,Delhi,Delhi,"Wazirpur, Delhi - DPCC",,28.699793,77.165453
+site_5453,Gujarat,Ahmedabad,"Chandkheda, Ahmedabad - IITM","System of Air Quality and Weather Forecasting Research CO Kali Cultural Garden, Chandkheda, Ahmedabad",23.107969,72.574648
+site_5450,Gujarat,Ahmedabad,"Gyaspur, Ahmedabad - IITM","System of Air Quality and Weather Forecasting Research CO AMC Nursery, Gyaspur, Ahmedabad",22.977134,72.553024
+site_308,Gujarat,Ahmedabad,"Maninagar, Ahmedabad - GPCB","On the terrace of Water distribution Center, Dhorbazar, Kankaria,",23.002657,72.591912
+site_5452,Gujarat,Ahmedabad,"Raikhad, Ahmedabad - IITM","System of Air Quality and Weather Forecasting Research CO Lok Manya Tilak Baug, Near Ellis Bridge, Raikhad, Ahmedabad",23.020509,72.579261
+site_5451,Gujarat,Ahmedabad,"Rakhial, Ahmedabad - IITM","System of Air Quality and Weather Forecasting Research CO Shramik Kranti Garden, Near Chakudia Mahadev Mandir, Rakhial, Ahmedabad",23.016834,72.625775
+site_5454,Gujarat,Ahmedabad,"SAC ISRO Bopal, Ahmedabad - IITM","System of Air Quality and Weather Forecasting Research CO ISRO Sac Bopal Campus. Near Delhi Public School, Bopal, Ahmedabad",23.041137,72.456691
+site_5455,Gujarat,Ahmedabad,"SAC ISRO Satellite, Ahmedabad - IITM","System of Air Quality and Weather Forecasting Research CO Space Application Centre ISRO Satellite, Ahmedabad",23.023389,72.515201
+site_5456,Gujarat,Ahmedabad,"SVPI Airport Hansol, Ahmedabad - IITM","System of Air Quality and Weather Forecasting Research CO IMD, Metrological Centre, Ahmedabad",23.076793,72.627874
+site_5449,Gujarat,Ahmedabad,"Sardar Vallabhbhai Patel Stadium, Ahmedabad - IITM","System Of Air Quality And Weather Forecasting Research CO Sardar Patel Stadium, Navrangpura, Ahmedabad.",23.04307,72.562968
+site_5065,Gujarat,Ankleshwar,"GIDC, Ankleshwar - GPCB","Building of Ankleshwar Industries Association,Plot N.:618,619,Gidc,Ankleshwar-393002",21.613267,73.010555
+site_5458,Gujarat,Gandhinagar,"GIFT City, Gandhinagar - IITM","System of Air Quality and Weather Forecasting Research CO GIFT City, Near IFSC Building, Gandhinagar",23.163798,72.677768
+site_5457,Gujarat,Gandhinagar,"IIPHG Lekawada, Gandhinagar - IITM","System of Air Quality and Weather Forecasting Research CO Iiphg, Lekhwada, Gandhinagar",23.243639,72.68994
+site_5066,Gujarat,Gandhinagar,"Sector-10, Gandhinagar - GPCB","Near Main Gate Number 7, Ch Road, Sector 10 Gandhinagar",23.221714,72.654328
+site_5274,Gujarat,Nandesari,"GIDC, Nandesari - Nandesari Ind. Association","Plot No 153/A, GIDC, Nandesari, Taluka & District Vadodara",22.410802,73.097923
+site_5664,Gujarat,Surat,"Science Center, Surat - SMC",,21.170046,72.795405
+site_5071,Gujarat,Vapi,"Phase-1 GIDC, Vapi - GPCB","Center of Excellence (WTP side garden, opposite of Front Garden & infront of the building), First Phase, GIDC",20.362421,72.918013
+site_5067,Gujarat,Vatva,"Phase-4 GIDC, Vatva - GPCB","At Plot 511, Near Vatva Industrial Association, Phase-4, Vatva Gidc Road Ahemdabad.",22.969611,72.6435
+site_5052,Haryana,Ambala,"Patti Mehar, Ambala - HSPCB","Saraswati Block Top Floor, Govt. Polytechnic, Ambala",30.379589,76.778328
+site_5045,Haryana,Bahadurgarh,"Arya Nagar, Bahadurgarh - HSPCB","Mini secretariat 301/13, Balaur Rd Kashmiri Colony, Balaur Rd, Kashmiri Colony, Arya Nagar, Bahadurgarh",28.6701,76.9254
+site_5060,Haryana,Ballabgarh,"Nathu Colony, Ballabgarh - HSPCB","BDPO Office, Near Raja Nahar Singh Mahal, Ballabgarh, Haryana",28.341925,77.319699
+site_5047,Haryana,Bhiwani,"H.B. Colony, Bhiwani - HSPCB","Mini Secretariat Office, 3rd Floor, H.B. Colony, Near Zoo, District. Bhiwani.",28.806223,76.141105
+site_5339,Haryana,Charkhi Dadri,"Mini Secretariat, Charkhi Dadri - HSPCB","Mini Secretariat, DC Office, Charkhi Dadri",28.593883,76.270653
+site_5340,Haryana,Faridabad,"New Industrial Town, Faridabad - HSPCB","Haryana State Pollution Control Board, MCF Auditorium, BK Chowk, Faridabad",28.39072,77.30059
+site_5342,Haryana,Faridabad,"Sector 11, Faridabad - HSPCB","MCF, Tube No 104, Block B, Sector 11, Faridabad",28.376058,77.315741
+site_5341,Haryana,Faridabad,"Sector 30, Faridabad - HSPCB",Haryana State Ppllution Control Board Sector 16 A Near Hewo Apartment Faridabad Haryana,28.4417,77.3217
+site_263,Haryana,Faridabad,"Sector- 16A, Faridabad - HSPCB",Faridabad,28.408842,77.309908
+site_5054,Haryana,Fatehabad,"Huda Sector, Fatehabad - HSPCB","Top Floor, SP Office Building, Mini Secretariat, Part-1, Fatehabad, Haryana.",29.503664,75.467934
+site_5025,Haryana,Gurugram,"NISE Gwal Pahari, Gurugram - IMD",,28.422681,77.148944
+site_5345,Haryana,Gurugram,"Sector-51, Gurugram - HSPCB","Haryana State Pollution Control Board Gurugram University, Sector 51, Gurugram, Haryana 122003",28.4227,77.0667
+site_5344,Haryana,Gurugram,"Teri Gram, Gurugram - HSPCB","Haryana State Pollution Control Board Faridabad Gurgaon Rd, Opposite Pathways School, Gwal Pahari, Gurugram, Haryana 122102.",28.4275,77.1465
+site_146,Haryana,Gurugram,"Vikas Sadan, Gurugram - HSPCB",,28.450124,77.026305
+site_5057,Haryana,Hisar,"Urban Estate-II, Hisar - HSPCB","Regional Office Cum Laboratory, Haryana State Pollution Control Board, Bays No. 7-8, Urban Estate-II, Hisar.",29.14056,75.744941
+site_5056,Haryana,Jind,"Police Lines, Jind - HSPCB","Antodya Bhawan Building, BDPO office, 1st floor, Mini Secretariat.",29.307814,76.337619
+site_5072,Haryana,Kaithal,"Rishi Nagar, Kaithal - HSPCB","HSPCB CAAQM station, Roof top of Mini Secretariat, SH 8, Rishi Nagar, Kaithal.",29.8006,76.4155
+site_5049,Haryana,Karnal,"Sector-12, Karnal - HSPCB",Mini secretariat,29.6953,77.0027
+site_5043,Haryana,Kurukshetra,"Sector-7, Kurukshetra - HSPCB","Deputy Director, Department of Agriculture & Farmer's Welfare, Sector-7, Shahid Major Nitin Bali Marg, Urban Estate.",29.966942,76.875879
+site_5055,Haryana,Mandikhera,"General Hospital, Mandikhera - HSPCB","Al Afiya General Hospital, SH-13, Sohna-Alwar Road, Mandikhera, Haryana.",27.9002,76.9938
+site_5039,Haryana,Manesar,"Sector-2 IMT, Manesar - HSPCB","Auditorium Hall, HSIIDC Complex, Tehsil Office, Sector-2, IMT, Manesar, Haryana",28.360699,76.93609
+site_5053,Haryana,Narnaul,"Shastri Nagar, Narnaul - HSPCB","Mini Secretariat, Shastri Nagar, Narnaul, Haryana.",28.060249,76.113115
+site_5050,Haryana,Palwal,"Shyam Nagar, Palwal - HSPCB","Nagar Parisad - Kushlipur, 1 Mini Secretrait, Palwal.",28.148556,77.332067
+site_5048,Haryana,Panipat,"Sector-18, Panipat - HSPCB","Sector 18, Community Centre, Near Toll Plaza, Panipat",29.497973,76.993331
+site_147,Haryana,Rohtak,"MD University, Rohtak - HSPCB","Gate No. 2, Maharishi Dyanand University, Rohtak.",28.52123,76.37138
+site_5051,Haryana,Sirsa,"F-Block, Sirsa - HSPCB","HSPCB CAAQM Station, Roof top of 11KVA Power Sub-Station, Chaudhary Devi Lal University, Sirsa.",29.5364,75.0158
+site_5041,Haryana,Sonipat,"Murthal, Sonipat - HSPCB","Rooftop of MV Block, Deenbandhu Chhotu Ram University of Science and Technology, 50th K.M. Stone,N.H. 1, Murthal (Sonipat).",29.0272,77.0621
+site_5046,Haryana,Yamuna Nagar,"Gobind Pura, Yamuna Nagar - HSPCB","Panchayat Bhawan, Jagadhri Road, Near Gaba Hospital, Yamuna Nagar, Haryana",30.148057,77.289347
+site_5586,Himachal Pradesh,Baddi,"HIMUDA Complex Phase-1, Baddi - HPPCB","Regional Office Himuda Complex Phase-1, Baddi, Tehssil Baddi, Dist Solan",30.943887,76.801991
+site_5424,Jammu and Kashmir,Srinagar,"Rajbagh, Srinagar - JKSPCB","Jammu and Kashmir State Pollution Control Board, Rajbagh, Srinagar Near Silk Factory, Jammu & Kashmir",34.066206,74.81982
+site_5827,Jharkhand,Dhanbad,"Kalakusuma, Dhanbad - DMC","Kalakusuma Vivah Bhavan, Dhanbad, Jharkhand",23.811548,86.481238
+site_5710,Jharkhand,Dhanbad,"Sardar Patel Nagar, Dhanbad - JSPCB","Golf Ground, Luby Circular Road, Dhanbad.",23.80569,86.44268
+site_254,Jharkhand,Jorapokhar,"Tata Stadium, Jorapokhar - JSPCB","Tata steel football ground , near barari More, Digwadih , Dhanbad- Jharkhand",23.707909,86.41467
+site_5832,Jharkhand,Pathardih,"Mohalbani Ghat, Pathardih - DMC","Mohalbani Ghat, Dhanbad, Jharkhand",23.66988,86.411725
+site_5264,Karnataka,Bagalkot,"Vidayagiri, Bagalkot - KSPCB","Basaveshwar Engineering College, Vidayagiri, Bagalkot, Karnataka",16.172806,75.659694
+site_5432,Karnataka,Belgaum,"Ramteerth Nagar, Belgaum - KSPCB","No. 1, Main Road, Auto Nagar, Kanbargi, Belgaum",15.888653,74.541751
+site_162,Karnataka,Bengaluru,"BTM Layout, Bengaluru - CPCB",,12.913522,77.59508
+site_164,Karnataka,Bengaluru,"BWSSB Kadabesanahalli, Bengaluru - CPCB",,12.935205,77.681449
+site_1553,Karnataka,Bengaluru,"Bapuji Nagar, Bengaluru - KSPCB","Mysore Rd, Banashankari Stage I, Bapuji Nagar, Bengaluru, Karnataka. Land mark: In Karnataka Vidyuth Company.",12.951913,77.539784
+site_1554,Karnataka,Bengaluru,"Hebbal, Bengaluru - KSPCB","Opp.: CBI Office, Hebbal, Bengaluru. Landmark: Near Veterinary College, Hebbal.",13.029152,77.585901
+site_1555,Karnataka,Bengaluru,"Hombegowda Nagar, Bengaluru - KSPCB","Rajiv Gandhi Institute of Chest Diseases,Someshwarnagar. 1st Main Road, Dharmaram College Post, 1st Block, Hombegowda Nagar, Bengaluru.",12.938539,77.5901
+site_1556,Karnataka,Bengaluru,"Jayanagar 5th Block, Bengaluru - KSPCB","Shalini Playground 5th Block , 541, 10th Main Rd, 5th Block, Jayanagar, Bengaluru.",12.920984,77.584908
+site_5729,Karnataka,Bengaluru,"Jigani, Bengaluru - KSPCB","KSPCB, Bannerghatta, Anekal Road, Jigani, Karnataka",12.781628,77.629915
+site_5681,Karnataka,Bengaluru,"Kasturi Nagar, Bengaluru - KSPCB","RTO Office, Kasturi Nagar, Bengaluru.",13.003872,77.664217
+site_163,Karnataka,Bengaluru,"Peenya, Bengaluru - CPCB",,13.02702,77.494094
+site_5678,Karnataka,Bengaluru,"RVCE-Mailasandra, Bengaluru - KSPCB","RV Vidyaniketan, Mysore Road, Bengaluru. (Near Pattanagere Metro Station)",12.921418,77.502466
+site_5686,Karnataka,Bengaluru,"Shivapura_Peenya, Bengaluru - KSPCB","No. 5857, No. 23, Post Box, 24, Peenya II Phase, Shivapura, Peenya, Bengaluru, Karnataka.",13.024634,77.508012
+site_1558,Karnataka,Bengaluru,"Silk Board, Bengaluru - KSPCB","Silkboard Junction 323, Hosur Rd, Santhosapuram, Venkatapura, HSR Layout 5th Sector, Bengaluru.",12.917348,77.622813
+site_5418,Karnataka,Bidar,"Naubad, Bidar - KSPCB","Karanartaka state pollution control board, No 42, B2 KIADB Office Building, Naubad Industrial Area Bidar 585403",17.930306,77.482194
+site_5124,Karnataka,Chamarajanagar,"Urban, Chamarajanagar - KSPCB","KHB Layout, Opp. Traffic Police Station, Chamarajanagara.",11.55358,76.55521
+site_1557,Karnataka,Chikkaballapur,"Chikkaballapur Rural, Chikkaballapur - KSPCB","Government PU college , NH-7, Bangalore Hyderabad Road, Chikkaballapura, Chikkaballapura.",13.428828,77.731418
+site_5265,Karnataka,Chikkamagaluru,"Kalyana Nagara, Chikkamagaluru - KSPCB","Plot No 252, 3rd Cross, 4th Phase, C D A Layout, Kalyana Nagara, Jyothinagar Post, Chikkamagaluru",13.328028,75.797056
+site_5422,Karnataka,Davanagere,"Devaraj Urs Badavane, Davanagere - KSPCB","KSPCB, Devraj URS Layout, C Block, Beside Excise Department",14.4758,75.9052
+site_5638,Karnataka,Dharwad,"Kalabhavan, Dharwad - KSPCB","Kalabhavan, Jubilee Circle, Dharwad.",15.459706,75.008381
+site_5419,Karnataka,Gadag,"Panchal Nagar, Gadag - KSPCB","CAAQMS Karnataka State pollution Control Board, TCE Engineering college Campus, Near Chirayu Hospital, Gadag",15.411456,75.638133
+site_5448,Karnataka,Hassan,"B.Katihalli, Hassan - KSPCB","Karnataka State Pollution Control Board Plot No 1A, Parisara Bhavan, C Block, B Katihalli Indl Area, B M Road Hassan",13.008556,76.125258
+site_5420,Karnataka,Haveri,"Ashwini Nagar, Haveri - KSPCB","Plot No 1, Survey NO 180A, 3rd Cross, Shivaji nagara, Ashwini nagar, Haveri",14.7918,75.3896
+site_1447,Karnataka,Hubballi,"Deshpande Nagar, Hubballi - KSPCB","KSPCB CAAQMS Hubbali, Corporation Garden, Near to commissioner office, Deshpande Nagar, Hubballi.",15.351773,75.140726
+site_5680,Karnataka,Hubballi,"Lingaraj Nagar, Hubballi - KSPCB","Lingaraj Nagar South, Lakkamanhalli, Hubballi, Dharwad.",15.371482,75.116017
+site_1565,Karnataka,Kalaburagi,"Lal Bahadur Shastri Nagar, Kalaburagi - KSPCB","Inside Govt ITI College Compound, Jewargi Cross, MSK Mill road, Lal bahadur Shastri Nagar, Kalaburagi.",17.321993,76.822628
+site_5679,Karnataka,Kalaburagi,"Mahatma Basaveswar Colony, Kalaburgi - KSPCB","Regional office, Karnataka State Pollution Control Board, Plot No.12/2, Sy.No.19/P, Mansafdar Layout, M.G.Road, Santraswadi, Kalaburgi",17.336318,76.847397
+site_5853,Karnataka,Karwar,"KHB Colony, Karwar - KSPCB","KSPCB Office Compound, KHB Colony, Karwar. KSPCB Office",14.816666,74.141003
+site_1551,Karnataka,Kolar,"Tamaka Ind. Area, Kolar - KSPCB","KPPCB CAAQMS, KSPCB Kolar regional Office, Parisara Bhawana, Plot No 14-B. KIADB Industrial Area, Tamaka Kolar.",13.127629,78.157012
+site_5415,Karnataka,Koppal,"Diwator Nagar, Koppal - KSPCB",Karnataka State Pollution Control Board DC Office Compound Koppal,15.34763,76.181767
+site_5391,Karnataka,Madikeri,"Stuart Hill, Madikeri - KSPCB","Near Rajas Seat, Stuart Hill, Madikeri, Karnataka. Land Mark - Madikeri Akashavani (All India Radio)",12.415911,75.73505
+site_5421,Karnataka,Mangalore,"Kadri, Mangalore - KSPCB","CAAQMS Karnatata State Pollution Control Board, Kadri Hills, Circuit House, Mangalore",12.88925,74.853
+site_5125,Karnataka,Mysuru,"Hebbal 1st Stage, Mysuru - KSPCB","Plot No-436, Ground Floor, K R S Road, Hebbal 1st Stage, Metagalli, Mysuru.",12.21041,76.37376
+site_5414,Karnataka,Raichur,"Haji Colony, Raichur - KSPCB",Haji Colony Compound Raichur DC Office Compound,16.208139,77.348417
+site_5255,Karnataka,Ramanagara,"Vijay Nagar, Ramanagara - KSPCB","KSPCB Regional office no 62/5, Vaderahalli BM Road, Near DC office, Ramanagara.",12.733409,77.298051
+site_5266,Karnataka,Shivamogga,"Vinoba Nagara, Shivamogga - KSPCB","Plot No 156, Auto Complex Industrial Area, Shivamogga",13.94,75.555917
+site_5682,Karnataka,Tumakuru,"Thimmalapura, Tumakuru - KSPCB","Plot No.:97, KIADB Complex, Anthrasanahalli Indl. Area, Sira Road, Tumakuru, Karnataka.",13.377516,77.099072
+site_5433,Karnataka,Udupi,"Brahmagiri, Udupi - KSPCB","CAAQMS Karnataka State Pollution Control Board, Board High School Compound, Udupi",13.341944,74.746944
+site_5267,Karnataka,Vijayapura,"Ibrahimpur, Vijayapura - KSPCB","Karnataka State Pollution Control Board, Ibrahimpur, Vijayapura",16.802639,75.722694
+site_5254,Karnataka,Yadgir,"Collector Office, Yadgir - KSPCB","Chittapur Road, Inside the DC Office compound KSPCB, Yadgiri, Karnataka",16.7602,77.1428
+site_5105,Kerala,Eloor,"Udyogamandal, Eloor - Kerala PCB","Kerala State Pollution Control Board ESIC Hospital, Udyogamandal, Eloor Road, Ernakulam, Kerala.",10.073232,76.302765
+site_5272,Kerala,Ernakulam,"Kacheripady, Ernakulam - Kerala PCB","Kerala State Pollution Control Board AAQMS , Madhava junction, Central bank Building ,Opposite to Josco jewellers, MG road- 682016",9.985653,76.281342
+site_5276,Kerala,Kannur,"Thavakkara, Kannur - Kerala PCB","Kerala State Pollution Control Board Infront Of District Planning Office , Civil Station, Near Collectorate Office, Kannur, Kerala",11.875,75.3732
+site_5270,Kerala,Kochi,"Vyttila, Kochi - Kerala PCB","Kerala State Pollution Control Board AAQMS, Vyttila Hub, Near Police Aid Post, Ernakulam - 682019",9.969447,76.321186
+site_5334,Kerala,Kollam,"Polayathode, Kollam - Kerala PCB","Kerala State Pollution Control Board Municipality Building, Polayathode Corporation Shopping Complex, Polayathode Kollam, Kerala",8.8787,76.6073
+site_5271,Kerala,Kozhikode,"Palayam, Kozhikode - Kerala PCB","Kerala State Pollution Control Board CAAQMS, Kozhikode Palayam bus stand, calicut",11.249077,75.784371
+site_5331,Kerala,Thiruvananthapuram,"Kariavattom, Thiruvananthapuram - Kerala PCB","University of Kerala (government college), kariyavattom campus, kariyavattom, Thiruvananthapuram district, Kerala.",8.5637,76.8865
+site_252,Kerala,Thiruvananthapuram,"Plammoodu, Thiruvananthapuram - Kerala PCB","KERALA STATE POLLUTION CONTROL BOARD, Plamoodu, Pattom",8.514909,76.943588
+site_5390,Kerala,Thrissur,"Corporation Ground, Thrissur - Kerala PCB","Kerala State Pollution Control Board Paravattani Corporation Ground, Paravattani Nellikkunnu Road, Paravattani, Thrissur, Kerala.",10.5324,76.2159
+site_5708,Madhya Pradesh,Bhopal,"Idgah Hills, Bhopal - MPPCB","Roof top of Collectorate Record Room, Old Secretariat, Sultania Road, Kohefiza, Bhopal.",23.264759,77.381568
+site_5650,Madhya Pradesh,Bhopal,"Paryavaran Parisar, Bhopal - MPPCB",,23.210494,77.425409
+site_5247,Madhya Pradesh,Bhopal,"T T Nagar, Bhopal - MPPCB","CSP Office Terrace, (Police Station Campus), STT Nagar, Near New Market, Bhopal.",23.233584,77.400574
+site_5040,Madhya Pradesh,Damoh,"Shrivastav Colony, Damoh - MPPCB","Collectorate Campus, Shrivastav Colony, Damoh.",23.817487,79.446246
+site_1404,Madhya Pradesh,Dewas,"Bhopal Chauraha, Dewas - MPPCB","Govt. K.P. College, near Lakshmibai marg, Bhopal Square, Dewas-455001",22.968259,76.064118
+site_5273,Madhya Pradesh,Gwalior,"City Center, Gwalior - MPPCB","Jiwaji University Ground, City Center, Jiwaji University, Mahalgaon, Gwalior, Madhya Pradesh 474011",26.203442,78.193251
+site_5667,Madhya Pradesh,Gwalior,"Deen Dayal Nagar, Gwalior - MPPCB","Deen Dayal Nagar Housing Board Colony, Gwalior (M.P.)",26.259242,78.216432
+site_5661,Madhya Pradesh,Gwalior,"Maharaj Bada, Gwalior - MPPCB","Maharaj Bada, Gandhi Market, Gwalior.",26.200388,78.147714
+site_5275,Madhya Pradesh,Gwalior,"Phool Bagh, Gwalior - Mondelez Ind. Food","Jan Sampark Karyalaya, City Government Office, Phool Bagh, Lashkar, Gwalior",26.210536,78.171
+site_5857,Madhya Pradesh,Indore,"Airport Area, Indore - IMC","Airport Road, Devi Ahillyabai Holkar Airport Area, Indore.",22.7289,75.8076
+site_5248,Madhya Pradesh,Indore,"Chhoti Gwaltoli, Indore - MPPCB","Roof Top of SP Office, Chhoti Gwaltoli, Regal Square, Indore.",22.431,75.5213
+site_5856,Madhya Pradesh,Indore,"Maguda Nagar, Indore - IMC","Meghdoot Garden, Main Gate, Entrance, Maguda Nagar, Scheme No 54, Indore.",22.7524,75.8872
+site_5855,Madhya Pradesh,Indore,"Regional Park, Indore - IMC","Regional Park, Regional Park Rd, Kasturba Gram, Indore.",22.678,75.8559
+site_5854,Madhya Pradesh,Indore,"Residency Area, Indore - IMC","Residency Garden, White Church Colony, Residency Area, Indore.",22.7084,75.8815
+site_5709,Madhya Pradesh,Indore,"Vijay Nagar Scheme-78, Indore - Glenmark","Govt. Institute of Fine Arts Indore, Scheme Number 78, Part II, Vijay Nagar, Indore, Madhya Pradesh",22.76726,75.8871
+site_5965,Madhya Pradesh,Jabalpur,"Govindh Bhavan Colony, Jabalpur - JMC","Near NCC GP, Pachpedhi, South Civil Line, Jabalpur M.P",23.163174,79.973061
+site_5817,Madhya Pradesh,Jabalpur,"Gupteshwar, Jabalpur - JMC","Municipal Corporation Zone Office-3, Gupteshwar, Rampur, Jabalpur M.P.",23.142888,79.916147
+site_5249,Madhya Pradesh,Jabalpur,"Marhatal, Jabalpur - MPPCB","Traffic Police Jabalpur, MP SH 37A, Awadhpuri Marhatal, Jabalpur.",23.168606,79.932247
+site_5816,Madhya Pradesh,Jabalpur,"Suhagi, Jabalpur - JMC","Municipal Corporation Zone office 15, Suhagi, Jabalpur M.P.",23.218135,79.95777
+site_5250,Madhya Pradesh,Katni,"Gole Bazar, Katni - MPPCB","CAAQMS station, Municipal Corporation Building Terrace, Mission Chowk Rd, Katni.",23.50016,80.23284
+site_5068,Madhya Pradesh,Maihar,"Sahilara, Maihar - KJS Cements",Sharda Temple,24.261301,80.723178
+site_1403,Madhya Pradesh,Mandideep,"Sector-D Industrial Area, Mandideep - MPPCB","Eicher Tractor (TMTL) Plot No. 1, Sector D, Industrial Area, Mandideep, Distt.-Raisen Madhya Pradesh 462040",23.10844,77.511428
+site_1402,Madhya Pradesh,Pithampur,"Sector-2 Industrial Area, Pithampur - MPPCB","Plot no.- 57,Pithampur, Sector-2, Dist.-Dhar,Madhya Pradesh India 454775",22.624758,75.675238
+site_5042,Madhya Pradesh,Ratlam,"Shasthri Nagar, Ratlam - IPCA Lab","S.E. Police Control Room, Do Butti Thana Ratlam, Ratlam.",23.331731,75.045981
+site_5662,Madhya Pradesh,Sagar,"Civil Lines, Sagar - MPPCB","CAAQM Station, Pili Kothi, 38 Cantt, Civil Line, Sagar Cantt, Sagar. Madhya Pradesh.",23.838586,78.759431
+site_5269,Madhya Pradesh,Sagar,"Deen Dayal Nagar, Sagar - MPPCB","Regional Office, M.P. Pollution Control Board, Deen Dayal Nagar, Sagar, M.P.",23.864016,78.802893
+site_1433,Madhya Pradesh,Satna,"Bandhavgar Colony, Satna - Birla Cement","Birla Corporation Limited, Unit- Satna Cement Works, P.O : Birla Vikas, Satna.",24.584344,80.854941
+site_1401,Madhya Pradesh,Singrauli,"Suryakiran Bhawan NCL, Singrauli - MPPCB","Surya Kiran Bhawan, Sector-B, Near Nehru Shatabdi Hospital Dudhichua Project, NCL (Northern Coalfields Limited), Singrauli (M.P.) 486888",24.10897,82.64558
+site_1400,Madhya Pradesh,Ujjain,"Mahakaleshwar Temple, Ujjain - MPPCB","MPPCB CAAQMS 2nd floor of facility center mahakal temple Jaisinghpura, Ujjain, Madhya Pradesh 456006",23.182719,75.768218
+site_5785,Maharashtra,Ahmednagar,"Tarakpur, Ahmednagar - MPCB","New Arts, Commerce &amp; Science College, Lal Taki Road, Tarakpur, Ahmednagar.",19.10122,74.73339
+site_5784,Maharashtra,Akola,"Ramdaspeth, Akola - MPCB","Shri Shivaji College, Near Akot Road, behind Shivaji Park, Ramdaspeth, Akola.",20.719516,77.000253
+site_5786,Maharashtra,Amravati,"Shivneri Colony, Amravati - MPCB","MPCB Premises, University Road, Beside Post office Colony, Amravati",20.940236,77.789525
+site_5788,Maharashtra,Aurangabad,"MIDC Chilkalthana, Aurangabad - MPCB","MPCB Regional Office, Behind Dhoot Hospital, Near BMW Service Center, Aurangabad",19.87562,75.38731
+site_198,Maharashtra,Aurangabad,"More Chowk Waluj, Aurangabad - MPCB",,19.838944,75.244448
+site_5789,Maharashtra,Aurangabad,"Rachnakar Colony, Aurangabad - MPCB","Deogiri College of Engineering And Management Campus, Railways Station Road, Aurangabad.",19.863756,75.321188
+site_5798,Maharashtra,Badlapur,"Katrap, Badlapur - MPCB","Shree Prakash Amte Udyan, Near Vivekanand Soc, Badlapur East.",19.16485,73.23409
+site_5804,Maharashtra,Belapur,"CBD Belapur, Belapur - MPCB","CBD Fire station, Near Sion Panvel Highway, Belapur, Sector-1A, Navi Mumbai.",19.02439,73.040672
+site_5813,Maharashtra,Bhiwandi,"Gokul Nagar, Bhiwandi - MPCB","Municipal Corporation Kondawada, Kombadpada, Gokul Nagar. Bhiwandi.(Near Fire Brigade Station)",19.309073,73.057223
+site_5809,Maharashtra,Boisar,"Khaira, Boisar - MPCB","JSW Housing Complex, Tarapur M.I.D.C., Khaira, Maharashtra 401501.",19.786089,72.757971
+site_271,Maharashtra,Chandrapur,"Chauhan Colony, Chandrapur - MPCB",,19.9629,79.298714
+site_295,Maharashtra,Chandrapur,"MIDC Khutala, Chandrapur - MPCB"," Khutala, Maharashtra 442406",19.97753,79.233709
+site_5801,Maharashtra,Dhule,"Deopur, Dhule - MPCB","Deopur, Navarang Taki, Dhule, Maharashtra, India",20.918946,74.776388
+site_5790,Maharashtra,Jalgaon,"Prabhat Colony, Jalgaon - MPCB","Old JMC School, No. 45, Vivekanand Nagar, Prabhat Colony, Jalgaon.",21.001264,75.565602
+site_5791,Maharashtra,Jalna,"Old MIDC, Jalna - MPCB","JES College, Old MIDC, Dist. Jalna, Maharashtra.",19.854616,75.905894
+site_5118,Maharashtra,Kalyan,"Khadakpada, Kalyan - MPCB","Kalyan Municipal Corporation Ward Office-B Ward, Khadakpada Kalyan (W).",19.25292,73.142019
+site_5768,Maharashtra,Kolhapur,"Shivaji University, Kolhapur - MPCB","Near CSIBER Chowk, Near MSEB substation, Shivaji University, Kolhapur.",16.687045,74.250587
+site_5769,Maharashtra,Kolhapur,"Sinchan Bhavan, Kolhapur - MPCB","Kolhapur Irrigation Division (North) Office Premises, Sinchan Bhavan, Tarabai Park, Kolhapur.",16.714375,74.24264
+site_5780,Maharashtra,Latur,"Sawe Wadi, Latur - MPCB","Vilas Rao Deshmukh Park (Nana-Nani Park), Sawe Wadi, Latur.",18.39963,76.57452
+site_5783,Maharashtra,Mahad,"Kamble Tarf Birwadi, Mahad - MPCB","Plot No.P43, MIDC Industrial Estate, MIDC Mahad, Birwadi, Mahad, Raigad, Maharashtra.",18.10234,73.478369
+site_5802,Maharashtra,Malegaon,"Mahesh Nagar, Malegaon - MPCB","Khwaja Garib Nawaz, Main Fire Station, Mahesh Nagar, Near Shivaji Maharaj Statue, Malegaon, Maharashtra.",20.555712,74.529236
+site_5392,Maharashtra,Mumbai,"Bandra Kurla Complex, Mumbai - IITM","System Of Air Quality and Weather Forecasting Research, BMC Mumbai, Nandadeep Park, Kalanagar, Bandra East",19.053536,72.84643
+site_5810,Maharashtra,Mumbai,"Bandra Kurla Complex, Mumbai - MPCB","BKC Ground, Near Asian Heart Institute, Bandra Kurla Complex, Mumbai",19.065931,72.862131
+site_168,Maharashtra,Mumbai,"Bandra, Mumbai - MPCB","CAAQMS Station Govt Polytechnic Mumbai, Near Gov Holi Tecni, Mumbai.",19.0627,72.84614
+site_5400,Maharashtra,Mumbai,"Borivali East, Mumbai - IITM","System Of Air Quality Andweather Forecasting Research, Bmc Mumbai Cti & Rc, Bmc, Abhinav Nagar, Behind National Park, Borivali East - 400066",19.23241,72.86895
+site_5113,Maharashtra,Mumbai,"Borivali East, Mumbai - MPCB","Maharashtra Pollution Control Board, Near Lion Safari, Sanjay Gandhi National Park, N.H.-8, Borivali (E), Mumbai.",19.224333,72.865811
+site_5960,Maharashtra,Mumbai,"Byculla, Mumbai - BMC","Park View Apartments Parking, Byculla East, Veer Jijamata Udyan, BMC Gate, Mumbai.",18.9767,72.838
+site_5399,Maharashtra,Mumbai,"Chakala-Andheri East, Mumbai - IITM","System Of Air Quality Andweather Forecasting Research, Bmc Mumbai, 2 Guru Hargovindji Rd, S B Singh Colony, Chakala, Andheri East, Mumbai- 400059",19.11074,72.86084
+site_5811,Maharashtra,Mumbai,"Chembur, Mumbai - MPCB","RCF Colony, Mahul Rd, Azad Nagar, near RCF Police Station, Chembur, Mumbai, Maharashtra",19.036459,72.895437
+site_5107,Maharashtra,Mumbai,"Chhatrapati Shivaji Intl. Airport (T2), Mumbai - MPCB","CAAQMS-Maharashtra Pollution Control Board, GVK Mumbai Airport Terminal 2, Near Gate No.06, Navpada Sahar Village, CSMIA, Andheri (East), Mumbai",19.10078,72.87462
+site_5120,Maharashtra,Mumbai,"Colaba, Mumbai - MPCB","MCGM, Sewage Treatment Plant, Near Afgan Church, SBS Road, Navy Nagar, Colaba.",18.91,72.82
+site_5396,Maharashtra,Mumbai,"Deonar, Mumbai - IITM","System Of Air Quality Andweather Forecasting Research, Bmc Mumbai International Institute For Population Sciences, Govandi Station Road, Near Govandi Station Over Bridge, Deonar, Chembur.",19.04946,72.923
+site_5964,Maharashtra,Mumbai,"Ghatkopar, Mumbai - BMC","BMC Pumping Station, Mankur, Near Highway BMC Public Toilet, Ghatkopar East, Mumbai.",19.083694,72.920967
+site_5412,Maharashtra,Mumbai,"Kandivali East, Mumbai - MPCB","Mahindra and Mahindra Ltd Automotive Sector, Akurili Road, Kandivali(E), Mumbai - 400101",19.2058,72.8682
+site_5962,Maharashtra,Mumbai,"Kandivali West, Mumbai - BMC","213, RDP Road No.-6, Shivkrupa CHS, RDP8, Charkop Sector-3, Kandivali West.",19.215859,72.831718
+site_5814,Maharashtra,Mumbai,"Kherwadi_Bandra East, Mumbai - MPCB","Government Polytechnic Collage, A Y Jang Marg, Kherwadi, Bandra East, Mumbai.",19.063214,72.845632
+site_5397,Maharashtra,Mumbai,"Khindipada-Bhandup West, Mumbai - IITM","System Of Air Quality And weather Forecasting Research, Bmc Mumbai, Water Filteration Plant, Bhandup West, Mumbai",19.165332,72.922099
+site_5104,Maharashtra,Mumbai,"Kurla, Mumbai - MPCB","LBS Road, Kamani,Kurla West, Phoenix Market City, Mumbai.",19.0863,72.8888
+site_5402,Maharashtra,Mumbai,"Malad West, Mumbai - IITM","System Of Air Quality Andweather Forecasting Research, Bmc Mumbai Fire Brigade Station,Near Asmitajyoti Housing Society, Malad West, Mumbai",19.19709,72.82204
+site_5394,Maharashtra,Mumbai,"Mazgaon, Mumbai - IITM","System of Air Quality and Weather Forecasting Research C/o BMC Mumbai, Joseph Baptista Garden, Garden Rd, Ekta Nagar, Mazgaon, Mumbai",18.96702,72.84214
+site_5807,Maharashtra,Mumbai,"Mindspace-Malad West, Mumbai - MPCB","Dr. APJ Abdul Kalam Vanodyan, Mindspace, Near Interface Hights, Malad West, Mumbai",19.187866,72.830407
+site_5413,Maharashtra,Mumbai,"Mulund West, Mumbai - MPCB","Maharashtra Pollution Control Board, Near car parking Johnson and Johnson P Ltd L B S Marg, Mulund W, Mumbai",19.175,72.9419
+site_5398,Maharashtra,Mumbai,"Navy Nagar-Colaba, Mumbai - IITM","System Of Air Quality And weather Forecasting Research, Bmc Mumbai Indian Meteorological Department, Nananbhaimoosa Marg, Near Rc Church, Colaba, Mumbai 400005",18.897756,72.81332
+site_5112,Maharashtra,Mumbai,"Powai, Mumbai - MPCB","CAAQMS- Maharashtra Pollution Control Board, Near Hostel-15 (Trident), IIT Campus, Powai, Mumbai.",19.1375,72.915056
+site_5963,Maharashtra,Mumbai,"Sewri, Mumbai - BMC","BMC Public School 19, Sewri Koliwada, MPT, Near Sewri Station Road.",19.000084,72.85673
+site_5961,Maharashtra,Mumbai,"Shivaji Nagar, Mumbai - BMC","Govandi Public School No-2, Govandi West, Raman Mama Nagar, Shivaji Nagar",19.060498,72.923356
+site_5403,Maharashtra,Mumbai,"Siddharth Nagar-Worli, Mumbai - IITM","System Of Air Quality Andweather Forecasting Research, Bmc Mumbai Lal Bahadur Shastri Garden, 60, Worli Hill Rd, Siddharth Nagar, Worli, Mumbai- 400018",19.000083,72.813993
+site_5119,Maharashtra,Mumbai,"Sion, Mumbai - MPCB","K J Somaiya Hospital, Sion (E), Mumbai, Maharashtra.",19.047,72.8746
+site_5102,Maharashtra,Mumbai,"Vasai West, Mumbai - MPCB","Fire Brigade Station, Vasai Grass Road, Navghar, Vasai West , Tarkhad. Landmark : Balaji Hotel",19.3832,72.8204
+site_5106,Maharashtra,Mumbai,"Vile Parle West, Mumbai - MPCB","CAAQMS- Maharashtra Pollution Control Board, U15, Bhaktivedanta Swami Marg, Juhu Scheme, Juhu, Mumbai.",19.10861,72.83622
+site_5115,Maharashtra,Mumbai,"Worli, Mumbai - MPCB","89-B, NEERI Building, Dr. Annie Besant Road, Worli Naka, Worli, Mumbai.",18.993616,72.812811
+site_5792,Maharashtra,Nagpur,"Ambazari, Nagpur - MPCB","Beside SBI VRC Opp. to NPTI South, Ambazari Road, Ambazari, Nagpur.",21.121801,79.04952
+site_5796,Maharashtra,Nagpur,"Mahal, Nagpur - MPCB","Old Town Hall Building NMC, Mahal, Nagpur.",21.14472,79.107595
+site_303,Maharashtra,Nagpur,"Opp GPO Civil Lines, Nagpur - MPCB",,21.152875,79.051753
+site_5793,Maharashtra,Nagpur,"Ram Nagar, Nagpur - MPCB","Laxminarayan Institute of Technology, Amravati Road, Ram Nagar, Nagpur, Maharashtra.",21.143383,79.048912
+site_5795,Maharashtra,Nanded,"Sneh Nagar, Nanded - MPCB","Agriculture Technical School, Near Science College, Sneh Nagar, Nanded, Maharashtra.",19.173852,77.296291
+site_304,Maharashtra,Nashik,"Gangapur Road, Nashik - MPCB","Gangapur Road, Nashik, Maharashtra 422002",20.007329,73.776243
+site_5782,Maharashtra,Nashik,"Hirawadi, Nashik - MPCB","Behind Late Sadashiv Bhore NMC Theater, Opp. Gems English Medium School, Hirawadi, Panchvati, Nashik",20.021503,73.813844
+site_5781,Maharashtra,Nashik,"MIDC Ambad, Nashik - MPCB","P-25, AIMA Recreation Centre, MIDC Ambad, Nashik.",19.95022,73.73148
+site_5779,Maharashtra,Nashik,"Pandav Nagari, Nashik - MPCB","Guru Gobind Singh Collage of Engineering And Research Centre, Guru Gobind Singh Marg,Wadala Pathardi Road, Indira Nagar Annexe, Nashik.",19.959135,73.778801
+site_261,Maharashtra,Navi Mumbai,"Airoli, Navi Mumbai - MPCB",,19.1494,72.9986
+site_5805,Maharashtra,Navi Mumbai,"Kopripada-Vashi, Navi Mumbai - MPCB","Tortoise Amusement Park, 180, Ram Mandir Rd, Kopripada, Sector 26, Vashi, Navi Mumbai.",19.090337,73.014232
+site_5114,Maharashtra,Navi Mumbai,"Mahape, Navi Mumbai - MPCB","Maharashtra Pollution Control Board, CAAQM Station, Ground Floor, Central Laboratory, Nirmal Bhavan P-3, Mahape, Navi Mumbai.",19.113505,73.008978
+site_5103,Maharashtra,Navi Mumbai,"Nerul, Navi Mumbai - MPCB","CAAQMS-MPCB,NMMC STP Compound, Sector 50- Nerul, Navi Mumbai.",19.008751,73.01662
+site_5815,Maharashtra,Navi Mumbai,"Sanpada, Navi Mumbai - MPCB","Sensory Garden, Juinagar Station Road, Near Ryan International School, near from, Sector-10, Sanpada, Navi Mumbai, Maharashtra.",19.057575,73.015137
+site_5401,Maharashtra,Navi Mumbai,"Sector-19A Nerul, Navi Mumbai - IITM","System Of Air Quality Andweather Forecasting Research, Nmmc Mumbai Wonders Park, Uran Road, Sector 19a, Nerul, Sector 19a, Nerul, Navi Mumbai- 400706",19.044,73.0325
+site_5799,Maharashtra,Navi Mumbai,"Sector-2E Kalamboli, Navi Mumbai - MPCB","Sector-2E, Smruti Van Park, Kalamboli, Panvel, Navi Mumbai.",19.02579,73.10297
+site_5803,Maharashtra,Navi Mumbai,"Tondare-Taloja, Navi Mumbai - MPCB","Near Water Tank, MIDC to M/s Hindalco, MIDC Taloja.",19.063,73.1209
+site_5794,Maharashtra,Parbhani,"Masoom Colony, Parbhani - MPCB","DSM College, Jintur Road, Behind Z.P. Parbhani, Masoom Colony, Parbhani, Maharashtra.",19.265594,76.761463
+site_5763,Maharashtra,Pimpri-Chinchwad,"Gavalinagar, Pimpri Chinchwad - MPCB","PCMC Rose Garden, Gavalinagar, Bhosari, Pimpri Chinchwad, Pune, Maharashtra.",18.63673,73.82487
+site_5764,Maharashtra,Pimpri-Chinchwad,"Park Street Wakad, Pimpri Chinchwad - MPCB","Wakad-Pimple Saudagar Road, Kaspate Vasti, Wakad, Pimpri Chinchwad, Pune, Maharashtra.",18.59051,73.77946
+site_5765,Maharashtra,Pimpri-Chinchwad,"Thergaon, Pimpri Chinchwad - MPCB","Chhatrapati Shivaji Maharaj Park, Aditya Birla Hospital Marg, Dange Chowk Road, Thergaon, Pimpri-Chinchwad.",18.616318,73.765797
+site_5405,Maharashtra,Pune,"Alandi, Pune - IITM","System Of Air Quality And weather Forecasting Research MIT Academy Of Engineering Dehu Phata, Alandi",18.675076,73.892743
+site_5406,Maharashtra,Pune,"Bhosari, Pune - IITM","System Of Air Quality And weather Forecasting Research Major Dhyanchand Hockey Stadium Bhosari Rd, MIDC, Pimpri Colony, Pimpri Chinchwad, Maharashtra",18.640051,73.848956
+site_5988,Maharashtra,Pune,"Bhumkar Nagar, Pune - IITM","System of Air Quality And Weather Forecasting Research, Near PCMC Water Tank, Bhagwan Nagar, Bhumkar Chowk, Wakad, Pune.",18.60577,73.749976
+site_5407,Maharashtra,Pune,"Hadapsar, Pune - IITM","System Of Air Quality And weather Forecasting Research Ram Manohar Lohiya Udyan, Pune Solapur Road, Hadapsar",18.501793,73.927532
+site_292,Maharashtra,Pune,"Karve Road, Pune - MPCB",,18.501174,73.816553
+site_5766,Maharashtra,Pune,"Katraj Dairy, Pune - MPCB","Katraj Dairy Campus, in front of Sarhad college of arts, commerce and science, Near Pune-Kashmir Maitri chowk, Katraj, Pune.",18.45445,73.854155
+site_5410,Maharashtra,Pune,"MIT-Kothrud, Pune - IITM","System Of Air Quality And weather Forecasting Research Maharashtra Institute Of Technology (MIT) S No124, Paud Road, Kothrud, Pune 411038",18.517754,73.821488
+site_5404,Maharashtra,Pune,"Mhada Colony, Pune - IITM","System Of Air Quality And weather Forecasting Research CWE Office, Near Mhada Colony,Viman Nagar, In Front Of Airport, Pune",18.57304,73.927715
+site_5996,Maharashtra,Pune,"Panchawati_Pashan, Pune - IITM","System Of Air Quality And Weather Forecasting Research, IITM, Dr. Homi Bhabha Road, Panchawati, Pashan, Pune.",18.536457,73.805454
+site_5409,Maharashtra,Pune,"Revenue Colony-Shivajinagar, Pune - IITM","System Of Air Quality And weather Forecasting Research India Meteorological Department, University Rd, Revenue Colony, Shivajinagar, Pune",18.530085,73.849598
+site_5767,Maharashtra,Pune,"Savitribai Phule Pune University, Pune - MPCB","Department of Environmental Sciences, Savitribai Phule Pune University Premises, Ganeshkhind Road, Pune.",18.547056,73.826908
+site_5408,Maharashtra,Pune,"Transport Nagar-Nigdi, Pune - IITM","System Of Air Quality And weather Forecasting Research Transport Nagar, Nigdi, Pimpri Chinchwad",18.664282,73.763966
+site_5774,Maharashtra,Sangli,"Vijay Nagar, Sangli - MPCB","Collector Office Premises, Near District Court, Sangali Miraj Road, Vijay Nagar, Sangli.",16.5038,74.3623
+site_5777,Maharashtra,Solapur,"Dnyaneshwar Nagar, Solapur - MPCB","Jule Police Chowki, Near Dumping Yard, Dnyaneshwar Nagar, Jule, Solapur.",17.633626,75.91325
+site_5776,Maharashtra,Solapur,"Ratandeep Housing Society, Solapur - MPCB","New Revenue Building, Niyojan Bhavan, Saat Rasta, Ratandeep Housing Society, Solapur.",17.65439,75.90649
+site_302,Maharashtra,Solapur,"Solapur, Solapur - MPCB",,17.659919,75.906391
+site_5797,Maharashtra,Thane,"Kasarvadavali, Thane - MPCB","Childrens Traffic Park, Kavesar, Ghodbunder Road, Thane",19.26777,72.97182
+site_5800,Maharashtra,Thane,"Upvan Fort, Thane - MPCB","Near Shree Palaydevi Mandir, Upvan Lake, Thane West.",19.222279,72.957979
+site_5812,Maharashtra,Ulhasnagar,"Sidhi Vinayak Nagar, Ulhasnagar - MPCB","Sidhi Vinayak Nagar, Gol Maidan, Ulhasnagar.",19.235581,73.159121
+site_5808,Maharashtra,Virar,"Bolinj, Virar - MPCB","Bolinj Fish Market, Virar West.",19.445821,72.798823
+site_5592,Manipur,Imphal,"DM College of Science, Imphal - Manipur PCB","DM College, SBI ATM, DM Complex, North AOC. PO-Imphal West, Manipur.",24.820739,93.942309
+site_5591,Manipur,Imphal,"Manipur University, Imphal - Manipur PCB","Manipur University, Imphal East, Indo Myanmar Road, Canchipur",24.752424,93.928622
+site_5593,Meghalaya,Shillong,"JN Stadium, Shillong - Meghalaya PCB","Jawaharlal Nehru Stadium, Polo Ground, Shillong.",25.580342,91.894257
+site_5131,Meghalaya,Shillong,"Lumpyngngad, Shillong - Meghalaya PCB","Meghalaya State Pollution Control Board, Forest & Environmental Department, Government of Meghalaya 'Arden' Lumpyngad, Shillong",25.5586,91.8985
+site_5346,Mizoram,Aizawl,"Sikulpuikawn, Aizawl - Mizoram PCB",Near Sikulpuikawn Bus Stand,23.717634,92.719284
+site_5939,Odisha,Angul,"Hakimapada, Angul - OSPCB","Regional Office, Angul S-3/3, Industrial Estate, Hakimpada, Angul.",20.832874,85.104082
+site_5937,Odisha,Balasore,"Kalidaspur, Balasore - OSPCB","Regional Office, Kalidaspur, Balia, Balasore, Ganeswarpur, P.O - Januganj, Balasore.",21.51161,86.89088
+site_5938,Odisha,Barbil,"Forest Office, Barbil - OSPCB","Model Forest Range Office, Barbil Range, Keonjhar Forest Division, Barbil.",22.116605,85.394555
+site_5670,Odisha,Baripada,"Meher Colony, Baripada - OSPCB","Municipality Office Premises, In front of Collector Office, Baripada, Mayurbhanj, Odisha",21.941841,86.728318
+site_5940,Odisha,Bhubaneswar,"Lingraj Mandir, Bhubaneswar - OSPCB","Lingaraj Temple, New Market Complex, Old Town, Bhubaneswar, Odisha.",20.24079,85.836784
+site_5943,Odisha,Bhubaneswar,"Patia, Bhubaneswar - OSPCB","LV Prasad Eye Institute, Mithu Tulsi Chanrai Campus, Patia, Bhubaneswar.",20.34652,85.8163
+site_5673,Odisha,Bileipada,"Tata Township, Bileipada - OSPCB","ODISHA POLLUTION CONTROL BOARD C/O BILEIPADA TATA TOWNSHIP BILEIPADA, KEONJHAR",22.061567,85.474096
+site_1410,Odisha,Brajrajnagar,"GM Office, Brajrajnagar - OSPCB","Mahanadi Coal fields Limited,Near GM office",21.8005,83.839698
+site_5942,Odisha,Byasanagar,"Ferro Chrome Colony, Byasanagar - OSPCB","IDC Ferro Chrome Colony, Balunga Bandi, Byasanagar, Jajpur Road, Odisha.",20.94185,86.1151
+site_5941,Odisha,Cuttack,"CDA Area, Cuttack - OSPCB","MLD Sewage Treatment Plant, 36, CDA 1, Cuttack, Odisha",20.48891,85.84768
+site_5671,Odisha,Keonjhar,"Jagamohanpur, Keonjhar - OSPCB","Within the premise of District Agriculture Office, Keonjhar Town, Keonjhar.",21.6439,85.599355
+site_5674,Odisha,Nayagarh,"Dabuna, Nayagarh - OSPCB","Within the plant premises of AM/NS at Dabuna, Nayagarh.",21.847279,85.416905
+site_5672,Odisha,Rairangpur,"Divisional Forest Office, Rairangpur - OSPCB","Divisional Forest Office Premises, Near Durga Mandap, Rairangpur, Mayurbhanj, Odisha",22.265816,86.174829
+site_5687,Odisha,Rourkela,"Fertilizer Township, Rourkela - OSPCB","Fertilizer township health center Rourkela steel plant, Rourkela",22.189722,84.862778
+site_5675,Odisha,Rourkela,"Raghunathpali, Rourkela - OSPCB","Regional Office, Odisha State Pollution Control Board, Near Hockey Chowk, Panposh, Rourkela, Odisha",22.220833,84.809444
+site_5688,Odisha,Rourkela,"Sector-2, Rourkela - OSPCB","Indo German Club, Sector-2, Rourkela, Odisha.",22.245,84.881111
+site_5676,Odisha,Suakati,"OMC Colony, Suakati - OSPCB","OMC Ltd. Colony, Suakati, Bansapal Tehsil, Kendujhar Distt.",21.606865,85.510538
+site_1408,Odisha,Talcher,"Talcher Coalfields,Talcher - OSPCB","OSPCB CAAQMS-1 Mahanadi Coal fields Limited Near Senior transit camp Dera , Talcher , Angul-759103",20.936071,85.170702
+site_5677,Odisha,Tensa,"Barsua Iron Ore Mines, Tensa - OSPCB","Within Barsua Iron Ore Mines, Sail, Tensa, Distt. Sundargadh, Odisha",21.869985,85.167016
+site_5423,Puducherry,Puducherry,"Jawahar Nagar, Puducherry - PPCC","Town and Country Planning Department (Roof Top), Jawahar Nagar Main Rd, Jawahar Nagar, Opp MarieOulgaret, Puducherry",11.9309,79.8027
+site_256,Punjab,Amritsar,"Golden Temple, Amritsar - PPCB","Near musical Fountain ,Atta Mandi Gate, Darbar Sahib, Amritsar (Golden Temple).",31.62,74.876512
+site_1549,Punjab,Bathinda,"Hardev Nagar, Bathinda - PPCB","Ambuja Cements Limited. (Unit : Bathinda) Near - G.N.D.T.P.P, Malout Road Bathinda.",30.233011,74.907758
+site_1438,Punjab,Jalandhar,"Civil Line, Jalandhar - PPCB","Circuit House, Civil Line, Jalandhar, Punjab.",31.321907,75.578914
+site_1450,Punjab,Khanna,"Kalal Majra, Khanna - PPCB","A.S. College, Samrala road, Khanna, Ludhiana.",30.736056,76.209694
+site_253,Punjab,Ludhiana,"Punjab Agricultural University, Ludhiana - PPCB","Near Gate no 3, PAU University, Ludhiana. (Punjab Agriculture University)",30.9028,75.8086
+site_255,Punjab,Mandi Gobindgarh,"RIMT University, Mandi Gobindgarh - PPCB","Near Agarsen Ground, RIMT university Opposite Floating Restaurant, Sirhind Side, Mandi Gobindgarh.",30.649961,76.331442
+site_1437,Punjab,Patiala,"Model Town, Patiala - PPCB","Vatavaran Bhawan, Nabha road, Patiala.",30.349388,76.366642
+site_1538,Punjab,Rupnagar,"Ratanpura, Rupnagar - Ambuja Cements","Ambuja Cement Ltd, Unit - Ropar, Near GGSSTP, Village-Dharburji, PO-Lodhimajra, Ropar, Ratanpura, Rupnagar, Punjab.",31.032545,76.562305
+site_1390,Rajasthan,Alwar,"Moti Doongri, Alwar - RSPCB","Alwar - Jaipur Rd, Mangal Vihar Colony, Moti Doongri, Alwar, Rajasthan.",27.554793,76.611536
+site_5711,Rajasthan,Banswara,"Rati Talai, Banswara - RSPCB","CAAQMS Station, Govt. Nutan Sr. Sec. School, Rati Talai, Banswara.",23.55519,74.44001
+site_5775,Rajasthan,Baran,"Bamboliya, Baran - RSPCB","CAAQMS Station, Collectorate, Near Rajeev Gandhi Seva Kendra, Kota Rd, Bamboliya, Baran, Rajasthan.",25.106006,76.469948
+site_5714,Rajasthan,Barmer,"Railway Colony, Barmer - RSPCB","CAAQMS Barmer, Government Senior Secondary School, Station Rd, Railway Colony, Barmer, Rajasthan.",25.747299,71.393989
+site_5695,Rajasthan,Bharatpur,"Krishna Nagar, Bharatpur - RSPCB","Master Adityendra Senior Secondary School, Krishna Nagar, Bharatpur.",27.215415,77.50873
+site_5770,Rajasthan,Bhilwara,"Pratap Nagar, Bhilwara - RSPCB","Govt. Higher Secondary School, Pur Road, Pratap Nagar, Bhilwara, Rajasthan",25.339605,74.618883
+site_1391,Rajasthan,Bhiwadi,"RIICO Ind. Area III, Bhiwadi - RSPCB","Phase-lll, RIICO Industrial Area, Bhiwadi, Rajasthan.",28.194909,76.862296
+site_5982,Rajasthan,Bhiwadi,"Vasundhara Nagar_UIT, Bhiwadi - RSPCB","Sewage Treatment Plant, Near Star Hospital, Bhiwadi.",28.207266,76.829265
+site_5696,Rajasthan,Bikaner,"MM Ground, Bikaner - RSPCB","M.M.Ground, Muralidhar Vyas Colony, Bikaner.",28.018792,73.292658
+site_5771,Rajasthan,Bundi,"New Colony, Bundi - RSPCB","Govt. Senior Secondary School, Near Circuit House, New Colony, Bundi, Rajasthan",25.435774,75.644272
+site_5712,Rajasthan,Chittorgarh,"Shastri Nagar, Chittorgarh - RSPCB","Shaheed Major Natwar Singh Shaktawat Government Higher Secondary School, Shastri Nagar, Bhilwara Road, Chittorgarh.",24.892047,74.623527
+site_5699,Rajasthan,Churu,"Subash Chowk, Churu - RSPCB","Parakh Govt. Balika Sr. Sec. School, Ke Ander D.B. Hospital Road, Railway Colony, Churu, Rajasthan, 331001",28.296139,74.961696
+site_5713,Rajasthan,Dausa,"Khatikan Mohalla, Dausa - RSPCB","Shri Ramkaran Joshi Govt. School, Lalsot Road, Dausa.",26.895552,76.334753
+site_5700,Rajasthan,Dholpur,"Raja Ganj, Dholpur - RSPCB","Maharana Pratap Govt. Sr. Sec. School, Dholpur, Gadarpura Road, Raja Ganj, Dholpur. Near old Bus stand",26.699557,77.898881
+site_5850,Rajasthan,Dungarpur,"Bhoiwada, Dungarpur - RSPCB","Govt. Maharawal Senior Secondary School, Bhoiwada, Dungarpur, Rajasthan",23.837789,73.714926
+site_5715,Rajasthan,Hanumangarh,"Housing Board, Hanumangarh - RSPCB","Government Senior Secondary School, Suratgarh - Hanumangarh Rd, Housing Board, Hanumangarh.",29.61075,74.283608
+site_1393,Rajasthan,Jaipur,"Adarsh Nagar, Jaipur - RSPCB","Psychiatric Centre, Janta Colony, Govind Marg, Adarsh Nagar, Jaipur.",26.902909,75.836858
+site_5725,Rajasthan,Jaipur,"Mansarovar Sector-12, Jaipur - RSPCB","Government Senior Secondary School, Mansarovar Sector-12, Mansarovar, Thadi Market, Jaipur",26.843698,75.766894
+site_134,Rajasthan,Jaipur,"Police Commissionerate, Jaipur - RSPCB","Commissionerate Jaipur Govt. Hostel, M.I. Road, Jaipur.",26.916409,75.79949
+site_5728,Rajasthan,Jaipur,"RIICO Sitapura, Jaipur - RSPCB","Global Circle, RIICO, Sitapura Jaipur.",26.786682,75.827928
+site_5727,Rajasthan,Jaipur,"Sector-2 Murlipura, Jaipur - RSPCB","Government Senior Secondary School, Murlipura Beed, Sikar Road, Murlipura, Jaipur, Rajasthan",26.960669,75.771817
+site_1396,Rajasthan,Jaipur,"Shastri Nagar, Jaipur - RSPCB","Regional Science Park, Shastri Nagar, Jaipur.",26.950293,75.730943
+site_5772,Rajasthan,Jaisalmer,"Sadar Bazar, Jaisalmer - RSPCB","Mangal Singh Park, Sadar Bazar, Kishanghat, Jaisalmer, Rajasthan",26.912329,70.909168
+site_5851,Rajasthan,Jalore,"Mudtra Sili, Jalore - RSPCB","Jalore Nagar Parishad Campus, Mudtra Sili, Jalore Road, Jalore, Rajasthan",25.344694,72.626208
+site_5724,Rajasthan,Jhalawar,"Rajlaxmi Nagar, Jhalawar - RSPCB","Govt. Secondary School (New Block), Rajlaxmi Nagar, Jhalawar.",24.588397,76.172782
+site_5717,Rajasthan,Jhunjhunu,"Indra Nagar, Jhunjhunu - RSPCB","G-36, Indra Nagar, Peeru Singh Govt Senior Secondary School, Near Peeru Singh Circle, Jhunjhunu, Rajasthan.",28.108988,75.386577
+site_136,Rajasthan,Jodhpur,"Collectorate, Jodhpur - RSPCB","CRT CAAQMS, Colectrate Campus Park, Paota High Court Road, Jodhpur.",26.268249,73.019385
+site_5726,Rajasthan,Jodhpur,"Digari Kalan, Jodhpur - RSPCB","Govt. Sr. Sec. School, Village Digari Kalan, Near Digari Circle, Jodhpur.",26.29581,73.082283
+site_5720,Rajasthan,Jodhpur,"Jhalamand, Jodhpur - RSPCB","Govt. Sr. Secondary School, Jhalamand, Jodhpur, Rajasthan.",26.215415,73.070156
+site_5773,Rajasthan,Jodhpur,"Mandor, Jodhpur - RSPCB","Gram Sevak Prashiksha Kendra, Nimba Nimri Road, Mandor, Jodhpur",26.358805,73.047444
+site_5694,Rajasthan,Jodhpur,"Samrat Ashok Udhyan, Jodhpur - RSPCB","Samrat Ashok Udhyan, Raj, Jodhpur.",26.253384,72.976571
+site_5723,Rajasthan,Karauli,"Satyawati Vihar, Karauli - RSPCB","Near Private Bus Stand, Fire Brigade Office, Collectorate Circle, Karauli.",26.506177,77.025989
+site_5707,Rajasthan,Kota,"Dhanmandi, Kota - RSPCB","Vigyan Prodyogiki Kendra, DCM Road, 81, New Chhatrapura, Dhanmandi, Kota",25.16409,75.858137
+site_5701,Rajasthan,Kota,"Nayapura, Kota - RSPCB","Govt. Vocational Sr. Sec. School, Infront of J.K. Loan Hospital, Nayapura, Kota.",25.196024,75.855668
+site_1394,Rajasthan,Kota,"Shrinath Puram, Kota - RSPCB","Sector E, Shrinath Puram, Kota, Rajasthan.",25.14389,75.821256
+site_5778,Rajasthan,Nagaur,"Karni Colony, Nagaur - RSPCB","Government Senior Secondary School, Rathori Kuan Road, Karni Colony, Nagaur, Rajasthan.",27.213494,73.734444
+site_1395,Rajasthan,Pali,"Indira Colony Vistar, Pali - RSPCB","Indira Colony Vistar, Pali, Rajasthan.",25.771061,73.340227
+site_5721,Rajasthan,Pratapgarh,"Pragati Nagar, Pratapgarh - RSPCB","Govt. Sr. Sec. School, Neemach Naka, Pratapgarh, Rajasthan",24.041198,74.780702
+site_5718,Rajasthan,Rajsamand,"Dhoinda, Rajsamand - RSPCB","Govt. Higher Sec. School, New Dhoinda Bus Stand, Dhoinda, Rajsamand.",25.03636,73.883502
+site_5716,Rajasthan,Sawai Madhopur,"Sahu Nagar, Sawai Madhopur - RSPCB","Mahatma Gandhi Govt. School, Sahu Nagar, Sawai Madhopur, Rajasthan",26.031443,76.359327
+site_5722,Rajasthan,Sikar,"Radhakishan Pura, Sikar - RSPCB","S K School Ground No.-1, Silver Jubilee Road, Near 3 Raj BN NCC, Radhakishan Pura, Sikar, Rajasthan",27.608912,75.153302
+site_5705,Rajasthan,Sirohi,"Vedhaynath Colony, Sirohi - RSPCB","Old Building School, Palace Rd, Vedhaynath Colony, Sirohi, Rajasthan",24.885261,72.857549
+site_5719,Rajasthan,Sri Ganganagar,"Old City, Sri Ganganagar - RSPCB","Government Model Higher Secondary School - Multipurpose, Old City, Sri Ganganagar, Rajasthan.",29.931624,73.864511
+site_5702,Rajasthan,Tonk,"Shastri Nagar, Tonk - RSPCB","Govt. Higher Secondary School, Kothi Natmam, Opposite to Gandhi Maidaan, Shastri Nagar, Near Vivekanand Circle, Tonk.",26.159933,75.780517
+site_1397,Rajasthan,Udaipur,"Ashok Nagar, Udaipur - RSPCB","Department of Mines and Geology Office, Near Court Chauk, Ashok Nagar, Udaipur.",24.588617,73.63214
+site_5590,Sikkim,Gangtok,"Zero Point GICI, Gangtok - SSPCB","Near State PWD Office, Zero Point, Gangtok, Sikkim",27.33853,88.614099
+site_5606,Tamil Nadu,Ariyalur,"Keelapalur, Ariyalur - TNPCB","SF No 4/326, Trichy Main Road, Opp Government Polytechnic College, Keelapalur Village.",11.06825,79.07033
+site_5605,Tamil Nadu,Chengalpattu,"Crescent University, Chengalpattu - TNPCB","B.S Abdur Rahman University, Seethakathi Estate, G.S.T Main Road, Vandalur, Chengalpattu, Tamilnadu.",12.877732,80.083481
+site_293,Tamil Nadu,Chennai,"Alandur Bus Depot, Chennai - CPCB","MKN Rd, St Thomas Mount, Chennai, Tamil Nadu 600016",12.909916,80.107654
+site_5361,Tamil Nadu,Chennai,"Arumbakkam, Chennai - TNPCB","4 and 5, Murugesan Street, Balavinayagar Nagar, Arumbakkam, chennai - 600106 (opposite side of vijay park hotel - 100 Feet Road)",13.0664,80.2112
+site_5618,Tamil Nadu,Chennai,"Gandhi Nagar_Ennore, Chennai - TNPCB","1st floor, Government Primary Health Care Centre, Kathivakkam, Gandhi Nagar, Ennore Chennai.",13.218341,80.32027
+site_5365,Tamil Nadu,Chennai,"Kodungaiyur, Chennai - TNPCB","No 23, Srinivasan Street, Krishnamurthy Nagar, Kodungaiyur, Near to MKB Nagar East Ave",13.1278,80.2642
+site_5092,Tamil Nadu,Chennai,"Manali Village, Chennai - TNPCB","Government School, Periya Thoppu Manali, Chennai TamilNadu.",13.1662,80.2584
+site_306,Tamil Nadu,Chennai,"Manali, Chennai - CPCB",,13.164544,80.26285
+site_5363,Tamil Nadu,Chennai,"Perungudi, Chennai - TNPCB","Door No 1/465, 6th cross Street, Sree Sai Nagar, Thuraipakkam, Near to small toll plaza",12.9533,80.2357
+site_5364,Tamil Nadu,Chennai,"Royapuram, Chennai - TNPCB",M/s Thirumalai Chemicals Ltd. Near to Royapuram Bridge,13.1036,80.2909
+site_288,Tamil Nadu,Chennai,"Velachery Res. Area, Chennai - CPCB","Sardar Patel Road, Opposite to C.L.R.I, Beside The Adyar Cancer Institute, Adyar, Chennai, Tamil Nadu 600036",13.005219,80.239813
+site_5623,Tamil Nadu,Coimbatore,"PSG College of Arts and Science, Coimbatore - TNPCB","PSG Collage of Arts and Science, Avinashi Road, Civil Aerodrome Post, Coimbatore.",11.0328,77.0349
+site_5094,Tamil Nadu,Coimbatore,"SIDCO Kurichi, Coimbatore - TNPCB","SIDCO Kurichi, Coimbatore, Tamil Nadu.",10.942451,76.978996
+site_5621,Tamil Nadu,Cuddalore,"Kudikadu, Cuddalore - TNPCB","Plot No.: A-3, SIPCOT Industrial Complex, Kudikadu, Cuddalore.",11.68299,79.75321
+site_5611,Tamil Nadu,Cuddalore,"Semmandalam, Cuddalore - TNPCB","29/23, Nellikuppam Main Road, Semmendalam, Near Anchaneyar Temple, Cuddalore.",11.763768,79.749984
+site_5608,Tamil Nadu,Dindigul,"Mendonsa Colony, Dindigul - TNPCB","PSNA Infosys Building, No :66, AMC Road, Near Bus Stand, Dindigul.",10.358535,77.984321
+site_5362,Tamil Nadu,Gummidipoondi,"Anthoni Pillai Nagar, Gummidipoondi - TNPCB","EPIP Building, SIPCOT Industrial Estate Road, Near to SIPCOT Fire and Police Station, Gummidipoondi",13.4127,80.1081
+site_5612,Tamil Nadu,Hosur,"SIPCOT Phase-1, Hosur - TNPCB","Plot No:149, 1 st Floor, SIPCOT PHASE-1, Dharga, Hosur.",12.746998,77.813811
+site_5619,Tamil Nadu,Kanchipuram,"Kilambi, Kanchipuram - TNPCB","Thirumalai Engineering College, Kilambi, Krishanpuram Post, Kanchipuram",12.864618,79.659968
+site_5627,Tamil Nadu,Karur,"Kamadenu Nagar, Karur - TNPCB","Unit-1, Asian Fabric Pvt. Ltd., No :247/ 8, 9,10, 1-D, Pugalur Road, Karur.",10.96782,78.080882
+site_5614,Tamil Nadu,Madurai,"Uchapatti, Madurai - TNPCB","Thirumangalam Taluk, Near Volkswagen Car Show Room, Madurai-Thirumangalam Road, Kappalur, Madurai.",9.865935,78.022669
+site_5616,Tamil Nadu,Nagapattinam,"Velippalayam, Nagapattinam - TNPCB","District Collector Master Complex, Nagapattinam.",10.798548,79.838212
+site_5624,Tamil Nadu,Ooty,"Bombay Castel, Ooty - TNPCB","Aavin Junction Milk factory, Bombay Castel, Ooty.",11.406829,76.713897
+site_5626,Tamil Nadu,Palkalaiperur,"Bharathidasan University, Palkalaiperur - TNPCB","Department of Environmental Biotechnology, Bharathidasan University, Palkalaiperur, Tiruchirappalli.",10.681158,78.741746
+site_5997,Tamil Nadu,Perundurai,"SIPCOT Industrial Park, Perundurai - TNPCB","TNPCB Regional Office, Near SIPCOT Arch, Olapalayam, Perundurai, Tamil Nadu.",11.258242,77.552761
+site_5978,Tamil Nadu,Pudukottai,"SIPCOT Nathampannai, Pudukottai - TNPCB","CAAQMS- Tamil Nadu Pollution Control Board, No.-1, SIPCOT Industrial Complex, SIPCOT Post, Pudukottai",10.423417,78.784889
+site_5625,Tamil Nadu,Ramanathapuram,"Chalai Bazaar, Ramanathapuram - TNPCB","Government Hospital, Chalai Bazaar, Kochi Madurai Dhanushkodi Road, Ramanathapuram.",9.36399,78.831977
+site_5617,Tamil Nadu,Ranipet,"VOC Nagar_SIPCOT, Ranipet - TNPCB","3/431, 5 th Street, VOC Nagar, SIPCOT, Ranipet.",12.952707,79.30394
+site_5622,Tamil Nadu,Salem,"Sona College of Technology, Salem - TNPCB","Sona college of Technology, Junction Main Road, Salem.",11.679111,78.125052
+site_5610,Tamil Nadu,Thanjavur,"Parisutham Nagar, Thanjavur - TNPCB","No.23, T.S.No.3303/1, SIDCO Industrial Complex, Nanchikottai Road, Opp. to Uzhavar Chandai, Manjikottai, Thanjavur.",10.765482,79.138997
+site_5630,Tamil Nadu,Tiruchirappalli,"St Joseph College, Tiruchirappalli - TNPCB","College Main Road, Annamalai Nagar, Teppakulam, Tiruchirappalli.",10.830158,78.691849
+site_5609,Tamil Nadu,Tirunelveli,"Municipal Corporation Office, Tirunelveli - TNPCB","Municiapl Corporation Office, Tirupuram, Tirunelveli, Tamilnadu.",8.728442,77.6962
+site_5607,Tamil Nadu,Tirupur,"Kumaran College, Tirupur - TNPCB","Tiruppur Kumaran College, Mangalam Road, Tiruppur, Tamilnadu.",11.09736,77.322867
+site_5615,Tamil Nadu,Vellore,"Vasanthapuram, Vellore - TNPCB","Khanna Mahal, Anna Salai, Vasanthapuram, Kosapet, Vellore.",12.909494,79.131861
+site_5979,Tamil Nadu,Virudhunagar,"Collectorate Office, Virudhunagar - TNPCB","No-23, Master Plan Complex, Sathur Road, Collectorate, Virudhunagar.",9.559382,77.948828
+site_199,Telangana,Hyderabad,"Bollaram Industrial Area, Hyderabad - TSPCB","CAAQMS, Top of the school building. Survey No. 499/A, IDA Bollaram X Road, Miyapur-Medchal Highway, Bachupally, Hyderabad, Telangana 500090 Land Mark: Kennedy School.",17.540891,78.358528
+site_262,Telangana,Hyderabad,"Central University, Hyderabad - TSPCB","Administrative Block, University of Hyderabad, Gachibowli, Hyderabad, Telangana -500046",17.460103,78.334361
+site_5596,Telangana,Hyderabad,"ECIL Kapra, Hyderabad - TSPCB","Telangana State Pollution Control Board, ECIL Kapra, Medchal, Malkajgiri District, Hyderabad.",17.470431,78.566959
+site_251,Telangana,Hyderabad,"ICRISAT Patancheru, Hyderabad - TSPCB","Patancheru, Hyderabad, Telangana 502324",17.5184,78.278777
+site_275,Telangana,Hyderabad,"IDA Pashamylaram, Hyderabad - TSPCB",,17.53169,78.218939
+site_5597,Telangana,Hyderabad,"IITH Kandi, Hyderabad - TSPCB","Telangana State Pollution Control Board, IITH KANDHI, Medak District, Hyderabad.",17.585705,78.126199
+site_5604,Telangana,Hyderabad,"Kokapet, Hyderabad - TSPCB","Telangana State Pollution Control Board, Kokapet Community Hall, Rangareddy District, Hyderabad, Telangana.",17.393559,78.339194
+site_5599,Telangana,Hyderabad,"Kompally Municipal Office, Hyderabad - TSPCB","Telangana State Pollution Control Board, Municipality Office, Kompally, Hyderabad, Telangana.",17.544899,78.486949
+site_5600,Telangana,Hyderabad,"Nacharam_TSIIC IALA, Hyderabad - TSPCB","Telangana State Pollution Control Road No.15D, TSIIC, IDA Nacharam, Hyderabad, Telangana.",17.429398,78.569354
+site_5595,Telangana,Hyderabad,"New Malakpet, Hyderabad - TSPCB","Telangana State Pollution Control Board, Louis Braille Park, Malakpet, Hyderabad District, Telangana.",17.37206,78.50864
+site_5602,Telangana,Hyderabad,"Ramachandrapuram, Hyderabad - TSPCB","Telangana State Pollution Control Board, Symphony Park Homes, Ramachandrapuram, Sangareddy District, Hyderabad, Telangana.",17.528544,78.286195
+site_294,Telangana,Hyderabad,"Sanathnagar, Hyderabad - TSPCB",,17.455946,78.433215
+site_5598,Telangana,Hyderabad,"Somajiguda, Hyderabad - TSPCB","Telangana State Pollution Control Board Khairthabad RTO Office, Hyderabad District.",17.417094,78.457437
+site_298,Telangana,Hyderabad,"Zoo Park, Hyderabad - TSPCB",,17.349694,78.451437
+site_5587,Tripura,Agartala,"Bardowali, Agartala - Tripura SPCB","Bardowali Higher Secondary School, Arundhautinagar, Agartala, West Tripura.",23.81755,91.272697
+site_5377,Tripura,Agartala,"Kunjaban, Agartala - Tripura SPCB","Parivesh Bhawan Pandit Nehru Complex, Gorkhabasti PO Kunjaban, Agartala West Tripura",23.862828,91.288736
+site_5464,Uttar Pradesh,Agra,"Manoharpur, Agra - UPPCB","Prelude Public School, Manoharpur, Dayalbagh, Agra",27.23711,78.01936
+site_5482,Uttar Pradesh,Agra,"Rohta, Agra - UPPCB","Panchsheel Mahaviddhyalaya, Rohta Rd, New Suraksha Vihar Phase-1, Rohta",27.106972,78.000111
+site_307,Uttar Pradesh,Agra,"Sanjay Palace, Agra - UPPCB",,27.198658,78.005981
+site_5465,Uttar Pradesh,Agra,"Sector-3B Avas Vikas Colony, Agra - UPPCB","U P Pollution Control Board, House No 14, Sec 3B, Awas Vikas Colony, Sikandra Yojna, Bodla, Agra",27.19412,77.96237
+site_5501,Uttar Pradesh,Agra,"Shahjahan Garden, Agra - UPPCB","Shahjahan Garden, Purani Mandi Churaha, Tajganj, Agra, Uttar Pradesh.",27.169338,78.03582
+site_5463,Uttar Pradesh,Agra,"Shastripuram, Agra - UPPCB","Dawar Footwear Industry Unit III, Plot No 56 and 57, EPIP, Shastripuram, Sikandra, Agra",27.19862,77.92066
+site_1569,Uttar Pradesh,Baghpat,"New Collectorate, Baghpat - UPPCB","Government District Hospital, New collectorate, Baghpat.",28.974801,77.213357
+site_5585,Uttar Pradesh,Baghpat,"Sardar Patel Inter College, Baghpat - UPPCB","Sardar Patel Inter College ,Bali ,Bali-Mewala Road, Baghpat U.P",28.964949,77.278761
+site_5628,Uttar Pradesh,Bareilly,"Civil Lines, Bareilly - UPPCB",Government Inter College For Boys Civil Lines Bareilly Uttar Pradesh 243003,28.359581,79.414455
+site_5601,Uttar Pradesh,Bareilly,"Rajendra Nagar, Bareilly - UPPCB","Regional Office, Uttar Pradesh Pollution Control Board, 1219/1 E- Rajendra Nagar Bareilly",28.389109,79.429637
+site_1542,Uttar Pradesh,Bulandshahr,"Yamunapuram, Bulandshahr - UPPCB","F-5, Yamunapuram, Bulandshahr, Near MMR Mall (Within the premises of UPPCB Office).",28.406963,77.849831
+site_5480,Uttar Pradesh,Firozabad,"Nagla Bhau, Firozabad - UPPCB","NaglaBhau Primary school, Opposite Tehsil Sadar",27.168897,78.37696
+site_5584,Uttar Pradesh,Firozabad,"Vibhab Nagar, Firozabad - UPPCB","Firozabad Club, Vibhab Nagar, Chandra Nagar, Uttar Pradesh (JALESAR ROAD FIROZABAD)",27.1594,78.3953
+site_5082,Uttar Pradesh,Ghaziabad,"Indirapuram, Ghaziabad - UPPCB","Ganga Jalpariyojan, Phase 2, Gyankhand-4, indiraouram.",28.646233,77.358075
+site_5083,Uttar Pradesh,Ghaziabad,"Loni, Ghaziabad - UPPCB","Loni Nagar, Palika Parisad Building, Loni Dehat, Ghaziabad, Uttar Pradesh.",28.757294,77.278792
+site_5081,Uttar Pradesh,Ghaziabad,"Sanjay Nagar, Ghaziabad - UPPCB","District Combined Hospital, P-Block, Sector 23, Sanjay Nagaar, Ghaazibad.",28.685382,77.453839
+site_144,Uttar Pradesh,Ghaziabad,"Vasundhara, Ghaziabad - UPPCB",,28.660335,77.357256
+site_5472,Uttar Pradesh,Gorakhpur,"Madan Mohan Malaviya University of Technology, Gorakhpur - UPPCB","MMMUT Deoria Road, Singhariya, Kunraghat, Gorakhpur",26.730136,83.433859
+site_5023,Uttar Pradesh,Hapur,"Anand Vihar, Hapur - UPPCB","New Collectorate Building, Anand Vihar, Delhi - Hapur Road, Hapur.",28.725645,77.749675
+site_5583,Uttar Pradesh,Jhansi,"Shivaji Nagar, Jhansi - UPPCB","Regional Office UP Pollution Control Board, Avas Vikas Colony, Talpura Yojana, Kanpur Road, Shivaji Nagar, Jhansi",25.4547,78.6039
+site_5500,Uttar Pradesh,Kanpur,"FTI Kidwai Nagar, Kanpur - UPPCB","Forestry Training Institute Kidwai Nagar, Kanpur, Uttar Pradesh 208011",26.428282,80.327067
+site_5416,Uttar Pradesh,Kanpur,"IITK, Kanpur - IITK","Indian Institute Of Technology, Kalyanpur, Kanpur, Uttar Pradesh 208016",26.511739,80.235136
+site_5474,Uttar Pradesh,Kanpur,"NSI Kalyanpur, Kanpur - UPPCB","National Sugar Institute GT Road, Near Kalyanpur railway station, Kalyanpur",26.509954,80.249612
+site_276,Uttar Pradesh,Kanpur,"Nehru Nagar, Kanpur - UPPCB",,26.470314,80.322986
+site_5603,Uttar Pradesh,Khurja,"Kalindi Kunj, Khurja - UPPCB","Old G.T.Road, Kalindi Kunj Park, Khurja, Bulandshahar, Uttar Pradesh.",28.234893,77.8683
+site_5460,Uttar Pradesh,Lucknow,"B R Ambedkar University, Lucknow - UPPCB",Babasaheb bhimrao ambedkar University Vidya vihar Raibarelly road Lucknow,26.766433,80.927299
+site_5128,Uttar Pradesh,Lucknow,"Gomti Nagar, Lucknow - UPPCB","Uttar Pradesh Pollution Control Board, Building No. TC-12V, 5th Floor, Vibhuti Khand, Gomti Nagar, Lucknow-226010",26.86812,81.005119
+site_272,Uttar Pradesh,Lucknow,"Kendriya Vidyalaya, Lucknow - CPCB","Sitapur Road, Sector-A, Sector-O, Aliganj, Lucknow, Uttar Pradesh 226024",26.906111,80.948222
+site_5462,Uttar Pradesh,Lucknow,"Kukrail Picnic Spot-1, Lucknow - UPPCB","Kukrail Picnic Spot Phase 1, Green Hut 1, Kukrail Forest Range, Near Shivpuri Colony, Indra Nagar, Lucknow, UP",26.90723,80.98579
+site_277,Uttar Pradesh,Lucknow,"Lalbagh, Lucknow - CPCB",,26.845881,80.936554
+site_1405,Uttar Pradesh,Lucknow,"Nishant Ganj, Lucknow - UPPCB","Shop No-05, IInd Floor, Karamat Market, Nishat Ganj, Lucknow.",26.871428,80.957145
+site_297,Uttar Pradesh,Lucknow,"Talkatora District Industries Center, Lucknow - CPCB",,26.833997,80.891736
+site_5258,Uttar Pradesh,Meerut,"Ganga Nagar, Meerut - UPPCB","Mawana Rd, O Pocket, Ganga Nagar, Meerut.",28.999264,77.759035
+site_5109,Uttar Pradesh,Meerut,"Jai Bhim Nagar, Meerut - UPPCB","Anuyogipuram, Near Medical College, Meerut Garh Road, Meerut.",28.953588,77.762294
+site_5257,Uttar Pradesh,Meerut,"Pallavpuram Phase 2, Meerut - UPPCB","T-C3/2, Pallav puram Phase 2, Meerut.",29.06351,77.709723
+site_5554,Uttar Pradesh,Moradabad,"Buddhi Vihar, Moradabad - UPPCB","Avas Vikas Colony, Buddhi Vihar, Moradabad, Uttar Pradesh",28.83526,78.7446
+site_5556,Uttar Pradesh,Moradabad,"Eco Herbal Park, Moradabad - UPPCB","Sec-9,Harbal Park Parking,New Moradabad Uttar Pradesh",28.840739,78.697531
+site_5537,Uttar Pradesh,Moradabad,"Employment Office, Moradabad - UPPCB","A.06 Complete Address (Land mark)Employment office, Mohra Ki Milak, Moradabad.",28.88528,78.7388
+site_5555,Uttar Pradesh,Moradabad,"Jigar Colony, Moradabad - UPPCB","Pasha Park, Jigar Colony, Moradabad, Uttar Pradesh",28.856664,78.772638
+site_5620,Uttar Pradesh,Moradabad,"Kashiram Nagar, Moradabad - UPPCB","G-Block Park, Kanshi Ram Nagar, Moradabad.",28.849399,78.742362
+site_1398,Uttar Pradesh,Moradabad,"Lajpat Nagar, Moradabad - UPPCB",,28.825341,78.721301
+site_5613,Uttar Pradesh,Moradabad,"Transport Nagar, Moradabad - UPPCB","Electric Bus Charging Station, Vill. Mainather, Lakri Fajalpur Road, Moradabad.",28.802625,78.753728
+site_1550,Uttar Pradesh,Muzaffarnagar,"New Mandi, Muzaffarnagar - UPPCB","SD College, Bhopa Road, Patel Nagar, New Mandi, Muzaffarnagar.",29.472351,77.719403
+site_5461,Uttar Pradesh,Prayagraj,"Jhunsi, Prayagraj - UPPCB","Avas Vikas Parishad Colony, Sector 10, Scheme No 3, Jhunsi, Prayagraj",25.425602,81.917152
+site_5459,Uttar Pradesh,Prayagraj,"Motilal Nehru NIT, Prayagraj - UPPCB","Barrister Mullah Colony, MNNIT Allahabad Campus, Teliarganj, Prayagraj, Uttar Pradesh",25.494,81.863
+site_5484,Uttar Pradesh,Prayagraj,"Nagar Nigam, Prayagraj - UPPCB","Sarojini Naidu Marg, Canton, Civil Lines, Prayagraj",25.449199,81.82736
+site_273,Uttar Pradesh,Varanasi,"Ardhali Bazar, Varanasi - UPPCB","Ordali Bazar, Tagore Town, Orderly Bazar, Varanasi, Uttar Pradesh 221002",25.350599,82.908307
+site_5469,Uttar Pradesh,Varanasi,"Bhelupur, Varanasi - UPPCB","B20 193, Jalkalvibhag, Bhelupur, Varanasi, Uttar Pradesh",25.301778,82.996789
+site_5468,Uttar Pradesh,Varanasi,"IESD Banaras Hindu University, Varanasi - UPPCB","IESD, BHU Campus, Varanasi, Uttar Pradesh",25.262326,82.995408
+site_5475,Uttar Pradesh,Varanasi,"Maldahiya, Varanasi - UPPCB","Government Queens Inter college, Maldahiya, Chetganj, Varanasi",25.32393,82.99687
+site_5483,Uttar Pradesh,Vrindavan,"Omex Eternity, Vrindavan - UPPCB","Omaxe Eternity Vrindavan, Near Prem Mandir, Chhatikara Choraha, Vrindavan",27.571409,77.655757
+site_5594,Uttarakhand,Dehradun,"Doon University, Dehradun - UKPCB","DOON UNIVERSITY CAMPUS, Mothorowala Road, Kedarpur, Dehradun, 248001, Uttarakhand",30.269444,78.044167
+site_5704,Uttarakhand,Kashipur,"Govt. Girls Inter College, Kashipur - UKPCB","Government Girls Inter College, Near Maharana Pratap Chowk, Kashipur.",29.212411,78.961175
+site_5703,Uttarakhand,Rishikesh,"Shivaji Nagar, Rishikesh - UKPCB","All India Institute of Medical Sciences, Shivaji Nagar, Virbhadra Road, Rishikesh, Uttarakhand,",30.075911,78.285955
+site_1418,West Bengal,Asansol,"Asansol Court Area, Asansol - WBPCB","SDM Bunglow, Near Asansol Girls Collage, Near Asansol Court, Asansol, Dist- Burdwan, Asansol.",23.685297,86.945968
+site_5985,West Bengal,Asansol,"Evelyn Lodge, Asansol - WBPCB","Munshi Bazar, Asansol, West Bengal.",23.697936,86.944395
+site_5986,West Bengal,Asansol,"Mahabir Colliery, Asansol - WBPCB","Mahabir Colliery Road, Raniganj, West Bengal.",23.618183,87.105718
+site_5995,West Bengal,Asansol,"Trivenidevi Bhalotia College, Asansol - WBPCB","Trivenidevi Bhalotia College, Raniganj, Asansol, Paschim Bardhaman.",23.616515,87.119133
+site_5959,West Bengal,Barrackpore,"SVSPA Campus, Barrackpore - WBPCB","Swami Vivekananda State Police Academy, Mongal Pandey Uddyan, Barrackpore, West Bengal.",22.760558,88.361759
+site_6008,West Bengal,Durgapur,"Mahishkapur Road_B-Zone, Durgapur - WBPCB","Mahishkapur Road, B-Zone, Durgapur, West Bengal",23.567923,87.306843
+site_5983,West Bengal,Durgapur,"PCBL Residential Complex, Durgapur - WBPCB","Bidhannagar, Paschim Bardhaman, Durgapur-713212",23.508764,87.35444
+site_300,West Bengal,Haldia,"Priyambada Housing Estate, Haldia - WBPCB","PRIYAMBADA HOUSING ESTATE, BASUDEVPUR, KHANJANCHAK, DURGACHAK, HALDIA-721602",22.06047,88.109737
+site_5101,West Bengal,Howrah,"Belur Math, Howrah - WBPCB","West Bengal Pollution Control Board, C/O Ramkrishna Mission Vivekananda University, PO-Belur Math, Dist Howrah.",22.629801,88.352017
+site_5989,West Bengal,Howrah,"Botanical Garden, Howrah - WBPCB","Acharya Jagdish Chandra Bose Indian Botanical Garden, Botanical Survey of India, Botanical Garden, Howrah.",22.554954,88.292568
+site_6009,West Bengal,Howrah,"Dasnagar, Howrah - WBPCB","Panchanantala, Kunjapara, Netajigarh, Dasnagar, Howrah, West Bengal.",22.602557,88.310566
+site_274,West Bengal,Howrah,"Ghusuri, Howrah - WBPCB","West Bengal Pollution Control Board, C/O KMDA Howrah Booster Pumping Station, Naskar Para Road, Near Jaiswal Hospital.",22.611968,88.347422
+site_1416,West Bengal,Howrah,"Padmapukur, Howrah - WBPCB","40 M.G.D Water treatment plant, 9 No. Andul road, Howrah.",22.568732,88.279728
+site_5238,West Bengal,Kolkata,"Ballygunge, Kolkata - WBPCB","Birla Industrial & Technological Museum 19a,Gurusaday Road ,Kolkata-700019",22.536751,88.363802
+site_5129,West Bengal,Kolkata,"Bidhannagar, Kolkata - WBPCB","Administrative Training Institute, Government of West Bengal, FC-Block, Sector-III, Salt Lake, Kolkata.",22.58157,88.410025
+site_5110,West Bengal,Kolkata,"Fort William, Kolkata - WBPCB","West Bengal Pollution Control Board, C/O Fort William, HQ Eastern Command, East Gate - Maidan, Hastings, Kolkata.",22.55664,88.342674
+site_5111,West Bengal,Kolkata,"Jadavpur, Kolkata - WBPCB","C/O, Indian Association for the Cultivation Of Science, 2a & 2b, Raja S C Mullick Road, Jadavpur, Kolkata.",22.49929,88.36917
+site_296,West Bengal,Kolkata,"Rabindra Bharati University, Kolkata - WBPCB","West Bengal Pollution Control Board C/o Rabindra Bharati University, 56A, B.T. Road, Kolkata.",22.627847,88.380669
+site_5126,West Bengal,Kolkata,"Rabindra Sarobar, Kolkata - WBPCB","C/O KMDA Park, Rabindra Sarobar, Opposite Menoka Cinema, 5, Sarat Chatterjee Avenue, Lake Range, Kalighta, Kolkata.",22.51106,88.35142
+site_309,West Bengal,Kolkata,"Victoria, Kolkata - WBPCB",,22.544808,88.340369
+site_1419,West Bengal,Siliguri,"Ward-32 Bapupara, Siliguri - WBPCB","Mahananda Barrage Division, TEEASTA Administrative Building, Tinbatti More, P.O.- Siliguri Bazar.",26.687923,88.41525

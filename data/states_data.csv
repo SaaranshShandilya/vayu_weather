@@ -1,0 +1,32 @@
+state,population,area (km2),isUnionTerritory
+Uttar Pradesh,199812341,240928,False
+Maharashtra,112374333,307713,False
+Bihar,104099452,94163,False
+West Bengal,91276115,88752,False
+Madhya Pradesh,72626809,308252,False
+Tamil Nadu,72147030,130058,False
+Rajasthan,68548437,342239,False
+Karnataka,61095297,191791,False
+Gujarat,60439692,196024,False
+Andhra Pradesh,49577103,162975,False
+Odisha,41974219,155707,False
+Telangana,35003674,112077,False
+Kerala,33406061,38863,False
+Jharkhand,32988134,79716,False
+Assam,31205576,78438,False
+Punjab,27743338,50362,False
+Chhattisgarh,25545198,135192,False
+Delhi,16787941,1484,True
+Haryana,25351462,44212,False
+Jammu and Kashmir,12267032,42241,True
+Uttarakhand,10086292,53483,False
+Himachal Pradesh,6864602,55673,False
+Tripura,3673917,10491,False
+Manipur,2570390,22327,False
+Meghalaya,2966889,22429,False
+Nagaland,1978502,16579,False
+Arunachal Pradesh,1383727,83743,False
+Puducherry,1247953,479,True
+Mizoram,1097206,21081,False
+Chandigarh,1055450,114,True
+Sikkim,610577,7096,False

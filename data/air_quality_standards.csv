@@ -1,0 +1,23 @@
+pollutant,averaging_period,standard_limit,unit,area_scope,standard_name,notification_year
+SO2,annual,50,µg/m³,industrial residential rural and other areas,National Ambient Air Quality Standards,2009
+SO2,annual,20,µg/m³,ecologically sensitive area,National Ambient Air Quality Standards,2009
+SO2,24-hour,80,µg/m³,all notified areas,National Ambient Air Quality Standards,2009
+NO2,annual,40,µg/m³,industrial residential rural and other areas,National Ambient Air Quality Standards,2009
+NO2,annual,30,µg/m³,ecologically sensitive area,National Ambient Air Quality Standards,2009
+NO2,24-hour,80,µg/m³,all notified areas,National Ambient Air Quality Standards,2009
+PM10,annual,60,µg/m³,all notified areas,National Ambient Air Quality Standards,2009
+PM10,24-hour,100,µg/m³,all notified areas,National Ambient Air Quality Standards,2009
+PM2.5,annual,40,µg/m³,all notified areas,National Ambient Air Quality Standards,2009
+PM2.5,24-hour,60,µg/m³,all notified areas,National Ambient Air Quality Standards,2009
+Ozone,8-hour,100,µg/m³,all notified areas,National Ambient Air Quality Standards,2009
+Ozone,1-hour,180,µg/m³,all notified areas,National Ambient Air Quality Standards,2009
+Lead,annual,0.5,µg/m³,all notified areas,National Ambient Air Quality Standards,2009
+Lead,24-hour,1,µg/m³,all notified areas,National Ambient Air Quality Standards,2009
+CO,8-hour,2,mg/m³,all notified areas,National Ambient Air Quality Standards,2009
+CO,1-hour,4,mg/m³,all notified areas,National Ambient Air Quality Standards,2009
+NH3,annual,100,µg/m³,all notified areas,National Ambient Air Quality Standards,2009
+NH3,24-hour,400,µg/m³,all notified areas,National Ambient Air Quality Standards,2009
+Benzene,annual,5,µg/m³,all notified areas,National Ambient Air Quality Standards,2009
+Benzo(a)pyrene,annual,1,ng/m³,all notified areas,National Ambient Air Quality Standards,2009
+Arsenic,annual,6,ng/m³,all notified areas,National Ambient Air Quality Standards,2009
+Nickel,annual,20,ng/m³,all notified areas,National Ambient Air Quality Standards,2009

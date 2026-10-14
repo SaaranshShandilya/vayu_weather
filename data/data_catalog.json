@@ -1,0 +1,227 @@
+{
+  "air_quality_start_year": 2017,
+  "air_quality_end_year": 2025,
+  "sources": [
+    {
+      "id": "cpcb_historical",
+      "title": "CPCB air quality and meteorology",
+      "provider": "Central Pollution Control Board (CPCB)",
+      "date_start": "2017-01-01",
+      "date_end": "2024-12-31",
+      "temporal_granularity": "Daily station observations",
+      "geographic_granularity": "535 stations · 277 cities · 30 states/UTs",
+      "records": 708224,
+      "fields": [
+        "PM2.5",
+        "PM10",
+        "NO",
+        "NO2",
+        "NOx",
+        "NH3",
+        "SO2",
+        "CO",
+        "ozone",
+        "temperature",
+        "humidity",
+        "wind",
+        "rainfall",
+        "solar radiation",
+        "pressure"
+      ],
+      "quality": "Daily values are used as published; metric-level missing values remain missing and are never imputed.",
+      "provenance": "Bundled historical station table from the Sustainability Lab VayuChat project, derived from CPCB CAAQMS observations."
+    },
+    {
+      "id": "cpcb_2025",
+      "title": "CPCB 2025 extension",
+      "provider": "CPCB CAAQMS Data Repository",
+      "date_start": "2025-01-01",
+      "date_end": "2025-12-31",
+      "temporal_granularity": "Daily station observations",
+      "geographic_granularity": "412 stations · 214 cities",
+      "records": 150380,
+      "fields": [
+        "PM2.5",
+        "PM10",
+        "NO",
+        "NO2",
+        "NOx",
+        "NH3",
+        "SO2",
+        "CO",
+        "ozone",
+        "temperature",
+        "humidity",
+        "wind",
+        "rainfall",
+        "solar radiation",
+        "pressure"
+      ],
+      "quality": "Only station-years with at least 330 days reporting a core pollutant were retained. 112 partial station-years and 11 unavailable archives were excluded; no values were imputed.",
+      "provenance": "Downloaded from CPCB's 1-day raw station archives and retained at station-day grain."
+    },
+    {
+      "id": "station_locations",
+      "title": "Monitoring-station locations",
+      "provider": "CPCB station metadata bundled by the Sustainability Lab",
+      "date_start": null,
+      "date_end": null,
+      "temporal_granularity": "Static metadata",
+      "geographic_granularity": "535 station points · 277 cities",
+      "records": 535,
+      "fields": [
+        "station",
+        "site ID",
+        "address",
+        "latitude",
+        "longitude",
+        "city",
+        "state"
+      ],
+      "quality": "Every station in the historical air-quality table has one matched coordinate pair.",
+      "provenance": "Deduplicated from the original VayuChat station metadata table."
+    },
+    {
+      "id": "ncap_funding",
+      "title": "NCAP city funding and utilisation (historical)",
+      "provider": "National Clean Air Programme funding table",
+      "date_start": "2019-04-01",
+      "date_end": "2022-06-30",
+      "temporal_granularity": "Three fiscal-year release fields; utilisation snapshot in June 2022",
+      "geographic_granularity": "117 cities · 23 states",
+      "records": 117,
+      "fields": [
+        "FY 2019-20 release",
+        "FY 2020-21 release",
+        "FY 2021-22 release",
+        "total released",
+        "utilisation as of June 2022"
+      ],
+      "quality": "Funding fields are not extrapolated beyond FY 2021-22. The utilisation field is interpreted at state level.",
+      "provenance": "Bundled NCAP funding table from the Sustainability Lab VayuChat project."
+    },
+    {
+      "id": "ncap_program_finance_2025",
+      "title": "NCAP and XV-FC programme finance",
+      "provider": "CPCB PRANA · 18th NCAP Implementation Committee",
+      "date_start": "2019-04-01",
+      "date_end": "2025-08-18",
+      "temporal_granularity": "Fiscal-year released and utilised totals through FY 2025–26",
+      "geographic_granularity": "National programme totals · NCAP, XV-FC, and combined",
+      "records": 21,
+      "fields": [
+        "funds released (₹ crore)",
+        "funds utilised (₹ crore)",
+        "utilisation percentage"
+      ],
+      "quality": "Programme-wide totals are shown at their 18 August 2025 reporting snapshot. Annual utilisation can include expenditure from balances released in earlier years, so it is not interpreted as a same-year causal rate.",
+      "provenance": "Financial-status table in the official minutes of the 18th NCAP Implementation Committee meeting."
+    },
+    {
+      "id": "ncap_physical_progress_2025",
+      "title": "NCAP physical implementation progress",
+      "provider": "CPCB PRANA · 18th NCAP Implementation Committee",
+      "date_start": null,
+      "date_end": "2025-08-14",
+      "temporal_granularity": "Cumulative progress snapshot",
+      "geographic_granularity": "National programme totals · NCAP, XV-FC, and other-scheme convergence",
+      "records": 8,
+      "fields": [
+        "road pavement",
+        "mechanical sweeping machines",
+        "green area",
+        "C&D processing sites",
+        "electric buses",
+        "charging stations",
+        "crematoria",
+        "legacy waste remediation"
+      ],
+      "quality": "These are cumulative physical-output totals, not city-level observations or estimates of health impact.",
+      "provenance": "Physical-progress table in the official minutes of the 18th NCAP Implementation Committee meeting."
+    },
+    {
+      "id": "census_state_context",
+      "title": "State population, density, and decadal growth",
+      "provider": "Census of India 2011 via data.gov.in",
+      "date_start": "2001-01-01",
+      "date_end": "2011-12-31",
+      "temporal_granularity": "Decennial census",
+      "geographic_granularity": "India · 28 states · 7 union territories using 2011 boundaries",
+      "records": 36,
+      "fields": [
+        "population in 2011",
+        "population density in 2011",
+        "decadal population growth, 2001–2011"
+      ],
+      "quality": "Values are historical Census 2011 measurements, not current population estimates. Geographic boundaries are those used by the source table.",
+      "provenance": "Open Government Data Platform resource sourced from the Office of the Registrar General and Census Commissioner, India."
+    },
+    {
+      "id": "cpcb_naaqs",
+      "title": "National Ambient Air Quality Standards",
+      "provider": "Central Pollution Control Board (CPCB)",
+      "date_start": "2009-11-18",
+      "date_end": null,
+      "temporal_granularity": "Regulatory standard by pollutant and averaging period",
+      "geographic_granularity": "India · notified area categories",
+      "records": 22,
+      "fields": [
+        "pollutant",
+        "averaging period",
+        "standard limit",
+        "unit",
+        "area scope"
+      ],
+      "quality": "The table preserves annual, 24-hour, 8-hour, and 1-hour limits separately; VayuChat never substitutes one averaging period for another.",
+      "provenance": "CPCB Revised National Ambient Air Quality Standards notified in 2009."
+    },
+    {
+      "id": "state_metadata",
+      "title": "State area and administrative type",
+      "provider": "Bundled state metadata",
+      "date_start": null,
+      "date_end": null,
+      "temporal_granularity": "Static metadata",
+      "geographic_granularity": "31 states/UTs represented in the air-quality data",
+      "records": 31,
+      "fields": [
+        "area",
+        "union-territory flag"
+      ],
+      "quality": "Used for compatibility with historical analyses; Census-specific population questions use the separately versioned Census table.",
+      "provenance": "Bundled state metadata from the Sustainability Lab VayuChat project."
+    },
+    {
+      "id": "state_boundaries",
+      "title": "India state and union-territory boundaries",
+      "provider": "Open GeoJSON boundary compilation",
+      "date_start": null,
+      "date_end": null,
+      "temporal_granularity": "Static geometry",
+      "geographic_granularity": "36 state/UT features, including Telangana",
+      "records": 36,
+      "fields": [
+        "state or union-territory name",
+        "polygon or multipolygon geometry"
+      ],
+      "quality": "Used only to draw choropleths. Analytical values and rankings come from the separately versioned official tabular sources; geometry does not change the computed result.",
+      "provenance": "Simplified from the open gdf_india36 GeoJSON compilation; names are normalised to match the app's analytical tables."
+    },
+    {
+      "id": "gridded_forecast_sample",
+      "title": "Delhi NCR gridded PM forecast (synthetic emulator sample)",
+      "provider": "Synthetic sample generated by VayuChat; stand-in for IITM emulator / WRF-Chem output",
+      "date_start": "2026-10-07",
+      "date_end": "2026-10-09",
+      "temporal_granularity": "Hourly forecast, 72 lead hours",
+      "geographic_granularity": "61 × 61 grid of 0.02° (~2 km) cells, 28.0–29.2°N, 76.6–77.8°E",
+      "records": 535824,
+      "fields": [
+        "PM2.5",
+        "PM10"
+      ],
+      "quality": "SYNTHETIC. Built from station locations, road corridors, industrial hotspots, a diurnal boundary-layer cycle and seeded noise. It has the structure of emulator output but is not a forecast. Values are stored as a [time, latitude, longitude] array and queried directly, not as table rows.",
+      "provenance": "Generated by scripts/build_gridded_forecast.py, which also converts real NetCDF model output into the same layout."
+    }
+  ]
+}
