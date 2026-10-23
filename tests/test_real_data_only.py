@@ -55,10 +55,3 @@ def test_sidebar_prompts_ask_about_real_data_only():
         # Future-looking questions belong only in the CAMS forecast group.
         if prompt not in forecast_prompts:
             assert not re.search(r"\b(?:forecast|tomorrow|next \d+ days)\b", prompt, re.IGNORECASE), prompt
-
-
-def test_weather_prompts_stay_inside_the_wrf_period():
-    source = (PROJECT_ROOT / "src" / "prompts.ts").read_text(encoding="utf-8")
-    group = source[source.index('name: "wrf_weather"') : source.index('name: "methods"')]
-    years = {int(year) for year in re.findall(r"\b20\d{2}\b", group)}
-    assert years and years <= {2023, 2024}

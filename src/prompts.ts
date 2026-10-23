@@ -92,33 +92,6 @@ export const promptGroups: PromptGroup[] = [
     ],
   },
   {
-    name: "wrf_weather",
-    label: "WRF weather events (2023–2024)",
-    // Each prompt is a real event the simulation reproduces: the May–June 2024
-    // heatwave, Cyclones Michaung and Biparjoy, the record-dry August 2023
-    // monsoon break, and Delhi's shallow winter boundary layer. Events it
-    // misses (Delhi's July 2023 rain, the December 2023 Tamil Nadu floods,
-    // Punjab's fog cold days) and its early-monsoon wet bias over Kerala are
-    // deliberately left out.
-    prompts: [
-      "Map the temperature in Delhi over the last 7 days of data.",
-      "Map the mean maximum temperature across India during the 25–31 May 2024 heatwave.",
-      "Map the mean maximum temperature across North India during the 25–31 May 2024 heatwave.",
-      "How hot did Delhi get each day from 20 May to 5 June 2024?",
-      "Which states had the highest mean maximum temperature in May 2024?",
-      "Map the days with maximum temperature above 45 °C across India in May and June 2024.",
-      "Show daily rainfall in Chennai during Cyclone Michaung, 1–6 December 2023.",
-      "Map total rainfall across South India during Cyclone Michaung, 1–6 December 2023.",
-      "Map the peak wind speed over Gujarat during Cyclone Biparjoy, 13–17 June 2023.",
-      "Map total rainfall over Rajasthan from 15 June to 19 June 2023, as Biparjoy's remnants crossed it.",
-      "Animate daily maximum temperature across India from 20 May to 5 June 2024.",
-      "Animate daily rainfall across Rajasthan from 13 to 21 June 2023 as Biparjoy's remnants crossed it.",
-      "Animate daily rainfall around Chennai during Cyclone Michaung, 1–6 December 2023.",
-      "Map total rainfall across India in August 2023.",
-      "Show Delhi's monthly boundary layer height across 2023 and 2024.",
-    ],
-  },
-  {
     name: "cams_forecast",
     label: "CAMS air-quality forecast (next 5 days)",
     // Relative days resolve against today's date and the latest CAMS run,
