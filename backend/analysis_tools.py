@@ -6,15 +6,25 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field, model_validator
 
 from .catalog import AIR_QUALITY_END_YEAR, AIR_QUALITY_START_YEAR
-from .gridded import (
-    GRIDDED_TOOL_NAMES,
-    WINDOW_DESCRIPTION,
-    ForecastExceedanceArgs,
-    ForecastGridMapArgs,
-    ForecastPointSeriesArgs,
-    gridded_forecast,
+from .cams_forecast import (
+    CAMS_TOOL_NAMES,
+    TOOL_GUIDE as CAMS_TOOL_GUIDE,
+    CamsMapArgs,
+    CamsRankArgs,
+    CamsSeriesArgs,
+    CamsThresholdArgs,
+    cams_forecast,
 )
 from .models import QueryPlan
+from .weather_grid import (
+    WEATHER_TOOL_NAMES,
+    WINDOW_DESCRIPTION as WEATHER_WINDOW_DESCRIPTION,
+    WeatherGridMapArgs,
+    WeatherPointSeriesArgs,
+    WeatherRegionRankArgs,
+    WeatherThresholdArgs,
+    weather_grid,
+)
 
 
 Pollutant = Literal[
@@ -488,6 +498,7 @@ class DataCatalogArgs(StrictArgs):
         "population",
         "standards",
         "stations",
+        "weather",
         "forecast",
     ] = "all"
 
@@ -550,6 +561,43 @@ class ClarifyQuestionArgs(StrictArgs):
     options: list[str] = Field(default_factory=list, max_length=6)
 
 
+# Gemini rejects a request whose tool schemas, taken together, carry too many
+# constraints ("Request contains an invalid argument"); the 33 original tools
+# sat just under that ceiling. Bounds are therefore declared to the model as
+# text, and Pydantic still enforces every one when the plan is validated.
+SCHEMA_BOUND_WORDS = {
+    "minimum": "at least {}",
+    "exclusiveMinimum": "greater than {}",
+    "maximum": "at most {}",
+    "exclusiveMaximum": "less than {}",
+    "minLength": "at least {} characters",
+    "maxLength": "at most {} characters",
+    "minItems": "at least {} items",
+    "maxItems": "at most {} items",
+}
+
+
+def _bounds_as_text(node: Any) -> Any:
+    if isinstance(node, list):
+        return [_bounds_as_text(item) for item in node]
+    if not isinstance(node, dict):
+        return node
+    compact = {
+        key: _bounds_as_text(value)
+        for key, value in node.items()
+        if key not in SCHEMA_BOUND_WORDS and key != "title"
+    }
+    bounds = [
+        words.format(node[key])
+        for key, words in SCHEMA_BOUND_WORDS.items()
+        if key in node
+    ]
+    if bounds:
+        note = "Must be " + ", ".join(bounds) + "."
+        compact["description"] = f"{compact['description']} {note}" if compact.get("description") else note
+    return compact
+
+
 @dataclass(frozen=True)
 class ToolDefinition:
     name: str
@@ -561,7 +609,7 @@ class ToolDefinition:
             "type": "function",
             "name": self.name,
             "description": self.description,
-            "parameters": self.arguments_model.model_json_schema(),
+            "parameters": _bounds_as_text(self.arguments_model.model_json_schema()),
         }
 
 
@@ -817,38 +865,97 @@ TOOL_DEFINITIONS = (
         PhysicalProgressArgs,
     ),
     ToolDefinition(
-        "forecast_grid_map",
+        "weather_grid_map",
         (
-            "Map the gridded PM2.5 or PM10 forecast (emulator / WRF-Chem style "
-            "output) over Delhi NCR as a heatmap, with the highest-value "
-            "hotspot cells. statistic='mean' or 'max' reduces the chosen lead "
-            "hours to one map; 'hourly' animates hour by hour. Pass city to zoom "
-            "to one NCR city. Use for forecast maps, spatial patterns, and "
-            "where pollution will be highest. "
-            + WINDOW_DESCRIPTION
+            "Map a WRF model weather variable across India, one state, or "
+            "the surroundings of a city as a heatmap, with the most extreme "
+            "cells listed. statistic='mean' averages the days in the window, "
+            "'total' sums rainfall, 'max'/'min' take the most extreme day, and "
+            "'sequence' animates day by day (or in blocks for long windows). "
+            "order='lowest' lists the coldest/driest cells. Use for weather "
+            "maps, spatial patterns, and where it was hottest, wettest, or "
+            "windiest. "
+            + WEATHER_WINDOW_DESCRIPTION
         ),
-        ForecastGridMapArgs,
+        WeatherGridMapArgs,
     ),
     ToolDefinition(
-        "forecast_point_series",
+        "weather_point_series",
         (
-            "Hour-by-hour gridded PM2.5 or PM10 forecast at one place in Delhi "
-            "NCR: a city (centre of its monitors), a named monitoring station, "
-            "or a latitude/longitude. Use for 'what will PM2.5 be in Gurugram "
-            "tomorrow', forecast peaks, and forecast time series at a place. "
-            + WINDOW_DESCRIPTION
+            "Daily, weekly, or monthly WRF model weather at one place: a city "
+            "(grid cell at the centre of its monitors), a whole state (area "
+            "mean), or a latitude/longitude. Rainfall periods are totals; other "
+            "variables are means. Wind adds direction. Use for 'how hot was "
+            "Delhi in May 2024', monsoon rainfall at a city, and weather time "
+            "series. "
+            + WEATHER_WINDOW_DESCRIPTION
         ),
-        ForecastPointSeriesArgs,
+        WeatherPointSeriesArgs,
     ),
     ToolDefinition(
-        "forecast_exceedance_map",
+        "weather_threshold_map",
         (
-            "Count, for every grid cell of the Delhi NCR forecast, how many "
-            "hours PM2.5 or PM10 is above a numeric threshold, and the share of "
-            "area above it per day. Requires an explicit threshold in µg/m³. "
-            + WINDOW_DESCRIPTION
+            "Count, for every grid cell, the days a WRF weather variable is "
+            "above or below a numeric threshold, and the share of area meeting "
+            "it by month. Requires an explicit threshold in the variable's "
+            "unit, for example max_temperature above 40 °C for heat days or "
+            "rainfall above 64.5 mm for heavy-rain days. "
+            + WEATHER_WINDOW_DESCRIPTION
         ),
-        ForecastExceedanceArgs,
+        WeatherThresholdArgs,
+    ),
+    ToolDefinition(
+        "weather_region_rank",
+        (
+            "Rank Indian states (area mean over the grid) or station-registry "
+            "cities (nearest grid cell) by a WRF weather variable over a "
+            "window. Use for 'which state was hottest in May 2024', 'wettest "
+            "cities in the 2023 monsoon', and state or city weather rankings. "
+            + WEATHER_WINDOW_DESCRIPTION
+        ),
+        WeatherRegionRankArgs,
+    ),
+    ToolDefinition(
+        "cams_forecast_map",
+        (
+            "Map the CAMS air-quality forecast over India, a state, or a city or "
+            "district with its surroundings, with the most extreme cells listed. "
+            "statistic='mean' averages the forecast hours, 'max'/'min' take the "
+            "most extreme hour, 'sequence' animates hour by hour (or in blocks). "
+            "Use for forecast maps and where pollution will be highest. "
+            + CAMS_TOOL_GUIDE
+        ),
+        CamsMapArgs,
+    ),
+    ToolDefinition(
+        "cams_forecast_series",
+        (
+            "Hourly or IST-daily CAMS air-quality forecast at a city or district, "
+            "a state average, or a coordinate. Use for 'what will PM2.5 be in "
+            "Lucknow on Friday', forecast peaks, and forecast time series. "
+            + CAMS_TOOL_GUIDE
+        ),
+        CamsSeriesArgs,
+    ),
+    ToolDefinition(
+        "cams_forecast_threshold_map",
+        (
+            "Count, for every grid cell, the forecast hours a CAMS pollutant is "
+            "above a numeric threshold, and the share of area above it by IST "
+            "day. Requires an explicit threshold in the pollutant's unit. "
+            + CAMS_TOOL_GUIDE
+        ),
+        CamsThresholdArgs,
+    ),
+    ToolDefinition(
+        "cams_forecast_rank",
+        (
+            "Rank Indian states (area mean) or station-registry cities (nearest "
+            "cell) by CAMS forecast mean or peak hourly value over a window. Use "
+            "for 'which states will have the worst PM2.5 tomorrow'. "
+            + CAMS_TOOL_GUIDE
+        ),
+        CamsRankArgs,
     ),
     ToolDefinition(
         "clarify_question",
@@ -3323,7 +3430,8 @@ def _data_catalog(args: DataCatalogArgs) -> QueryPlan:
         "population": ["census_state_context", "state_metadata"],
         "standards": ["cpcb_naaqs"],
         "stations": ["station_locations"],
-        "forecast": ["gridded_forecast_sample"],
+        "forecast": ["cams_global_forecast"],
+        "weather": ["wrf_d01_daily", "wrf_d02_daily", "wrf_d03_daily", "wrf_d04_daily", "district_boundaries"],
     }
     where = ""
     if args.topic != "all":
@@ -3579,8 +3687,10 @@ def build_analysis(name: str, raw_arguments: dict[str, Any]) -> ToolAnalysis:
         plan = _programme_finance_trend(arguments)
     elif name == "physical_progress":
         plan = _physical_progress(arguments)
-    elif name in GRIDDED_TOOL_NAMES:
-        plan = gridded_forecast.run(name, arguments).plan
+    elif name in WEATHER_TOOL_NAMES:
+        plan = weather_grid.run(name, arguments).plan
+    elif name in CAMS_TOOL_NAMES:
+        plan = cams_forecast.run(name, arguments).plan
     elif name == "clarify_question":
         return ToolAnalysis(
             name=name,

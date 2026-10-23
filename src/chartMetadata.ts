@@ -17,6 +17,14 @@ const metricLabels: Record<string, string> = {
   solar_radiation: "Solar radiation",
   pressure: "Pressure",
   vertical_wind_speed: "Vertical wind speed",
+  max_temperature: "daily maximum temperature",
+  min_temperature: "daily minimum temperature",
+  max_wind_speed: "daily maximum wind speed",
+  boundary_layer_height: "Boundary layer height",
+  max_boundary_layer_height: "daily maximum boundary layer height",
+  surface_pressure: "Surface pressure",
+  aod: "Aerosol optical depth",
+  dust_aod: "Dust aerosol optical depth",
 };
 
 const metricUnits: Record<string, string> = {
@@ -38,6 +46,12 @@ const metricUnits: Record<string, string> = {
   solar_radiation: "W/m²",
   pressure: "mmHg",
   vertical_wind_speed: "m/s",
+  max_temperature: "°C",
+  min_temperature: "°C",
+  max_wind_speed: "m/s",
+  boundary_layer_height: "m",
+  max_boundary_layer_height: "m",
+  surface_pressure: "hPa",
 };
 
 const directLabels: Record<string, string> = {
@@ -76,11 +90,19 @@ const directLabels: Record<string, string> = {
   reported_value: "Reported value",
   value: "Value",
   average_value: "Average value",
-  forecast_time: "Forecast time (IST)",
-  lead_hour: "Lead hour",
-  forecast_day: "Forecast day",
+  mean_area_meeting_pct: "Mean area meeting threshold",
   mean_area_above_pct: "Mean area above threshold",
   peak_area_above_pct: "Peak area above threshold",
+  peak_time: "Peak time (IST)",
+  time: "Time (IST)",
+  hours: "Forecast hours",
+  peak_area_meeting_pct: "Peak area meeting threshold",
+  peak_day: "Peak day",
+  days: "Days",
+  grid_cells: "Grid cells",
+  nearest_city: "Nearest city",
+  distance_km: "Distance",
+  wind_from: "Wind from",
 };
 
 const directUnits: Record<string, string> = {
@@ -93,13 +115,18 @@ const directUnits: Record<string, string> = {
   released_crore: "₹ crore",
   utilised_crore: "₹ crore",
   utilisation_pct: "%",
+  mean_area_meeting_pct: "%",
   mean_area_above_pct: "%",
   peak_area_above_pct: "%",
+  peak_area_meeting_pct: "%",
+  distance_km: "km",
 };
 
 const statisticalPrefixes: Array<[string, string]> = [
   ["mean_", "Mean "],
   ["max_", "Peak "],
+  ["min_", "Lowest "],
+  ["total_", "Total "],
   ["median_", "Median "],
   ["average_", "Average "],
   ["start_", "Start "],

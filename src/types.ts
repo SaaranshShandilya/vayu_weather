@@ -42,12 +42,31 @@ export type GridPayload = {
   frames: Array<{ label: string; values: Array<number | null> }>;
   value_label: string;
   unit: string;
-  scale: "pm25" | "pm10" | "hours";
+  scale:
+    | "days"
+    | "hours"
+    | "pm25"
+    | "pm10"
+    | "pollutant"
+    | "aod"
+    | "temperature"
+    | "humidity"
+    | "wind"
+    | "rainfall"
+    | "pblh"
+    | "radiation"
+    | "pressure";
   scale_max: number | null;
   landmarks: Array<{ name: string; latitude: number; longitude: number }>;
   source_shape: number[];
   resolution_degrees: number;
-  synthetic: boolean;
+  boundaries: boolean;
+  source_label: string;
+  time_unit?: "days" | "hours";
+  domain: string;
+  domain_label: string;
+  outline: Array<Array<[number, number]>>;
+  outline_label: string;
 };
 
 export type AnalysisStep = {

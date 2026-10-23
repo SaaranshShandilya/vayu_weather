@@ -68,12 +68,36 @@ class GridPayload(BaseModel):
     frames: list[GridFrame] = Field(max_length=24)
     value_label: str
     unit: str
-    scale: Literal["pm25", "pm10", "hours"]
+    scale: Literal[
+        "days",
+        "hours",
+        "pm25",
+        "pm10",
+        "pollutant",
+        "aod",
+        "temperature",
+        "humidity",
+        "wind",
+        "rainfall",
+        "pblh",
+        "radiation",
+        "pressure",
+    ]
     scale_max: float | None = None
     landmarks: list[GridLandmark] = Field(default_factory=list)
     source_shape: list[int]
     resolution_degrees: float
-    synthetic: bool
+    # Draw state outlines over the grid (all-India and state maps).
+    boundaries: bool = False
+    source_label: str = "WRF d01 daily weather"
+    # The step of the time axis the grid was reduced over.
+    time_unit: Literal["days", "hours"] = "days"
+    # The WRF domain the values come from, e.g. "d02" and its description.
+    domain: str = ""
+    domain_label: str = ""
+    # Boundary of the place asked about, as [lon, lat] rings, and its name.
+    outline: list[list[list[float]]] = Field(default_factory=list)
+    outline_label: str = ""
 
 
 class AnalysisStep(BaseModel):

@@ -10,8 +10,10 @@ from typing import Any
 
 from google import genai
 from google.genai import types
+from pydantic import ValidationError
 
 from .analysis_tools import TOOL_BY_NAME, tool_declarations
+from .cams_forecast import routing_context
 from .catalog import AIR_QUALITY_END_YEAR, AIR_QUALITY_START_YEAR
 from .config import Settings
 from .keypool import KeyPool, PoolExhausted, fingerprint
@@ -132,17 +134,47 @@ Use the function arguments literally:
   funding_rank for the older city-level table.
 - Use physical_progress for PRANA implementation-output questions such as road
   paving, sweeping machines, green area, electric buses, or waste remediation.
-- Use forecast_grid_map, forecast_point_series, or forecast_exceedance_map
-  for forecast, emulator, WRF, gridded, "tomorrow", "next 72 hours", or other
-  future questions about Delhi NCR. They read an hourly forecast grid, not the
-  station observations, which end in {AIR_QUALITY_END_YEAR}. Convert days to
-  lead hours as each function describes: today = hours 0–23, tomorrow = 24–47,
-  the day after = 48–71, and "next 3 days" or an unstated window = 0–71. Use
-  forecast_grid_map for maps, spatial patterns, and where pollution will be
-  highest (statistic="max" for peaks, "hourly" to animate); forecast_point_series
-  for a city, station, or coordinate time series; forecast_exceedance_map for
-  hours or area above a stated threshold. Pass city exactly as written; pass a
-  monitoring-station name such as Anand Vihar as station, not city.
+- Use cams_forecast_map, cams_forecast_series, cams_forecast_threshold_map,
+  or cams_forecast_rank for air-quality forecasts: "forecast", "will",
+  "tomorrow", "this weekend", a weekday, or any date in the CAMS forecast
+  window given in the conversation context. Convert relative days to IST
+  dates using today's date from the context ("tomorrow" = today + 1 day;
+  "Friday" = the next Friday in the window). Use the station functions for
+  past measurements. If the requested days are outside the forecast window,
+  still call the CAMS function with those dates: the server explains the
+  window. Forecasts of weather (temperature, rain, wind) are not available;
+  use out_of_scope for those.
+- Use weather_grid_map, weather_point_series, weather_threshold_map, or
+  weather_region_rank for gridded or modelled weather anywhere in India in
+  2023–2024: temperature, heat, humidity, wind, rainfall, boundary layer
+  height, solar radiation, and surface pressure, and for any question that
+  names WRF weather or meteorology. They read a daily WRF simulation grid, not
+  station observations; prefer them for maps, states, places without
+  monitors, boundary layer height, and dates in 2023–2024. Use the station
+  functions instead when the user asks for measured or station weather, or
+  relates weather to pollution. Choose the variable that matches the wording:
+  "hottest" or "heat" = max_temperature, "coldest" or "cold nights" =
+  min_temperature, plain "temperature" = temperature, "wettest" or "rain" =
+  rainfall. Rainfall amounts ("most rain", "how much rain", "wettest") over a
+  window are totals: use statistic="total". The grid ends at 2024-12-31 and
+  starts at 2023-01-01; for weather in any other year, use the station
+  functions with the measured weather metric instead. Convert periods to
+  start_date/end_date (YYYY-MM-DD): "May 2024" =
+  2024-05-01 to 2024-05-31, "2023 monsoon" = 2023-06-01 to 2023-09-30; omit
+  dates for the whole period. Use statistic="total" for rainfall totals over a
+  window and "mean" otherwise unless the user asks for an extreme. Use
+  weather_grid_map for maps and where it was most extreme
+  (statistic="sequence" to animate); weather_point_series for a city, a state
+  average, or a coordinate over time; weather_threshold_map for the number of
+  days above or below a stated threshold; weather_region_rank to rank states or
+  cities. Pass a state as state and a city or district as city, exactly as
+  written; give only one location for weather_point_series. When the user
+  names North India, South India or East India as an area (not a state or
+  city), pass region="north_india", "south_india" or "east_india"; the
+  function description gives each region's exact box. Never choose a WRF
+  domain: the server uses the finest domain covering the place and says
+  which. For "the last N days", "recently" or "latest", end the window at the
+  last available day stated in the function description.
 - Use clarify_question only when an essential analytical dimension is missing
   and no documented default resolves it safely. Ask one specific question. For
   example, clarify a city comparison that says only "pollution" without naming
@@ -192,9 +224,15 @@ negative change means a reduction. Never describe the result as an NCAP effect
 or claim that funding caused a reduction. NCAP release data end at FY 2021-22;
 do not imply the dataset contains 2022-23 or later releases.
 
-For forecast_* results, say they are gridded forecast values and name the
-forecast window. If the method says the data are a SYNTHETIC sample, say so in
-the answer; never present them as an official or real forecast.
+For cams_* results, say they are a CAMS model forecast, not measurements, name
+the run's issue time and the forecast days in IST, and mention that the 0.4°
+(~44 km) grid is coarse for cities.
+
+For weather_* results, say once, in your own words, that the values are
+simulated by the WRF weather model, and name the dates covered.
+Also say which WRF domain and resolution the result used (e.g. "the 9 km
+North India domain"). If the verified result says part of the place lies
+outside the domain, or that a named region means a specific box, say so.
 
 Use plain Unicode units such as µg/m³, mg/m³, °C, and m/s. Never emit LaTeX,
 TeX, Markdown math, or dollar-sign math delimiters. Keep answer to at most
@@ -320,6 +358,7 @@ class GeminiService:
         context = self._history_text(history)
         prompt = (
             f"Conversation context:\n{context}\n\n"
+            f"Date and forecast window: {routing_context()}\n\n"
             f"Current user question:\n{message}"
         )
         if validation_feedback:
@@ -373,7 +412,9 @@ class GeminiService:
                 ):
                     prompt += (
                         "\n\nYour previous function selection or arguments failed "
-                        "typed validation. Repair the plan and call one to three "
+                        "typed validation"
+                        + self._validation_reason(exc)
+                        + ". Repair the plan and call one to three "
                         "available functions with complete, valid JSON arguments. "
                         f"For an unstated air-quality period, use "
                         f"{AIR_QUALITY_START_YEAR} through "
@@ -477,6 +518,18 @@ class GeminiService:
         if len(routed.calls) != 1:
             raise ValueError("Gemini did not select exactly one analysis function.")
         return routed.calls[0]
+
+    @staticmethod
+    def _validation_reason(error: Exception) -> str:
+        """The validator's messages, without echoing argument values."""
+        if not isinstance(error, ValidationError):
+            return ""
+        messages = []
+        for detail in error.errors()[:3]:
+            field = ".".join(str(part) for part in detail.get("loc", ()))
+            text = str(detail.get("msg", "")).removeprefix("Value error, ")
+            messages.append(f"{field}: {text}" if field else text)
+        return f" ({error.title}: {'; '.join(messages)})" if messages else ""
 
     @staticmethod
     def _is_malformed_tool_call_error(error: Exception) -> bool:

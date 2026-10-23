@@ -16,4 +16,8 @@ work/
 data/AQ_met_data.csv
 data/AQ_met_data_2025.csv
 public/vayuchat-logo.png
-data/gridded/*.npz
+data/gridded/*.nc
+data/india-districts.geojson
+
+# CAMS forecast downloads (refetched by scripts/fetch_cams_forecast.py)
+data/cams/

@@ -18,7 +18,13 @@ from .catalog import AIR_QUALITY_END_YEAR, AIR_QUALITY_START_YEAR
 from .config import Settings, get_settings
 from .database import database
 from .gemini_service import GeminiService, RoutedToolCall, build_key_pool
-from .gridded import GRIDDED_TOOL_NAMES, gridded_forecast
+from .weather_grid import VARIABLES as WEATHER_VARIABLES
+from .weather_grid import WEATHER_TOOL_NAMES, weather_grid
+from .cams_forecast import CAMS_TOOL_NAMES, cams_forecast
+from .cams_forecast import VARIABLES as CAMS_VARIABLES
+
+# Gridded tools (WRF weather and CAMS forecasts) share place handling.
+GRID_TOOL_NAMES = WEATHER_TOOL_NAMES | CAMS_TOOL_NAMES
 from .keypool import KeyPool, PoolExhausted
 from .models import ChatRequest, ChatResponse, LoginRequest, QueryPlan
 from .security import (
@@ -37,7 +43,7 @@ logger = logging.getLogger("vayuchat")
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DIST_DIR = PROJECT_ROOT / "dist"
 rate_limiter = LoginRateLimiter()
-CONTROL_CHARACTERS = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
+CONTROL_CHARACTERS = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f-\x9f]")
 LATEX_MICROGRAM_UNIT = re.compile(
     r"\$?\s*\\mu\s*(?:\\text\{)?g/m(?:\})?\s*\^\{?3\}?\s*\$?",
     re.IGNORECASE,
@@ -46,6 +52,13 @@ LATEX_MILLIGRAM_UNIT = re.compile(
     r"\$?\s*(?:\\text\{)?mg/m(?:\})?\s*\^\{?3\}?\s*\$?",
     re.IGNORECASE,
 )
+# Degree signs the presenter has been seen to garble after a number: "ƒ" or
+# "ƒC" (ƒ never appears legitimately), and "ºC", "Â°C", "˚C", "deg C".
+DEGREE_VARIANT = re.compile(
+    r"(?<=\d)\s?(?:ƒC?|(?:º|Â°|˚|deg(?:rees)?\s?)C)(?![A-Za-z])"
+)
+# A dropped degree sign: only after a decimal reading such as "3.5 C".
+BARE_DEGREE = re.compile(r"(?<=\d\.\d)(\d*) C\b")
 SUMMARY_PLACEHOLDER = re.compile(r"\{\{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}\}")
 SIMPLE_PLURAL = re.compile(
     r"\b1 (stations|days|observations|cities|records)\b",
@@ -71,12 +84,27 @@ class ExecutedAnalysis:
     grid: dict[str, Any] | None = None
 
 
+def restore_verified_units(text: str, verified: str) -> str:
+    """Put back a degree sign the presenter dropped from a verified value.
+
+    "45 C" becomes "45 °C" only when the server's own result says "45 °C",
+    so text such as "Zone 2 C" is never touched.
+    """
+    for number in set(re.findall(r"(-?\d+(?:\.\d+)?) °C", verified)):
+        text = re.sub(
+            rf"(?<![\d.]){re.escape(number)} C\b", f"{number} °C", text
+        )
+    return text
+
+
 def clean_model_text(value: str) -> str:
     cleaned = CONTROL_CHARACTERS.sub("", value)
     cleaned = LATEX_MICROGRAM_UNIT.sub("µg/m³", cleaned)
     cleaned = LATEX_MILLIGRAM_UNIT.sub("mg/m³", cleaned)
     for variant in ("Pcg/cm³", "μg/m³", "ug/m3", "µg/m3"):
         cleaned = cleaned.replace(variant, "µg/m³")
+    cleaned = DEGREE_VARIANT.sub(" °C", cleaned)
+    cleaned = BARE_DEGREE.sub(r"\1 °C", cleaned)
     cleaned = SIMPLE_PLURAL.sub(
         lambda match: f"1 {match.group(1)[:-1]}",
         cleaned,
@@ -129,6 +157,29 @@ def render_result_summary(
     )
 
 
+WEATHER_METRICS = {
+    "temperature": {"temperature"},
+    "max_temperature": {"temperature"},
+    "min_temperature": {"temperature"},
+    "humidity": {"humidity"},
+    "wind_speed": {"wind_speed", "wind_direction"},
+    "max_wind_speed": {"wind_speed", "wind_direction"},
+    "rainfall": {"rainfall"},
+    "solar_radiation": {"solar_radiation"},
+    "surface_pressure": {"pressure"},
+}
+# Everyday weather words, recognised only when the plan uses the weather grid.
+WEATHER_SYNONYM_PATTERNS = {
+    "temperature": (
+        r"\bhott?(?:er|est)?\b|\bcold(?:er|est)?\b|\bwarm(?:er|est)?\b|"
+        r"\bcool(?:er|est)\b|\bheat\s*waves?\b|\bheat\b"
+    ),
+    "rainfall": r"\bwett?(?:er|est)\b|\brainy\b|\bprecipitation\b",
+    "wind_speed": r"\bwind(?:y|ier|iest)?\b",
+    "humidity": r"\bhumid\b",
+}
+
+
 def requested_city_names(
     analysis_name: str,
     arguments: dict[str, Any],
@@ -145,7 +196,7 @@ def requested_city_names(
     }:
         city = arguments.get("city")
         return [city] if isinstance(city, str) and city.strip() else []
-    if analysis_name in GRIDDED_TOOL_NAMES:
+    if analysis_name in GRID_TOOL_NAMES:
         city = arguments.get("city")
         return [city] if isinstance(city, str) and city.strip() else []
     if analysis_name in {
@@ -244,8 +295,10 @@ def capability_suggested_questions(
 
     primary = results[0]
     arguments = primary.arguments
-    if primary.name in GRIDDED_TOOL_NAMES:
-        return gridded_suggested_questions(primary)
+    if primary.name in WEATHER_TOOL_NAMES:
+        return weather_suggested_questions(primary)
+    if primary.name in CAMS_TOOL_NAMES:
+        return cams_suggested_questions(primary)
     first_row = primary.rows[0] if primary.rows else {}
     pollutant = arguments.get("pollutant")
     if not isinstance(pollutant, str):
@@ -315,36 +368,78 @@ def capability_suggested_questions(
     ]
 
 
-def gridded_suggested_questions(primary: ExecutedAnalysis) -> list[str]:
-    """Follow-ups for the gridded forecast, which has its own geography."""
-    pollutant = primary.arguments.get("pollutant")
-    label = METRIC_LABELS.get(pollutant, "PM2.5") if isinstance(pollutant, str) else "PM2.5"
+def weather_suggested_questions(primary: ExecutedAnalysis) -> list[str]:
+    """Follow-ups for the WRF weather grid, which covers 2023-2024."""
+    variable = primary.arguments.get("variable")
+    if variable not in WEATHER_VARIABLES:
+        variable = "temperature"
+    label = WEATHER_VARIABLES[variable].label.removeprefix("daily ")
     city = primary.arguments.get("city")
-    place = city if isinstance(city, str) and city.strip() else "Delhi"
-    if primary.name == "forecast_grid_map":
+    state = primary.arguments.get("state")
+    place = next(
+        (value for value in (city, state) if isinstance(value, str) and value.strip()),
+        "Delhi",
+    )
+    if primary.name == "weather_grid_map":
         return [
-            f"Show the hourly {label} forecast for {place} tomorrow.",
-            f"Map the hours above 60 µg/m³ {label} across Delhi NCR in the forecast.",
-            f"Animate the {label} forecast hour by hour for tomorrow across Delhi NCR.",
+            f"Show the monthly {label} for {place} in 2024.",
+            f"Rank Indian states by {label} in 2024.",
+            "Map the days with maximum temperature above 40 °C across India in May 2024.",
         ]
-    if primary.name == "forecast_point_series":
+    if primary.name == "weather_point_series":
         return [
-            f"Map where {label} is forecast to be highest across Delhi NCR tomorrow.",
-            f"Map the hours above 60 µg/m³ {label} across Delhi NCR in the forecast.",
-            f"Show the hourly {label} forecast for Gurugram over the next 3 days.",
+            f"Map the {label} across India for the same period.",
+            f"Rank cities by {label} for the same period.",
+            "Show the monthly rainfall for Mumbai in 2023.",
+        ]
+    if primary.name == "weather_threshold_map":
+        return [
+            "Map the total rainfall across India in the 2023 monsoon.",
+            "Which states had the highest mean maximum temperature in May 2024?",
+            f"Show the daily {label} for {place} in June 2024.",
         ]
     return [
-        f"Map the mean {label} forecast across Delhi NCR for the next 3 days.",
-        f"Show the hourly {label} forecast at Anand Vihar station.",
-        f"Map the peak {label} forecast for {place} tomorrow.",
+        f"Map the {label} across India for the same period.",
+        f"Show the monthly {label} for {place} in 2024.",
+        "Map the days with rainfall above 64.5 mm across India in 2023.",
     ]
 
 
-def execute_gridded_analysis(call: RoutedToolCall) -> ExecutedAnalysis:
+def cams_suggested_questions(primary: ExecutedAnalysis) -> list[str]:
+    """Follow-ups for the CAMS forecast: other places, maps, and pollutants."""
+    pollutant = primary.arguments.get("pollutant")
+    label = CAMS_VARIABLES[pollutant].label if pollutant in CAMS_VARIABLES else "PM2.5"
+    city = primary.arguments.get("city")
+    state = primary.arguments.get("state")
+    place = next(
+        (value for value in (city, state) if isinstance(value, str) and value.strip()),
+        "Delhi",
+    )
+    if primary.name == "cams_forecast_series":
+        return [
+            f"Map the {label} forecast across India for tomorrow.",
+            f"Animate the hourly {label} forecast around {place} for the next 2 days.",
+            f"Which states have the highest forecast {label} tomorrow?",
+        ]
+    if primary.name == "cams_forecast_rank":
+        return [
+            f"Map the {label} forecast across India for tomorrow.",
+            f"Show the hourly {label} forecast for {place} for the next 3 days.",
+            "Map forecast hours with PM2.5 above 60 µg/m³ across India.",
+        ]
+    return [
+        f"Show the hourly {label} forecast for {place} for the next 3 days.",
+        f"Which states have the highest forecast {label} tomorrow?",
+        "Map the dust aerosol optical depth forecast over Rajasthan.",
+    ]
+
+
+def execute_weather_analysis(call: RoutedToolCall) -> ExecutedAnalysis:
     arguments = TOOL_BY_NAME[call.name].arguments_model.model_validate(
         call.arguments
     )
-    output = gridded_forecast.run(call.name, arguments)
+    engine = cams_forecast if call.name in CAMS_TOOL_NAMES else weather_grid
+    output = engine.run(call.name, arguments)
     corrections = database.suggest_city_names(
         requested_city_names(call.name, call.arguments)
     ) if not output.plan.in_scope else {}
@@ -361,8 +456,8 @@ def execute_gridded_analysis(call: RoutedToolCall) -> ExecutedAnalysis:
 
 
 def execute_analysis(call: RoutedToolCall) -> ExecutedAnalysis:
-    if call.name in GRIDDED_TOOL_NAMES:
-        return execute_gridded_analysis(call)
+    if call.name in GRID_TOOL_NAMES:
+        return execute_weather_analysis(call)
     analysis = build_analysis(call.name, call.arguments)
     plan = analysis.plan
     if not plan.in_scope:
@@ -442,19 +537,17 @@ def routing_alignment_issue(
 
     issues: list[str] = []
     mentioned_cities = database.city_names_in_text(question)
-    if re.search(r"\bncr\b", question.casefold()) and all(
-        call.name in GRIDDED_TOOL_NAMES for call in calls
-    ):
-        # "Delhi NCR" names the whole forecast domain, not the city of Delhi.
-        mentioned_cities = [
-            city for city in mentioned_cities if city.casefold() != "delhi"
-        ]
     if mentioned_cities:
         planned_cities = []
         for call in calls:
             planned_cities.extend(
                 requested_city_names(call.name, call.arguments)
             )
+            # Delhi, Chandigarh and Puducherry are both a city and a state;
+            # the weather grid can scope either way.
+            state = call.arguments.get("state")
+            if call.name in GRID_TOOL_NAMES and isinstance(state, str):
+                planned_cities.append(state)
         expected = {city.casefold() for city in mentioned_cities}
         actual = {city.strip().casefold() for city in planned_cities}
         follow_up_language = bool(
@@ -530,19 +623,52 @@ def routing_alignment_issue(
         "so2": r"\bso\s*2\b|sulphur\s+dioxide|sulfur\s+dioxide",
         "co": r"\bco\b(?!\s*2)|carbon\s+monoxide",
         "ozone": r"\bozone\b|\bo3\b",
-        "temperature": r"\btemperature\b|\btemp\b",
+        "temperature": r"\btemperatures?\b|\btemps?\b",
         "humidity": r"\bhumidity\b",
-        "wind_speed": r"\bwind\s+speed\b",
-        "wind_direction": r"\bwind\s+direction\b",
-        "rainfall": r"\brain(?:fall)?\b",
+        "wind_speed": r"\bwind\s+speeds?\b",
+        "wind_direction": r"\bwind\s+directions?\b",
+        "rainfall": r"\brain(?:s|falls?)?\b",
         "solar_radiation": r"\bsolar\s+radiation\b",
-        "pressure": r"\bpressure\b",
+        "pressure": r"\bpressures?\b",
     }
-    mentioned_metrics = {
-        metric
-        for metric, pattern in metric_patterns.items()
-        if re.search(pattern, normalized)
-    }
+    uses_weather_grid = any(call.name in WEATHER_TOOL_NAMES for call in calls)
+
+    def metrics_named_in(text: str) -> set[str]:
+        named = {
+            metric
+            for metric, pattern in metric_patterns.items()
+            if re.search(pattern, text)
+        }
+        if uses_weather_grid:
+            named |= {
+                metric
+                for metric, pattern in WEATHER_SYNONYM_PATTERNS.items()
+                if re.search(pattern, text)
+            }
+        return named
+
+    mentioned_metrics = metrics_named_in(normalized)
+    # "Do the same for Mumbai" keeps the metric of the immediately prior
+    # question, just as the city check accepts the prior city.
+    if not mentioned_metrics and re.search(
+        r"\b(?:same|that|those|what about|how about|do it for|now)\b",
+        normalized,
+    ):
+        for message in reversed(history or []):
+            role = (
+                message.get("role")
+                if isinstance(message, dict)
+                else getattr(message, "role", None)
+            )
+            if role != "user":
+                continue
+            content = (
+                message.get("content", "")
+                if isinstance(message, dict)
+                else getattr(message, "content", "")
+            )
+            mentioned_metrics = metrics_named_in(content.casefold())
+            break
     unsupported_metric_match = re.search(
         r"\b(?:co\s*2|carbon\s+dioxide|pm\s*1(?:\.0)?|pm\s*4|"
         r"aqi|air\s+quality\s+index|voc|volatile\s+organic\s+compounds?|"
@@ -562,6 +688,8 @@ def routing_alignment_issue(
             value = call.arguments.get(key)
             if isinstance(value, str) and value in METRIC_LABELS:
                 planned_metrics.add(value)
+        if call.name in WEATHER_TOOL_NAMES:
+            planned_metrics |= WEATHER_METRICS.get(call.arguments.get("variable"), set())
     if mentioned_metrics - planned_metrics:
         issues.append(
             "The function plan omitted metrics named in the question: "
@@ -608,7 +736,8 @@ def routing_alignment_issue(
         "ncap_threshold_cities",
         "threshold_frequency",
         "condition_comparison",
-        "forecast_exceedance_map",
+        "weather_threshold_map",
+        "cams_forecast_threshold_map",
     }
     if any(call.name in threshold_calls for call in calls):
         numeric_values = [
@@ -677,8 +806,10 @@ def routing_alignment_issue(
             {
                 "station_map",
                 "state_choropleth",
-                "forecast_grid_map",
-                "forecast_exceedance_map",
+                "weather_grid_map",
+                "weather_threshold_map",
+                "cams_forecast_map",
+                "cams_forecast_threshold_map",
             },
             "a requested map",
         ),
@@ -1055,10 +1186,17 @@ async def run_chat_turn(
                 ),
                 timeout=service.call_timeout(15),
             )
-            answer = clean_model_text(narrative.answer)
+            verified_text = " ".join(
+                result.plan.summary_template for result in executed
+            )
+            answer = restore_verified_units(
+                clean_model_text(narrative.answer), verified_text
+            )
             key_points = []
             for point in narrative.key_points:
-                cleaned_point = clean_model_text(point)
+                cleaned_point = restore_verified_units(
+                    clean_model_text(point), verified_text
+                )
                 if cleaned_point:
                     key_points.append(cleaned_point)
             suggested_questions = capability_suggested_questions(executed)

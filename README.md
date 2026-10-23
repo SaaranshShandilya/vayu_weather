@@ -46,36 +46,127 @@ The bundled source catalog is exposed in the app and through the
 - CPCB National Ambient Air Quality Standards: 2009 notification, with
   averaging periods retained separately.
 
-## Gridded forecast data
+## WRF weather grid
 
-Model and emulator forecasts (WRF-Chem, ML emulators of it, CAMS) are not
-station readings. Every latitude × longitude cell has a value for every
-forecast hour. VayuChat keeps such output as one `[time, latitude, longitude]`
-array per pollutant in `data/gridded/delhi_ncr_forecast.npz` and answers
-questions with array operations in `backend/gridded.py`. It does not flatten
-the grid into SQL rows: the bundled 72 × 61 × 61 grid would be 267,912 rows
-per pollutant, and a 400 m emulator domain would be tens of millions.
+VayuChat also answers weather questions anywhere in India from a WRF v4.7.1
+simulation with four domains (3-hourly output, 2023–2024):
 
-- `forecast_grid_map` gives a mean, peak, or hour-by-hour heatmap over Delhi
-  NCR, or over one NCR city, plus the hotspot cells.
-- `forecast_point_series` gives the hourly forecast at a city, a monitoring
-  station, or a coordinate.
-- `forecast_exceedance_map` counts the hours each cell is above a stated
-  threshold, and the share of area above it each day.
+| Domain | Region | Native | Stored grid |
+| --- | --- | --- | --- |
+| d01 | all India | 27 km | 0.25°, 115 × 125 |
+| d02 | North India (incl. Delhi NCR) | 9 km | 0.08°, 89 × 99 |
+| d03 | South India | 9 km | 0.08°, 96 × 99 |
+| d04 | East India | 9 km | 0.08°, 92 × 99 |
 
-Only summary rows and one downsampled grid (at most 120 cells per axis and
-24 animation frames) reach the browser. The `grid_heatmap` chart uses CPCB AQI
-colours.
+`scripts/build_wrf_weather.py --domain dNN` reads the raw `wrfout_dNN_*`
+files with xarray, reduces them to one value per IST calendar day, and
+interpolates them (`Dataset.interp`) to a regular grid. Each domain is saved
+as a self-describing NetCDF file, `data/gridded/wrf_dNN_daily.nc`, tagged with
+its domain, resolution, missing days and provenance in the attributes.
 
-**The bundled grid is a synthetic sample.** It is labelled as synthetic in
-the app and in the answers. To load real emulator or WRF-Chem output on a
-regular lat/lon grid, convert it to the same layout (this step needs
-`xarray`/`netCDF4`):
+At query time `backend/weather_grid.py` opens these with xarray and answers
+with labelled operations, never flattening the grid into SQL rows (one
+variable alone would be 10.5 million rows): `.sel(time=slice(...))` for a
+window, `.mean("time")` or `.sum("time", min_count=1)` for a period,
+`.where(mask)` for a place, `.resample(time="MS")` for monthly series, and
+`.groupby(state_index)` for state rankings. Each question uses the finest
+domain covering at least 95% of the place's area, and the answer names it.
+When that domain covers less than all of the place, the answer says how much
+and which part is left out: d02 covers 99.8% of Haryana, so Haryana uses 9 km
+data and the answer notes the 0.2% north of 30.84°N. States the nests cover
+less well stay on d01, and the answer says why (d02 covers only 73% of Uttar
+Pradesh). Delhi, Haryana and Chandigarh use d02; Chennai, Hyderabad,
+Karnataka and Puducherry d03; Kolkata and Jharkhand d04; Mumbai, Rajasthan
+and all of India d01. National rankings always use d01, so every place is
+compared on one grid.
+
+A whole 9 km domain can also be mapped by name: "North India", "South India"
+and "East India" mean the d02, d03 and d04 boxes (the answer gives the exact
+bounds and says that parts of those regions outside the box are excluded).
+
+Places are looked up in GeoJSON (`backend/places.py`): a state or union
+territory from `public/india-states.geojson` (Delhi is the NCT), a district
+from `data/india-districts.geojson`, or, for a monitored city that is not a
+district, the district containing its stations. The boundary gives the
+place's coordinates, the cells its statistics use (cell centres inside the
+polygon, or the nearest cell for a district smaller than one cell), and the
+outline drawn on the map. The district file is geoBoundaries gbOpen IND ADM2
+(2021; Pathways Data Pvt. Ltd. and lgdirectory.gov.in), Open Data Commons Open
+Database License 1.0, prepared by `scripts/prepare_districts.py`.
+
+The latest day is 31 December 2024, so "the last 7 days" means 25–31
+December 2024, and the answer says so.
+
+Every map can be downloaded as a PNG (title, legend and source included, at
+the current zoom); animations also download as a looping GIF. Both are drawn
+in the browser from the same renderer as the map on screen.
+
+VayuChat bundles no forecast and no synthetic data. Every answer comes from
+the station observations, the programme and Census tables, or this WRF
+simulation; questions about future periods are declined.
+
+Variables: mean, maximum and minimum 2 m temperature; relative humidity; mean
+and maximum 10 m wind speed (with direction); rainfall; mean and maximum
+boundary layer height; downward solar radiation; and surface pressure.
+
+- `weather_grid_map` maps a variable over India, a state, or a city or
+  district with its surroundings (mean, rainfall total, extreme day, or a
+  day-by-day animation) and lists the most extreme cells.
+- `weather_point_series` gives a daily, weekly, or monthly series for a city
+  or district, a state average, or a coordinate.
+- `weather_threshold_map` counts the days each cell is above or below a stated
+  threshold, such as maximum temperature above 40 °C.
+- `weather_region_rank` ranks states (area means) or cities (nearest cell).
+
+Caveats are stated in every answer's method note. These are model values, not
+station observations. Daily extremes come from eight 3-hourly instants and can
+miss peaks between them. Rainfall is differenced within each ~10-day WRF run,
+and the 3-hour interval ending at each re-initialisation is not recorded.
+Every domain has empty or truncated files for 11–13 October 2023; days with
+fewer than four readable outputs are stored as missing, excluded from every
+statistic, and named in the answer. Units smaller than one cell (Lakshadweep,
+Puducherry, Daman and Diu) cannot be mapped as states. To rebuild a domain
+(needs `netCDF4` and `scipy`; about 20 minutes over NFS with 12 workers; more
+workers saturate the NAS):
 
 ```bash
-python scripts/build_gridded_forecast.py --from-netcdf emulator.nc     --var pm25=PM2_5_DRY --var pm10=PM10 --source "IITM emulator"
-python scripts/build_gridded_forecast.py   # regenerate the synthetic sample
+python scripts/build_wrf_weather.py --domain d02 --workers 12
 ```
+
+## CAMS air-quality forecast
+
+VayuChat also maps and charts the Copernicus Atmosphere Monitoring Service
+(CAMS) global air-quality forecast. Each run (00 and 12 UTC) forecasts 0–120
+hours ahead, hourly, on a 0.4° (~44 km) grid; VayuChat keeps the box
+5–38°N, 66–100°E (83 × 86 cells).
+
+`scripts/update_cams_forecast.py` finds the newest unprocessed run, downloads
+it from the Copernicus Atmosphere Data Store (`scripts/fetch_cams_forecast.py`,
+key `ADS_API_KEY` in `.env`), and writes `data/cams/cams_forecast_<run>.nc`:
+hourly fields with IST valid times, PM2.5 and PM10 in µg/m³, NO2, O3 and SO2 in
+µg/m³ and CO in mg/m³ (gases converted from mixing ratios at the lowest model
+level with the air density there), and total and dust aerosol optical depth.
+Runs older than 30 days are deleted. A systemd user timer
+(`vayuchat-cams.timer`) runs it every 3 hours; the app always serves the newest
+run without a restart.
+
+`backend/cams_forecast.py` reuses the WRF engine's places, masks, outlines and
+map payloads:
+
+- `cams_forecast_map`: mean, peak or lowest hourly value, or an hourly
+  animation, over India, a state, or a city or district.
+- `cams_forecast_series`: hourly or IST-daily values at a place; days at the
+  edge of the forecast window are flagged as partial.
+- `cams_forecast_threshold_map`: forecast hours above a threshold per cell.
+- `cams_forecast_rank`: states or cities by forecast mean or peak.
+
+The router is given today's date and the forecast window with every question,
+so "tomorrow" and "Friday" resolve to IST dates. Answers name the run's issue
+time, say the values are a model forecast rather than measurements, and note
+the coarse grid; CAMS PM2.5 is known to differ from ground monitors over South
+Asia. PM maps use CPCB AQI category colours (24-hour breakpoints, so hourly
+colours are indicative). CAMS data are CC-BY-4.0: answers, maps and downloads
+say "Contains modified Copernicus Atmosphere Monitoring Service information."
 
 Maps are rendered from the station registry and a simplified India state
 boundary layer. Every source keeps its own grain and vintage; VayuChat does
