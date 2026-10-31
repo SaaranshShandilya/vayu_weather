@@ -21,3 +21,6 @@ data/india-districts.geojson
 
 # CAMS forecast downloads (refetched by scripts/fetch_cams_forecast.py)
 data/cams/
+
+# NASA FIRMS fire detections (rebuilt by scripts/update_firms.py)
+data/firms/

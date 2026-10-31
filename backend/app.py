@@ -23,8 +23,12 @@ from .weather_grid import WEATHER_TOOL_NAMES, weather_grid
 from .cams_forecast import CAMS_TOOL_NAMES, cams_forecast
 from .cams_forecast import VARIABLES as CAMS_VARIABLES
 
-# Gridded tools (WRF weather and CAMS forecasts) share place handling.
-GRID_TOOL_NAMES = WEATHER_TOOL_NAMES | CAMS_TOOL_NAMES
+from .firms_fires import FIRE_TOOL_NAMES, fire_analyses
+
+from .cross_compare import COMPARE_TOOL_NAMES, cross_compare
+
+# Gridded and cross-dataset tools run on the server's own engines, not SQL.
+GRID_TOOL_NAMES = WEATHER_TOOL_NAMES | CAMS_TOOL_NAMES | FIRE_TOOL_NAMES | COMPARE_TOOL_NAMES
 from .keypool import KeyPool, PoolExhausted
 from .models import ChatRequest, ChatResponse, LoginRequest, QueryPlan
 from .security import (
@@ -95,6 +99,21 @@ def restore_verified_units(text: str, verified: str) -> str:
             rf"(?<![\d.]){re.escape(number)} C\b", f"{number} °C", text
         )
     return text
+
+
+# Phrases only an instruction would contain: a sentence carrying one is the
+# presenter repeating its prompt, not answering, and is dropped.
+INSTRUCTION_ECHO = re.compile(
+    r"\b(?:name the dates|say (?:it|they|so|once)\b|in your own words|"
+    r"mention (?:this|that) when|verified[_ ]result|never call them)",
+    re.IGNORECASE,
+)
+
+
+def drop_instruction_echo(text: str) -> str:
+    sentences = re.split(r"(?<=[.!?])\s+", text.strip())
+    kept = [sentence for sentence in sentences if not INSTRUCTION_ECHO.search(sentence)]
+    return " ".join(kept) if kept else text
 
 
 def clean_model_text(value: str) -> str:
@@ -299,6 +318,19 @@ def capability_suggested_questions(
         return weather_suggested_questions(primary)
     if primary.name in CAMS_TOOL_NAMES:
         return cams_suggested_questions(primary)
+    if primary.name in COMPARE_TOOL_NAMES:
+        return [
+            "Which states had the most fire detections in the last 7 days?",
+            "Map the PM2.5 forecast across India for tomorrow.",
+            "Map fire detections across Punjab over the last 7 days.",
+        ]
+    if primary.name in FIRE_TOOL_NAMES:
+        place = primary.arguments.get("state") or primary.arguments.get("city") or "Punjab"
+        return [
+            f"Show daily fire detections in {place} over the last 7 days.",
+            "Which districts had the most fire detections in the last 7 days?",
+            "Map the PM2.5 forecast across North India for tomorrow.",
+        ]
     first_row = primary.rows[0] if primary.rows else {}
     pollutant = arguments.get("pollutant")
     if not isinstance(pollutant, str):
@@ -438,7 +470,12 @@ def execute_weather_analysis(call: RoutedToolCall) -> ExecutedAnalysis:
     arguments = TOOL_BY_NAME[call.name].arguments_model.model_validate(
         call.arguments
     )
-    engine = cams_forecast if call.name in CAMS_TOOL_NAMES else weather_grid
+    engine = (
+        cams_forecast if call.name in CAMS_TOOL_NAMES
+        else fire_analyses if call.name in FIRE_TOOL_NAMES
+        else cross_compare if call.name in COMPARE_TOOL_NAMES
+        else weather_grid
+    )
     output = engine.run(call.name, arguments)
     corrections = database.suggest_city_names(
         requested_city_names(call.name, call.arguments)
@@ -690,6 +727,12 @@ def routing_alignment_issue(
                 planned_metrics.add(value)
         if call.name in WEATHER_TOOL_NAMES:
             planned_metrics |= WEATHER_METRICS.get(call.arguments.get("variable"), set())
+        if call.name in COMPARE_TOOL_NAMES:
+            for key in ("x_measure", "y_measure"):
+                measure = str(call.arguments.get(key, ""))
+                pollutant = measure.split("_", 1)[-1]
+                if measure.startswith(("cams_", "station_")) and pollutant in METRIC_LABELS:
+                    planned_metrics.add(pollutant)
     if mentioned_metrics - planned_metrics:
         issues.append(
             "The function plan omitted metrics named in the question: "
@@ -810,6 +853,7 @@ def routing_alignment_issue(
                 "weather_threshold_map",
                 "cams_forecast_map",
                 "cams_forecast_threshold_map",
+                "fire_map",
             },
             "a requested map",
         ),
@@ -1063,6 +1107,48 @@ async def chat(
         return await run_chat_turn(body, settings, pool)
 
 
+def model_service_busy(exc: BaseException) -> bool:
+    """True when a failure came from Gemini overload or rate limits, not the question."""
+    seen = set()
+    while exc is not None and id(exc) not in seen:
+        seen.add(id(exc))
+        text = f"{type(exc).__name__} {exc}"
+        if isinstance(exc, (TimeoutError, asyncio.TimeoutError)) or any(
+            marker in text
+            for marker in ("429", "503", "Too Many Requests", "RESOURCE_EXHAUSTED", "UNAVAILABLE", "high demand")
+        ):
+            return True
+        exc = exc.__cause__ or exc.__context__
+    return False
+
+
+def busy_response(started_at: float, method_note: str) -> ChatResponse:
+    """An honest answer when the model service, not the question, was the problem."""
+    return ChatResponse(
+        answer=(
+            "VayuChat is at its shared request limit right now, so this "
+            "question was not sent to the model. Please try again in a "
+            "minute."
+        ),
+        key_points=[
+            "Every configured API key is currently rate limited or busy.",
+            "No analysis was run, so nothing was answered from guesswork.",
+        ],
+        method_note=method_note,
+        analysis_steps=[],
+        columns=[],
+        rows=[],
+        visualization="none",
+        title="Request limit reached",
+        x_key="",
+        y_keys=[],
+        truncated=False,
+        analysis_type="capacity_unavailable",
+        elapsed_ms=round((time.perf_counter() - started_at) * 1_000),
+        suggested_questions=[],
+    )
+
+
 async def run_chat_turn(
     body: ChatRequest,
     settings: Settings,
@@ -1190,7 +1276,7 @@ async def run_chat_turn(
                 result.plan.summary_template for result in executed
             )
             answer = restore_verified_units(
-                clean_model_text(narrative.answer), verified_text
+                drop_instruction_echo(clean_model_text(narrative.answer)), verified_text
             )
             key_points = []
             for point in narrative.key_points:
@@ -1284,33 +1370,19 @@ async def run_chat_turn(
         )
     except PoolExhausted:
         logger.warning("Gemini key pool exhausted: %s", pool.stats())
-        return ChatResponse(
-            answer=(
-                "VayuChat is at its shared request limit right now, so this "
-                "question was not sent to the model. Please try again in a "
-                "minute."
-            ),
-            key_points=[
-                "Every configured API key is currently rate limited or busy.",
-                "No analysis was run, so nothing was answered from guesswork.",
-            ],
-            method_note=(
-                "The request waited for an available API key and reached the "
-                "time budget for this turn before one freed up."
-            ),
-            analysis_steps=[],
-            columns=[],
-            rows=[],
-            visualization="none",
-            title="Request limit reached",
-            x_key="",
-            y_keys=[],
-            truncated=False,
-            analysis_type="capacity_unavailable",
-            elapsed_ms=round((time.perf_counter() - started_at) * 1_000),
-            suggested_questions=[],
+        return busy_response(
+            started_at,
+            "The request waited for an available API key and reached the "
+            "time budget for this turn before one freed up.",
         )
     except Exception as exc:
+        if model_service_busy(exc):
+            logger.warning("Gemini busy or rate limited: %s", exc)
+            return busy_response(
+                started_at,
+                "The model service returned rate-limit or overload errors (HTTP "
+                "429 or 503) until this turn's time budget ran out.",
+            )
         logger.exception("Chat request failed")
         return ChatResponse(
             answer=(

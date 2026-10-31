@@ -109,6 +109,21 @@ export const promptGroups: PromptGroup[] = [
     ],
   },
   {
+    name: "fires",
+    label: "Fires and stubble burning (NASA FIRMS)",
+    // Live satellite detections, refreshed every few hours; "last 7 days"
+    // resolves against the dates installed.
+    prompts: [
+      "Map fire detections across Punjab and Haryana over the last 7 days.",
+      "Show daily fire detections in Punjab over the last 7 days.",
+      "Which districts had the most fire detections in the last 7 days?",
+      "Animate daily fire detections across India over the last 7 days.",
+      "Map fire radiative power around Tarn Taran over the last 7 days.",
+      "Which states had the most fire detections in the last 7 days?",
+      "Which states have the highest PM2.5 per fire detection in the last 7 days?",
+    ],
+  },
+  {
     name: "methods",
     label: "Coverage & methods",
     prompts: [

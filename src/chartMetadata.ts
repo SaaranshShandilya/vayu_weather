@@ -103,6 +103,21 @@ const directLabels: Record<string, string> = {
   nearest_city: "Nearest city",
   distance_km: "Distance",
   wind_from: "Wind from",
+  detections: "Fire detections",
+  fire_detections: "Fire detections",
+  fire_radiative_power: "Fire radiative power",
+  cams_pm25: "CAMS PM2.5",
+  cams_pm10: "CAMS PM10",
+  cams_no2: "CAMS NO₂",
+  cams_ozone: "CAMS ozone",
+  station_pm25: "CPCB station PM2.5",
+  station_pm10: "CPCB station PM10",
+  station_no2: "CPCB station NO₂",
+  cams_pm25_per_fire_detections: "CAMS PM2.5 per fire detection",
+  cams_pm10_per_fire_detections: "CAMS PM10 per fire detection",
+  frp_mw: "Fire radiative power",
+  night_detections: "Night-time detections",
+  district: "District",
 };
 
 const directUnits: Record<string, string> = {
@@ -120,6 +135,15 @@ const directUnits: Record<string, string> = {
   peak_area_above_pct: "%",
   peak_area_meeting_pct: "%",
   distance_km: "km",
+  frp_mw: "MW",
+  fire_radiative_power: "MW",
+  cams_pm25: "µg/m³",
+  cams_pm10: "µg/m³",
+  cams_no2: "µg/m³",
+  cams_ozone: "µg/m³",
+  station_pm25: "µg/m³",
+  station_pm10: "µg/m³",
+  station_no2: "µg/m³",
 };
 
 const statisticalPrefixes: Array<[string, string]> = [

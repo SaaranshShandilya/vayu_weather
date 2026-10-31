@@ -75,6 +75,7 @@ class GridPayload(BaseModel):
         "pm10",
         "pollutant",
         "aod",
+        "fires",
         "temperature",
         "humidity",
         "wind",

@@ -168,6 +168,31 @@ Asia. PM maps use CPCB AQI category colours (24-hour breakpoints, so hourly
 colours are indicative). CAMS data are CC-BY-4.0: answers, maps and downloads
 say "Contains modified Copernicus Atmosphere Monitoring Service information."
 
+## NASA FIRMS fire detections
+
+VayuChat maps satellite fire detections for stubble (crop-residue) burning,
+forest fires and other open burning. `scripts/update_firms.py` downloads the
+rolling 7-day near-real-time files from NASA FIRMS (VIIRS on S-NPP, NOAA-20 and
+NOAA-21 at 375 m; MODIS at 1 km; no key needed), keeps detections inside India,
+tags each with its state and district from the GeoJSON boundaries, converts
+times to IST, and adds them once each to `data/firms/fires.parquet`. Run it
+every few hours and the history grows; `--backfill START END` with
+`FIRMS_MAP_KEY` in `.env` fetches older seasons from the FIRMS archive.
+
+`backend/firms_fires.py` bins detections onto a grid sized to the area (0.25°
+for India, 0.1° or finer for a state or district) and reuses the gridded map
+format, so zoom, outlines, animation and downloads work as elsewhere:
+
+- `fire_map`: detection counts or fire radiative power, as a total or a daily
+  animation, with the most active districts listed.
+- `fire_series`: daily detections and fire radiative power for a place.
+- `fire_rank`: districts (optionally within a state) or states.
+
+Answers say these are satellite detections, not fires or burned area: one fire
+can be seen by several satellites, cloud and smoke hide fires, and persistent
+detections at coal fields and industrial sites are not crop burning. We
+acknowledge the use of data from NASA's FIRMS, part of NASA's ESDIS.
+
 Maps are rendered from the station registry and a simplified India state
 boundary layer. Every source keeps its own grain and vintage; VayuChat does
 not label Census 2011 population as current or partial city-finance evidence

@@ -329,6 +329,26 @@
       ],
       "quality": "Model forecast, not measurement. Coarse for cities (one cell is ~44 km), and CAMS PM2.5 is known to differ from ground monitors over South Asia, so it complements CPCB stations rather than replacing them. Gases are converted from mixing ratios at the lowest model level (~10 m). The newest processed run is served; runs are refreshed automatically.",
       "provenance": "CC-BY-4.0. Contains modified Copernicus Atmosphere Monitoring Service information. Downloaded and processed by scripts/update_cams_forecast.py."
+    },
+    {
+      "id": "nasa_firms_fires",
+      "title": "NASA FIRMS active-fire detections over India",
+      "provider": "NASA Fire Information for Resource Management System (FIRMS), LANCE / ESDIS",
+      "date_start": "rolling",
+      "date_end": "rolling (near-real-time, refreshed every 3 hours)",
+      "temporal_granularity": "Per satellite overpass (VIIRS ~01:30/13:30, MODIS ~10:30/22:30 local); summarised by IST day",
+      "geographic_granularity": "Point detections (VIIRS 375 m, MODIS 1 km pixels), tagged with state and district",
+      "records": null,
+      "fields": [
+        "Detection location and time",
+        "Fire radiative power (MW)",
+        "Confidence",
+        "Day/night",
+        "State",
+        "District"
+      ],
+      "quality": "Satellite thermal-anomaly detections, not fires or burned area: one fire can be detected by several satellites, and fires under cloud or smoke, or small and brief, are missed. Persistent detections at coal fields, steel plants and refineries are industrial heat sources. Near-real-time processing; history accumulates from the first download, and older seasons need an archive backfill.",
+      "provenance": "We acknowledge the use of data from NASA's Fire Information for Resource Management System (FIRMS), part of NASA's Earth Science Data and Information System (ESDIS). Downloaded by scripts/update_firms.py."
     }
   ]
 }

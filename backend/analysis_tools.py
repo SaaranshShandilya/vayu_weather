@@ -15,6 +15,20 @@ from .cams_forecast import (
     CamsThresholdArgs,
     cams_forecast,
 )
+from .firms_fires import (
+    FIRE_TOOL_NAMES,
+    TOOL_GUIDE as FIRE_TOOL_GUIDE,
+    FireMapArgs,
+    FireRankArgs,
+    FireSeriesArgs,
+    fire_analyses,
+)
+from .cross_compare import (
+    COMPARE_TOOL_NAMES,
+    TOOL_GUIDE as COMPARE_TOOL_GUIDE,
+    StateCompareArgs,
+    cross_compare,
+)
 from .models import QueryPlan
 from .weather_grid import (
     WEATHER_TOOL_NAMES,
@@ -500,6 +514,7 @@ class DataCatalogArgs(StrictArgs):
         "stations",
         "weather",
         "forecast",
+        "fires",
     ] = "all"
 
 
@@ -956,6 +971,47 @@ TOOL_DEFINITIONS = (
             + CAMS_TOOL_GUIDE
         ),
         CamsRankArgs,
+    ),
+    ToolDefinition(
+        "fire_map",
+        (
+            "Map NASA FIRMS satellite fire detections (or fire radiative power) over "
+            "India, a state, or a city or district with its surroundings, with the most "
+            "active districts listed. statistic='sequence' animates day by day. Use for "
+            "stubble or crop-residue burning maps, farm fires, forest fires and where "
+            "fires are. " + FIRE_TOOL_GUIDE
+        ),
+        FireMapArgs,
+    ),
+    ToolDefinition(
+        "fire_series",
+        (
+            "Daily NASA FIRMS fire detections and fire radiative power for India, a "
+            "state, or a city or district. Use for 'how many fires in Punjab each day "
+            "this week' and fire trends. " + FIRE_TOOL_GUIDE
+        ),
+        FireSeriesArgs,
+    ),
+    ToolDefinition(
+        "fire_rank",
+        (
+            "Rank districts (optionally within one state) or states by NASA FIRMS fire "
+            "detections or fire radiative power. Use for 'which districts had the most "
+            "stubble fires'. " + FIRE_TOOL_GUIDE
+        ),
+        FireRankArgs,
+    ),
+    ToolDefinition(
+        "state_compare",
+        (
+            "Put two state-level measures side by side, possibly from different "
+            "datasets, and rank states by their ratio (x per y) or by either measure, "
+            "with the correlation across states. Use for 'which states have the highest "
+            "PM2.5 per fire', 'PM2.5 vs fire counts by state', and any per-unit ratio or "
+            "relationship between pollution and fires across states. "
+            + COMPARE_TOOL_GUIDE
+        ),
+        StateCompareArgs,
     ),
     ToolDefinition(
         "clarify_question",
@@ -3431,6 +3487,7 @@ def _data_catalog(args: DataCatalogArgs) -> QueryPlan:
         "standards": ["cpcb_naaqs"],
         "stations": ["station_locations"],
         "forecast": ["cams_global_forecast"],
+        "fires": ["nasa_firms_fires"],
         "weather": ["wrf_d01_daily", "wrf_d02_daily", "wrf_d03_daily", "wrf_d04_daily", "district_boundaries"],
     }
     where = ""
@@ -3691,6 +3748,10 @@ def build_analysis(name: str, raw_arguments: dict[str, Any]) -> ToolAnalysis:
         plan = weather_grid.run(name, arguments).plan
     elif name in CAMS_TOOL_NAMES:
         plan = cams_forecast.run(name, arguments).plan
+    elif name in FIRE_TOOL_NAMES:
+        plan = fire_analyses.run(name, arguments).plan
+    elif name in COMPARE_TOOL_NAMES:
+        plan = cross_compare.run(name, arguments).plan
     elif name == "clarify_question":
         return ToolAnalysis(
             name=name,
