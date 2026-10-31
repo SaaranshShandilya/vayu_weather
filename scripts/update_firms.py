@@ -9,7 +9,8 @@ https://firms.modaps.eosdis.nasa.gov. Four satellite products:
 The rolling 7-day near-real-time (NRT) files need no key and are fetched on
 every run, so the archive grows from the first run onwards. With FIRMS_MAP_KEY
 in .env, --backfill START END also fetches older dates through the FIRMS
-country API (standard-processing archive where available).
+area API over India's bounding box (standard-processing archive where
+available, near-real-time otherwise).
 
 Each detection is kept once (satellite + position + time), restricted to
 India, and tagged with its state and district from the GeoJSON boundaries.
@@ -28,6 +29,7 @@ import datetime as dt
 import io
 import os
 import sys
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -44,7 +46,12 @@ from backend.places import places  # noqa: E402
 FIRMS_DIR = PROJECT_ROOT / "data" / "firms"
 TABLE = FIRMS_DIR / "fires.parquet"
 NRT = "https://firms.modaps.eosdis.nasa.gov/data/active_fire"
-API = "https://firms.modaps.eosdis.nasa.gov/api/country/csv"
+API = "https://firms.modaps.eosdis.nasa.gov/api/area/csv"
+# India's bounding box (west,south,east,north); tag_places drops points outside
+# India. The FIRMS country endpoint no longer accepts requests.
+INDIA_BBOX = "68,6,98,38"
+# The area API serves at most 5 days per request.
+MAX_SPAN_DAYS = 5
 IST = pd.Timedelta(hours=5, minutes=30)
 
 # label -> (7-day NRT file, archive source names tried newest-quality first)
@@ -127,15 +134,23 @@ def fetch_nrt() -> pd.DataFrame:
 
 
 def fetch_archive(key: str, start: dt.date, end: dt.date) -> pd.DataFrame:
-    """Country API, 10 days per request, standard processing where it exists."""
+    """Area API, 5 days per request, standard processing where it exists."""
     frames = []
     for product, (_, sources) in PRODUCTS.items():
         day = start
         while day <= end:
-            span = min(10, (end - day).days + 1)
+            span = min(MAX_SPAN_DAYS, (end - day).days + 1)
             got = None
             for source in sources:
-                text = _get(f"{API}/{key}/{source}/IND/{span}/{day.isoformat()}")
+                try:
+                    text = _get(f"{API}/{key}/{source}/{INDIA_BBOX}/{span}/{day.isoformat()}")
+                except urllib.error.HTTPError as error:
+                    # A source without data for these dates (e.g. the
+                    # standard archive for recent days) answers 400: try the next.
+                    body = error.read().decode("utf-8", "replace")
+                    if "map_key" in body.lower():
+                        raise SystemExit(f"FIRMS API refused the key: {body[:200]}") from None
+                    continue
                 if text.lower().startswith("invalid") or "error" in text[:80].lower():
                     raise SystemExit(f"FIRMS API refused the request: {text[:200]}")
                 frame = pd.read_csv(io.StringIO(text)) if text.strip() else pd.DataFrame()
