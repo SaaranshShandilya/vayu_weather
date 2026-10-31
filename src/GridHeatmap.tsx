@@ -29,6 +29,7 @@ const PALETTES: Record<string, string[]> = {
   hours: ["#ecf0f7", "#9fb3d9", "#274687"],
   pollutant: ["#fff7ec", "#fdd49e", "#fc8d59", "#d7301f", "#7f0000"],
   aod: ["#ffffe5", "#fee391", "#fe9929", "#cc4c02", "#662506"],
+  fires: ["#fff8e7", "#fed98e", "#fe9929", "#d95f0e", "#993404", "#4a1a02"],
   pm25: ["#ffffcc", "#fed976", "#fd8d3c", "#e31a1c", "#800026", "#3f0011"],
   pm10: ["#ffffcc", "#fed976", "#fd8d3c", "#e31a1c", "#800026", "#3f0011"],
 };

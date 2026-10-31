@@ -14,6 +14,7 @@ from pydantic import ValidationError
 
 from .analysis_tools import TOOL_BY_NAME, tool_declarations
 from .cams_forecast import routing_context
+from .firms_fires import routing_context as fire_context
 from .catalog import AIR_QUALITY_END_YEAR, AIR_QUALITY_START_YEAR
 from .config import Settings
 from .keypool import KeyPool, PoolExhausted, fingerprint
@@ -134,6 +135,14 @@ Use the function arguments literally:
   funding_rank for the older city-level table.
 - Use physical_progress for PRANA implementation-output questions such as road
   paving, sweeping machines, green area, electric buses, or waste remediation.
+- Use state_compare for a ratio, "per", "vs" or relationship between two
+  measures across states, including across datasets, e.g. "which states have
+  the highest PM2.5 per fire" (x_measure="cams_pm25", y_measure=
+  "fire_detections", rank_by="ratio"). For dates after the CPCB station data
+  end, use cams_* measures for pollution; for 2017-2025 use station_*.
+- Use fire_map, fire_series, or fire_rank for fires: stubble or crop-residue
+  burning, farm fires, forest fires, fire counts or hotspots. "The last N days"
+  or "this week" ends at the last FIRMS date in the conversation context.
 - Use cams_forecast_map, cams_forecast_series, cams_forecast_threshold_map,
   or cams_forecast_rank for air-quality forecasts: "forecast", "will",
   "tomorrow", "this weekend", a weekday, or any date in the CAMS forecast
@@ -190,6 +199,12 @@ Use the function arguments literally:
   proceed with that analysis. Use context_relationship directly for wording
   such as association, relationship, or correlation. Do not use out_of_scope
   for a question that becomes answerable after one clarification.
+- Offer clarify_question options only for analyses a declared function can
+  answer directly; never offer an option that would need another
+  clarification. If the previous assistant turn was a clarification and the
+  user's message picks one of its options, do not ask again: call the
+  best-matching function with documented defaults, or use out_of_scope and
+  say plainly what VayuChat cannot do.
 - For clarify_question, include 2–6 short options when the missing dimension
   has a finite supported set. Use only values supported by the declared
   functions. For a missing pollutant, prefer the most relevant choices from
@@ -224,9 +239,15 @@ negative change means a reduction. Never describe the result as an NCAP effect
 or claim that funding caused a reduction. NCAP release data end at FY 2021-22;
 do not imply the dataset contains 2022-23 or later releases.
 
-For cams_* results, say they are a CAMS model forecast, not measurements, name
-the run's issue time and the forecast days in IST, and mention that the 0.4°
-(~44 km) grid is coarse for cities.
+Facts for fire_* results: the counts are NASA FIRMS satellite fire
+detections over the stated IST dates, not individual fires or burned area.
+Coal-mining and industrial districts such as Dhanbad or Anugul rank high
+partly because of persistent industrial heat, not crop burning; mention this
+when such a district appears in the result.
+
+Facts for cams_* results: the values are a CAMS model forecast, not
+measurements, from the run issued at the time stated in the verified result,
+for IST dates; the 0.4° (~44 km) grid is coarse for cities.
 
 For weather_* results, say once, in your own words, that the values are
 simulated by the WRF weather model, and name the dates covered.
@@ -358,7 +379,7 @@ class GeminiService:
         context = self._history_text(history)
         prompt = (
             f"Conversation context:\n{context}\n\n"
-            f"Date and forecast window: {routing_context()}\n\n"
+            f"Date and data windows: {routing_context()} {fire_context()}\n\n"
             f"Current user question:\n{message}"
         )
         if validation_feedback:

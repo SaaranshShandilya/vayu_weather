@@ -49,6 +49,7 @@ export type GridPayload = {
     | "pm10"
     | "pollutant"
     | "aod"
+    | "fires"
     | "temperature"
     | "humidity"
     | "wind"
