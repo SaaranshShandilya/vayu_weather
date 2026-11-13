@@ -2361,3 +2361,11 @@ tbody tr:hover {
 .grid-basemap .point-map__legend > div {
   align-self: flex-start;
 }
+
+/* The legend is a column, where the colour bar's 18rem flex basis (a width in
+   the heatmap's row legend) became an 18rem height under the bar. */
+.grid-basemap .point-map__legend .color-bar {
+  flex: 0 0 auto;
+  width: 18rem;
+  max-width: 100%;
+}
