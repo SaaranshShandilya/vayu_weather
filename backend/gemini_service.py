@@ -12,7 +12,7 @@ from google import genai
 from google.genai import types
 from pydantic import ValidationError
 
-from .analysis_tools import TOOL_BY_NAME, tool_declarations
+from .analysis_tools import TOOL_BY_NAME, station_data_context, tool_declarations
 from .cams_forecast import routing_context
 from .firms_fires import routing_context as fire_context
 from .catalog import AIR_QUALITY_END_YEAR, AIR_QUALITY_START_YEAR
@@ -139,10 +139,24 @@ Use the function arguments literally:
   measures across states, including across datasets, e.g. "which states have
   the highest PM2.5 per fire" (x_measure="cams_pm25", y_measure=
   "fire_detections", rank_by="ratio"). For dates after the CPCB station data
-  end, use cams_* measures for pollution; for 2017-2025 use station_*.
+  end, use cams_* measures for pollution; for {AIR_QUALITY_START_YEAR}-{AIR_QUALITY_END_YEAR} use station_*.
 - Use fire_map, fire_series, or fire_rank for fires: stubble or crop-residue
   burning, farm fires, forest fires, fire counts or hotspots. "The last N days"
   or "this week" ends at the last FIRMS date in the conversation context.
+- Use station_days for measured station data on particular days rather than
+  whole years or months (view="daily" for one city or station day by day,
+  view="rank" to rank or compare, view="map" for a map): "yesterday",
+  "on 5 November", "last week", "the last N days", "this week", "so far this
+  month", or a day-by-day series. Convert them to IST dates (YYYY-MM-DD) from
+  today's date and the station-data end date in the conversation context:
+  "yesterday" = today minus one day; "the last N days" and "last week" (7
+  days) end at the latest station day. Station data have no live or same-day
+  readings: for "now", "today", "currently" or "what is the air like" without
+  the word forecast, use station_days with today's date as start_date (the
+  function then shows the latest complete day and says so), never a cams_*
+  function. For general air or
+  pollution wording that names no pollutant, use PM2.5. Use the year and
+  month functions for whole years, whole months and longer periods.
 - Use cams_forecast_map, cams_forecast_series, cams_forecast_threshold_map,
   or cams_forecast_rank for air-quality forecasts: "forecast", "will",
   "tomorrow", "this weekend", a weekday, or any date in the CAMS forecast
@@ -165,7 +179,9 @@ Use the function arguments literally:
   "hottest" or "heat" = max_temperature, "coldest" or "cold nights" =
   min_temperature, plain "temperature" = temperature, "wettest" or "rain" =
   rainfall. Rainfall amounts ("most rain", "how much rain", "wettest") over a
-  window are totals: use statistic="total". The grid ends at 2024-12-31 and
+  window are totals: use statistic="total". For measured station rainfall use
+  the metric total_rainfall (daily total, every year); "rainfall" is a
+  15-minute mean that exists only in the pre-2021 archive. The grid ends at 2024-12-31 and
   starts at 2023-01-01; for weather in any other year, use the station
   functions with the measured weather metric instead. Convert periods to
   start_date/end_date (YYYY-MM-DD): "May 2024" =
@@ -244,6 +260,10 @@ detections over the stated IST dates, not individual fires or burned area.
 Coal-mining and industrial districts such as Dhanbad or Anugul rank high
 partly because of persistent industrial heat, not crop burning; mention this
 when such a district appears in the result.
+
+Facts for station_days results: name the exact IST date or dates of the CPCB
+measurements. Repeat the verified result's explanation of which day is shown,
+if it gives one.
 
 Facts for cams_* results: the values are a CAMS model forecast, not
 measurements, from the run issued at the time stated in the verified result,
@@ -379,7 +399,8 @@ class GeminiService:
         context = self._history_text(history)
         prompt = (
             f"Conversation context:\n{context}\n\n"
-            f"Date and data windows: {routing_context()} {fire_context()}\n\n"
+            f"Date and data windows: {routing_context()} {fire_context()} "
+            f"{station_data_context()}\n\n"
             f"Current user question:\n{message}"
         )
         if validation_feedback:

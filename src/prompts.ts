@@ -92,6 +92,22 @@ export const promptGroups: PromptGroup[] = [
     ],
   },
   {
+    name: "recent_days",
+    label: "Recent days (CPCB via OAQ)",
+    // Measured daily station values up to the latest complete day; "yesterday"
+    // and "the last N days" resolve against the station-data end date.
+    prompts: [
+      "What was the PM2.5 in Delhi yesterday?",
+      "Show Delhi's daily PM2.5 over the last 30 days.",
+      "Which cities had the highest PM2.5 yesterday?",
+      "Which Delhi monitoring stations had the highest PM2.5 last week?",
+      "Map PM2.5 at Delhi's monitoring stations yesterday.",
+      "Compare Delhi and Mumbai's PM2.5 yesterday.",
+      "Which states had the highest PM2.5 over the last 7 days?",
+      "Show Mumbai's daily PM10 in October 2026.",
+    ],
+  },
+  {
     name: "wrf_weather",
     label: "WRF weather events (2023–2024)",
     // Each prompt is a real event the simulation reproduces: the May–June 2024

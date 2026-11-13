@@ -16,7 +16,6 @@ boundary was used, so answers can say exactly what area they describe.
 
 from __future__ import annotations
 
-import csv
 import json
 import threading
 from dataclasses import dataclass
@@ -26,6 +25,8 @@ import shapely
 from shapely.geometry import Point, mapping, shape
 from shapely.geometry.base import BaseGeometry
 
+from .oaq import station_records
+
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 # Detailed states merged from the district boundaries (scripts/prepare_states.py);
@@ -34,7 +35,6 @@ STATES_PATH = PROJECT_ROOT / "data" / "india-states-detailed.geojson"
 if not STATES_PATH.exists():
     STATES_PATH = PROJECT_ROOT / "public" / "india-states.geojson"
 DISTRICTS_PATH = PROJECT_ROOT / "data" / "india-districts.geojson"
-STATIONS_PATH = PROJECT_ROOT / "data" / "stations.csv"
 
 # City names people use -> the name in the boundary files.
 ALIASES = {
@@ -123,13 +123,12 @@ class PlaceIndex:
                 geometry = shape(feature["geometry"]).buffer(0)
                 self.districts.setdefault(_key(district), []).append((district, state, geometry))
             grouped: dict[str, list[tuple[float, float, str]]] = {}
-            with STATIONS_PATH.open(encoding="utf-8") as handle:
-                for row in csv.DictReader(handle):
-                    try:
-                        lat, lon = float(row["latitude"]), float(row["longitude"])
-                    except (TypeError, ValueError):
-                        continue
-                    grouped.setdefault(row["city"], []).append((lat, lon, row["state"]))
+            for row in station_records():
+                try:
+                    lat, lon = float(row["latitude"]), float(row["longitude"])
+                except (TypeError, ValueError):
+                    continue
+                grouped.setdefault(row["city"], []).append((lat, lon, row["state"]))
             for city, rows in grouped.items():
                 lat = sum(r[0] for r in rows) / len(rows)
                 lon = sum(r[1] for r in rows) / len(rows)

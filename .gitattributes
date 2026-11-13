@@ -3,3 +3,4 @@ data/AQ_met_data_2025.csv filter=lfs diff=lfs merge=lfs -text
 public/vayuchat-logo.png filter=lfs diff=lfs merge=lfs -text
 data/gridded/*.nc filter=lfs diff=lfs merge=lfs -text
 data/india-districts.geojson filter=lfs diff=lfs merge=lfs -text
+data/oaq/*.parquet filter=lfs diff=lfs merge=lfs -text

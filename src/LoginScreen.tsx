@@ -49,17 +49,17 @@ export function LoginScreen({ configured, onAuthenticated }: LoginScreenProps) {
           <h1 id="login-heading">Ask India’s air what changed.</h1>
           <p>
             Explore daily pollution, weather, city, state, and NCAP funding data
-            from 2017–2025 with a Gemini-powered analyst.
+            from 2017 to today with a Gemini-powered analyst.
           </p>
         </div>
 
         <div className="login-metrics" aria-label="Dataset summary">
           <span>
-            <strong>2017–25</strong>
+            <strong>2017–now</strong>
             daily observations
           </span>
           <span>
-            <strong>277</strong>
+            <strong>330</strong>
             Indian cities
           </span>
           <span>

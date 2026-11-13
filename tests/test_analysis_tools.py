@@ -332,7 +332,7 @@ def test_rank_cities_uses_equal_station_weighting_and_known_baseline(database):
     _, rows, _ = database.execute(analysis.plan.sql)
     assert rows[0] == {
         "city": "Byrnihat",
-        "mean_pm25": 151.51,
+        "mean_pm25": 149.11,
         "station_count": 1,
         "min_observation_days": 351,
         "total_station_days": 351,
@@ -353,7 +353,9 @@ def test_single_city_average_and_station_coverage_have_known_baselines(database)
 
     coverage = build_analysis(
         "station_coverage",
-        {"metric": "pm25", "cities": ["Mumbai", "Delhi"]},
+        # A closed period: the open one moves daily as new monitors (Delhi's
+        # DPCC stations from October 2026) cross the 30-day threshold.
+        {"metric": "pm25", "cities": ["Mumbai", "Delhi"], "start_year": 2017, "end_year": 2024},
     )
     _, coverage_rows, _ = database.execute(coverage.plan.sql)
     assert [(row["city"], row["station_count"]) for row in coverage_rows] == [
@@ -380,7 +382,7 @@ def test_rank_stations_uses_station_grain_and_known_delhi_baseline(database):
         "site_id": "site_301",
         "city": "Delhi",
         "state": "Delhi",
-        "mean_pm25": 127.87,
+        "mean_pm25": 127.81,
         "observation_days": 355,
         "first_observation_date": "2023-01-01",
         "last_observation_date": "2023-12-31",
@@ -816,7 +818,7 @@ def test_strongest_weather_relationship_evaluates_all_factors(database):
         "temperature",
         "humidity",
         "wind_speed",
-        "rainfall",
+        "total_rainfall",
         "solar_radiation",
         "pressure",
     }
@@ -847,7 +849,7 @@ def test_ncap_change_uses_same_stations_and_reports_funding_context(database):
     assert all(row["min_start_observation_months"] >= 9 for row in rows)
     assert all(row["min_end_observation_months"] >= 9 for row in rows)
     assert rows[0]["city"] == "Gaya"
-    assert rows[0]["absolute_change_pm25"] == -11.37
+    assert rows[0]["absolute_change_pm25"] == -11.68
     assert "only the same stations" in analysis.plan.method_note
     assert "does not attribute" in analysis.plan.method_note
 
@@ -1097,14 +1099,27 @@ def test_enrichment_functions_execute_with_explicit_scope(
 
 
 def test_recent_data_and_source_ranges_are_exposed(database):
+    from backend import oaq
+
     stats = database.stats()
+    synced = oaq.provenance()
+    # The archive starts the period; OAQ, refreshed continuously, ends it.
     assert stats["first_date"] == "2017-01-01"
-    assert stats["last_date"] == "2025-12-31"
-    assert stats["records"] == 858_604
-    assert stats["cities"] == 277
-    assert stats["stations"] == 535
+    assert stats["last_date"] == synced["date_end"] >= "2026-01-01"
+    assert stats["records"] > 858_604
+    assert stats["cities"] >= 277
+    assert stats["stations"] >= 600
+    _, sources, _ = database.execute(
+        "SELECT source, MIN(year) AS first_year, MAX(year) AS last_year "
+        "FROM air_quality GROUP BY source ORDER BY source"
+    )
+    assert sources == [
+        {"source": "CPCB archive", "first_year": 2017, "last_year": sources[0]["last_year"]},
+        {"source": "OAQ", "first_year": oaq.FIRST_YEAR, "last_year": int(synced["date_end"][:4])},
+    ]
     source_ids = {source["id"] for source in stats["sources"]}
     assert {
+        "oaq_cpcb",
         "cpcb_2025",
         "census_state_context",
         "cpcb_naaqs",

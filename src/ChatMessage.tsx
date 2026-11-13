@@ -33,6 +33,7 @@ const analysisLabels: Record<string, string> = {
   context_relationship: "Context relationship",
   threshold_frequency: "Threshold frequency",
   station_map: "Station map",
+  station_days: "Station data for selected days",
   state_choropleth: "State choropleth",
   data_catalog: "Source catalog",
   census_state_rank: "Census context",

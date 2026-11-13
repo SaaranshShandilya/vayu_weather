@@ -11,48 +11,17 @@ import {
 import { ColorBar, tickLabels, type Marker } from "./ColorBar";
 import { usePanZoom, type View } from "./usePanZoom";
 import { ZoomControls, ZoomHint } from "./ZoomControls";
+import { PALETTES, paletteColor } from "./mapStyle";
 
 const WIDTH = 720;
 const MARGIN = { top: 8, right: 8, bottom: 28, left: 52 };
 const FRAME_MS = 450;
 
-// Continuous palettes for weather fields, low to high.
-const PALETTES: Record<string, string[]> = {
-  temperature: ["#313695", "#4575b4", "#74add1", "#abd9e9", "#fee090", "#fdae61", "#f46d43", "#d73027", "#a50026"],
-  rainfall: ["#f7fbff", "#c6dbef", "#6baed6", "#2171b5", "#08306b"],
-  humidity: ["#8c510a", "#d8b365", "#f6e8c3", "#c7eae5", "#5ab4ac", "#01665e"],
-  wind: ["#f2f0f7", "#cbc9e2", "#9e9ac8", "#756bb1", "#54278f"],
-  pblh: ["#ffffcc", "#c2e699", "#78c679", "#31a354", "#006837"],
-  radiation: ["#fff5eb", "#fdd0a2", "#fd8d3c", "#d94801", "#7f2704"],
-  pressure: ["#440154", "#3b528b", "#21918c", "#5ec962", "#fde725"],
-  days: ["#ecf0f7", "#9fb3d9", "#274687"],
-  hours: ["#ecf0f7", "#9fb3d9", "#274687"],
-  pollutant: ["#fff7ec", "#fdd49e", "#fc8d59", "#d7301f", "#7f0000"],
-  aod: ["#ffffe5", "#fee391", "#fe9929", "#cc4c02", "#662506"],
-  fires: ["#fff8e7", "#fed98e", "#fe9929", "#d95f0e", "#993404", "#4a1a02"],
-  pm25: ["#ffffcc", "#fed976", "#fd8d3c", "#e31a1c", "#800026", "#3f0011"],
-  pm10: ["#ffffcc", "#fed976", "#fd8d3c", "#e31a1c", "#800026", "#3f0011"],
-};
-
 // Reference lines on the PM colour bars: CPCB 24-hour standards.
-const STANDARD_MARKERS: Record<string, Marker[]> = {
+export const STANDARD_MARKERS: Record<string, Marker[]> = {
   pm25: [{ value: 60, label: "CPCB 24-hour standard, 60 µg/m³" }],
   pm10: [{ value: 100, label: "CPCB 24-hour standard, 100 µg/m³" }],
 };
-
-function hexChannels(hex: string) {
-  return [1, 3, 5].map((start) => parseInt(hex.slice(start, start + 2), 16));
-}
-
-function paletteColor(stops: string[], fraction: number) {
-  const position = Math.max(0, Math.min(1, fraction)) * (stops.length - 1);
-  const index = Math.min(stops.length - 2, Math.floor(position));
-  const local = position - index;
-  const from = hexChannels(stops[index]!);
-  const to = hexChannels(stops[index + 1]!);
-  const channel = (k: number) => Math.round(from[k]! + (to[k]! - from[k]!) * local);
-  return `rgb(${channel(0)}, ${channel(1)}, ${channel(2)})`;
-}
 
 type Ring = [number, number][];
 let boundaryRings: Promise<Ring[]> | null = null;

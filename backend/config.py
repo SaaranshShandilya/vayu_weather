@@ -66,6 +66,7 @@ class Settings:
     key_wait_seconds: float
     turn_budget_seconds: float
     api_concurrency_limit: int
+    oaq_refresh_hours: float
 
     @property
     def gemini_api_key(self) -> str:
@@ -134,4 +135,8 @@ def get_settings() -> Settings:
             ("API_CONCURRENCY_LIMIT", "API_THREAD_LIMIT"),
             0,
         ),
+        # How often the app re-fetches the current and previous year from
+        # OAQ. 0 turns the background refresh off; scripts/sync_oaq.py still
+        # works by hand.
+        oaq_refresh_hours=_float_env(("OAQ_REFRESH_HOURS",), 6.0),
     )

@@ -30,6 +30,7 @@ import pandas as pd
 import xarray as xr
 from pydantic import Field, model_validator
 
+from .catalog import AIR_QUALITY_END_YEAR, AIR_QUALITY_START_YEAR
 from .database import database
 from .firms_fires import fires
 from .models import QueryPlan
@@ -70,7 +71,7 @@ TOOL_GUIDE = (
     "Measures: fire_detections and fire_radiative_power (NASA FIRMS satellite fires), "
     "cams_pm25, cams_pm10, cams_no2, cams_ozone (CAMS model forecast, stitched across "
     "runs for past days), station_pm25, station_pm10, station_no2 (CPCB monitors, "
-    "2017-2025). Only days covered by both measures are used; the server says when "
+    f"{AIR_QUALITY_START_YEAR}-{AIR_QUALITY_END_YEAR}). Only days covered by both measures are used; the server says when "
     "they do not overlap. Dates are IST, YYYY-MM-DD; omit them to use the whole overlap."
 )
 
@@ -202,8 +203,7 @@ def state_compare(args: StateCompareArgs) -> GriddedOutput:
             f"while {y_info['label']} covers {y_cover[0]} to {y_cover[1]}, so the two have no days in "
             "common and cannot be compared. "
             + (
-                "CPCB station data end in December 2025 while the fire detections start in "
-                "October 2026; use CAMS PM2.5 (a model estimate) for the fire period instead."
+                "Use CAMS PM2.5 (a model estimate) for the fire period instead."
                 if {args.x_measure[:4], args.y_measure[:4]} >= {"fire", "stat"}
                 else ""
             )

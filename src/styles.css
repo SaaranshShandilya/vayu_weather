@@ -2204,3 +2204,160 @@ tbody tr:hover {
 .color-bar__note {
   margin: 0.15rem 0 0;
 }
+
+/* Station maps on a street basemap (PointMap.tsx). */
+.point-map__canvas {
+  width: 100%;
+  height: 34rem;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 0.45rem;
+  background: #eef0f2;
+  z-index: 0;
+}
+
+.point-map__canvas .leaflet-control-attribution {
+  font-size: 0.58rem;
+}
+
+.point-map__marker {
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(20, 20, 18, 0.45);
+  font: 700 10px/1 system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+}
+
+.point-map__marker:not(.is-labelled) {
+  border-width: 1.5px;
+}
+
+.point-map__marker.is-sensor {
+  border-radius: 4px;
+}
+
+.point-map__marker.is-labelled.is-sensor {
+  border-radius: 7px;
+}
+
+.point-map .leaflet-tooltip {
+  max-width: 18rem;
+  white-space: normal;
+  font: 0.72rem/1.4 system-ui, sans-serif;
+}
+
+.point-map__tip-value {
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.point-map__legend {
+  display: flex;
+  margin-top: 0.6rem;
+  flex-direction: column;
+  gap: 0.4rem;
+  color: var(--muted);
+  font-size: 0.66rem;
+}
+
+.point-map__legend-title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.point-map__ramp {
+  display: inline-block;
+  width: 8rem;
+  height: 0.5rem;
+  border-radius: 999px;
+}
+
+.point-map__bands {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.9rem;
+  list-style: none;
+}
+
+.point-map__bands li {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.point-map__bands li.is-empty {
+  opacity: 0.45;
+}
+
+.point-map__bands i,
+.point-map__shape {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+}
+
+.point-map__bands i {
+  border-radius: 2px;
+}
+
+.point-map__bands small {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.point-map__shapes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem 0.9rem;
+}
+
+.point-map__shapes > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.point-map__shape {
+  border: 1.5px solid #5d5e59;
+  background: #ffffff;
+}
+
+.point-map__shape.is-sensor {
+  border-radius: 2px;
+}
+
+.point-map__hint {
+  margin-left: auto;
+}
+
+@media (max-width: 640px) {
+  .point-map__canvas {
+    height: 22rem;
+  }
+
+  .point-map__hint {
+    margin-left: 0;
+  }
+}
+
+/* CAMS forecast grid on the basemap (GridBasemap.tsx). */
+.grid-basemap__cells {
+  image-rendering: pixelated;
+}
+
+.grid-basemap .point-map__legend .color-bar,
+.grid-basemap .point-map__legend > div {
+  align-self: flex-start;
+}

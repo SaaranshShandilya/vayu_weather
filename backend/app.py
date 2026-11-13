@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import datetime as dt
 import logging
 import re
 import time
@@ -13,10 +14,20 @@ from fastapi import Depends, FastAPI, HTTPException, Request, Response, status
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from .analysis_tools import METRIC_LABELS, TOOL_BY_NAME, build_analysis
+from .analysis_tools import (
+    DATE_TOOL_NAMES,
+    IST,
+    METRIC_LABELS,
+    TOOL_BY_NAME,
+    build_analysis,
+    station_data_end,
+)
 from .catalog import AIR_QUALITY_END_YEAR, AIR_QUALITY_START_YEAR
 from .config import Settings, get_settings
 from .database import database
+from . import oaq
+from .oaq_sync import start_background_refresh
+from .oaq_sync import sync as sync_oaq
 from .gemini_service import GeminiService, RoutedToolCall, build_key_pool
 from .weather_grid import VARIABLES as WEATHER_VARIABLES
 from .weather_grid import WEATHER_TOOL_NAMES, weather_grid
@@ -64,6 +75,14 @@ DEGREE_VARIANT = re.compile(
 # A dropped degree sign: only after a decimal reading such as "3.5 C".
 BARE_DEGREE = re.compile(r"(?<=\d\.\d)(\d*) C\b")
 SUMMARY_PLACEHOLDER = re.compile(r"\{\{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}\}")
+# Wording that names particular days rather than whole years or months.
+DAY_WINDOW_WORDS = re.compile(
+    r"\b(?:yesterday|today|tonight|right now|currently|at the moment|this week|"
+    r"so far this month|day[- ]by[- ]day|"
+    r"(?:last|past|previous)\s+(?:\d+\s+|few\s+)?(?:days?|weeks?|fortnight)|"
+    r"\d{1,2}(?:st|nd|rd|th)?\s+(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\b)",
+    re.IGNORECASE,
+)
 SIMPLE_PLURAL = re.compile(
     r"\b1 (stations|days|observations|cities|records)\b",
     re.IGNORECASE,
@@ -125,7 +144,7 @@ def clean_model_text(value: str) -> str:
     cleaned = DEGREE_VARIANT.sub(" °C", cleaned)
     cleaned = BARE_DEGREE.sub(r"\1 °C", cleaned)
     cleaned = SIMPLE_PLURAL.sub(
-        lambda match: f"1 {match.group(1)[:-1]}",
+        lambda match: f"1 {'city' if match.group(1).lower() == 'cities' else match.group(1)[:-1]}",
         cleaned,
     )
     return cleaned.strip()
@@ -226,6 +245,7 @@ def requested_city_names(
         "pollution_change",
         "threshold_frequency",
         "station_map",
+        "station_days",
     }:
         cities = arguments.get("cities")
         if isinstance(cities, list):
@@ -323,6 +343,16 @@ def capability_suggested_questions(
             "Which states had the most fire detections in the last 7 days?",
             "Map the PM2.5 forecast across India for tomorrow.",
             "Map fire detections across Punjab over the last 7 days.",
+        ]
+    if primary.name in DATE_TOOL_NAMES:
+        metric = arguments.get("pollutant")
+        label = METRIC_LABELS.get(metric, "PM2.5") if isinstance(metric, str) else "PM2.5"
+        cities = arguments.get("cities") if isinstance(arguments.get("cities"), list) else []
+        city = arguments.get("city") or (cities[0] if cities else "Delhi")
+        return [
+            f"Show {city}'s daily {label} over the last 30 days.",
+            f"Which cities had the highest {label} yesterday?",
+            f"Map {label} at {city}'s monitoring stations over the last 7 days.",
         ]
     if primary.name in FIRE_TOOL_NAMES:
         place = primary.arguments.get("state") or primary.arguments.get("city") or "Punjab"
@@ -492,10 +522,57 @@ def execute_weather_analysis(call: RoutedToolCall) -> ExecutedAnalysis:
     )
 
 
+METRIC_ARGUMENTS = ("pollutant", "metric", "condition_metric", "x_metric", "y_metric", "value")
+
+
+def station_rainfall_as_total(arguments: dict[str, Any]) -> dict[str, Any]:
+    """Read station "rainfall" as the daily total.
+
+    The 15-minute-mean rainfall column ends with the CPCB archive in 2020;
+    OAQ publishes the daily total for every year, and a total in mm is what a
+    rainfall question means.
+    """
+    return {
+        key: "total_rainfall" if key in METRIC_ARGUMENTS and value == "rainfall" else value
+        for key, value in arguments.items()
+    }
+
+
+NOW_WORDS = re.compile(
+    r"\b(?:right now|currently|at the moment|today|live)\b|\bnow\s*\??\s*$",
+    re.IGNORECASE,
+)
+
+
+def now_as_today(calls: list[RoutedToolCall], question: str) -> list[RoutedToolCall]:
+    """Ask station_days for today when the question says now or today.
+
+    The router tends to pass the latest station day itself. Asking for today
+    makes the function show that day with its note that there are no live
+    readings, so a "right now" answer never passes yesterday off as current.
+    """
+    if not NOW_WORDS.search(question) or re.search(r"\bforecast", question, re.IGNORECASE):
+        return calls
+    latest = station_data_end().isoformat()
+    today = dt.datetime.now(IST).date().isoformat()
+
+    def single_recent_day(arguments: dict[str, Any]) -> bool:
+        start = arguments.get("start_date") or latest
+        end = arguments.get("end_date") or start
+        return start == end and start >= latest
+
+    return [
+        RoutedToolCall(call.name, {**call.arguments, "start_date": today, "end_date": today})
+        if call.name == "station_days" and single_recent_day(call.arguments)
+        else call
+        for call in calls
+    ]
+
+
 def execute_analysis(call: RoutedToolCall) -> ExecutedAnalysis:
     if call.name in GRID_TOOL_NAMES:
         return execute_weather_analysis(call)
-    analysis = build_analysis(call.name, call.arguments)
+    analysis = build_analysis(call.name, station_rainfall_as_total(call.arguments))
     plan = analysis.plan
     if not plan.in_scope:
         return ExecutedAnalysis(
@@ -508,7 +585,10 @@ def execute_analysis(call: RoutedToolCall) -> ExecutedAnalysis:
             city_corrections={},
         )
     safe_sql = database.validate_sql(plan.sql)
-    max_rows = 600 if analysis.name == "station_map" else 200
+    station_map = analysis.name == "station_map" or (
+        analysis.name == "station_days" and analysis.arguments.get("view") == "map"
+    )
+    max_rows = 600 if station_map else 200
     columns, rows, truncated = database.execute(safe_sql, max_rows=max_rows)
     corrections = database.suggest_city_names(
         requested_city_names(analysis.name, call.arguments),
@@ -733,6 +813,10 @@ def routing_alignment_issue(
                 pollutant = measure.split("_", 1)[-1]
                 if measure.startswith(("cams_", "station_")) and pollutant in METRIC_LABELS:
                     planned_metrics.add(pollutant)
+    # A rainfall question is answered by the daily total as well as the
+    # 15-minute mean; only the total exists from 2021 (see backend/oaq.py).
+    if "total_rainfall" in planned_metrics:
+        planned_metrics.add("rainfall")
     if mentioned_metrics - planned_metrics:
         issues.append(
             "The function plan omitted metrics named in the question: "
@@ -746,7 +830,16 @@ def routing_alignment_issue(
             "possible supported alternative; never substitute a different "
             "measure silently."
         )
-    if not mentioned_metrics and planned_metrics:
+    # "What was the air like in Delhi yesterday" names no pollutant; the
+    # day-window functions document PM2.5 as the default for such wording,
+    # and their answers name it, so it is not a silent assumption.
+    general_air = re.search(r"\b(?:air|pollution|polluted|smog|aqi)\b", normalized)
+    date_default = {
+        "pm25"
+        for call in calls
+        if general_air and call.name in DATE_TOOL_NAMES and call.arguments.get("pollutant") == "pm25"
+    }
+    if not mentioned_metrics and planned_metrics - date_default:
         issues.append(
             "The question did not name a supported pollutant or weather metric "
             "selected by the function plan. Use clarify_question instead of "
@@ -773,6 +866,32 @@ def routing_alignment_issue(
                     f"Every temporal {call.name} call must preserve the "
                     f"explicit {expected_start}–{expected_end} window."
                 )
+
+    if mentioned_years:
+        for call in calls:
+            if call.name not in DATE_TOOL_NAMES:
+                continue
+            for key in ("start_date", "end_date"):
+                value = call.arguments.get(key)
+                if isinstance(value, str) and value[:4].isdigit() and not (
+                    mentioned_years[0] <= int(value[:4]) <= mentioned_years[-1]
+                ):
+                    issues.append(
+                        f"The {call.name} dates must fall in the year(s) the "
+                        f"question names ({', '.join(map(str, mentioned_years))})."
+                    )
+
+    # Particular days answered with whole-year averages: "which Delhi stations
+    # were worst last week" planned as rank_stations over all of 2026.
+    day_window = DAY_WINDOW_WORDS.search(normalized)
+    if day_window and not any(call.name in DATE_TOOL_NAMES for call in calls):
+        year_calls = [call.name for call in calls if "start_year" in call.arguments]
+        if year_calls:
+            issues.append(
+                f"The question asks about particular days ('{day_window.group(0)}'), "
+                f"but {', '.join(year_calls)} averages whole years. Use station_days "
+                "with IST start_date and end_date instead."
+            )
 
     threshold_calls = {
         "threshold_cities",
@@ -830,7 +949,8 @@ def routing_alignment_issue(
                     normalized,
                 )
             ),
-            {"rank_stations"},
+            # "station PM2.5 per fire" ranks states with station data (state_compare).
+            {"rank_stations", "state_compare", "station_days:rank"},
             "a requested station-level value ranking",
         ),
         (
@@ -848,6 +968,7 @@ def routing_alignment_issue(
             bool(re.search(r"\b(?:map|choropleth)\b", normalized)),
             {
                 "station_map",
+                "station_days:map",
                 "state_choropleth",
                 "weather_grid_map",
                 "weather_threshold_map",
@@ -859,6 +980,12 @@ def routing_alignment_issue(
         ),
     ]
     planned_tools = {call.name for call in calls}
+    # station_days serves a series, a ranking or a map depending on its view.
+    planned_tools |= {
+        f"station_days:{call.arguments.get('view', 'daily')}"
+        for call in calls
+        if call.name == "station_days"
+    }
     for requested, acceptable_tools, label in requested_capabilities:
         if requested and not (planned_tools & acceptable_tools):
             issues.append(
@@ -917,12 +1044,22 @@ def routing_alignment_issue(
 
 @asynccontextmanager
 async def lifespan(instance: FastAPI):
+    settings = get_settings()
+    if not oaq.STATION_DAY_PATH.exists() and oaq.api_key():
+        logger.info("No OAQ cache yet; fetching CPCB station data from OAQ")
+        await asyncio.to_thread(sync_oaq)
     logger.info("Loading VayuChat datasets")
     database.initialize()
     logger.info("VayuChat datasets ready: %s", database.stats())
+    stop_refresh = (
+        start_background_refresh(settings.oaq_refresh_hours, database.initialize)
+        if oaq.api_key()
+        else None
+    )
+    if stop_refresh is None:
+        logger.info("OAQ background refresh is off")
     # One pool per process, built once: keys and their quota windows are
     # process-wide state, not per-request state.
-    settings = get_settings()
     instance.state.key_pool = build_key_pool(settings)
     # Bounds how many turns contend for the pool at once. The pool itself is
     # the real limiter; this just stops a flood from queueing inside the app.
@@ -936,6 +1073,8 @@ async def lifespan(instance: FastAPI):
     else:
         logger.info("Gemini key pool ready: %s", instance.state.key_pool.stats())
     yield
+    if stop_refresh is not None:
+        stop_refresh.set()
 
 
 app = FastAPI(
@@ -959,7 +1098,8 @@ async def security_headers(request: Request, call_next):
         "default-src 'self'; "
         "script-src 'self'; "
         "style-src 'self' 'unsafe-inline'; "
-        "img-src 'self' data:; "
+        # Basemap tiles for station maps (Esri light grey canvas).
+        "img-src 'self' data: https://server.arcgisonline.com; "
         "font-src 'self'; "
         "connect-src 'self'; "
         "frame-ancestors 'self' https://huggingface.co https://*.huggingface.co; "
@@ -1201,7 +1341,7 @@ async def run_chat_turn(
             raise ValueError(alignment_issue)
         executed = [
             execute_analysis(call)
-            for call in routed.calls
+            for call in now_as_today(routed.calls, body.message)
         ]
         if len(executed) == 1 and not executed[0].plan.in_scope:
             refusal_plan = executed[0].plan

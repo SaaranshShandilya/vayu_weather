@@ -36,8 +36,12 @@ does not write or repair SQL.
 The bundled source catalog is exposed in the app and through the
 `data_catalog` function:
 
-- CPCB station-day pollution and meteorology: 2017–2025, 858,604 rows.
-- Monitoring locations: 535 geocoded stations in 277 cities.
+- CPCB station-day pollution and meteorology from
+  [OAQ](https://oaq.notf.in), India's Open Air Quality Platform: 2021 to the
+  latest synced day, with the bundled CPCB archive filling 2017–2020 and any
+  other station-year OAQ does not publish (see below).
+- Monitoring locations: OAQ's CPCB station registry (634 stations), plus the
+  few archive stations OAQ no longer lists.
 - Historical NCAP city releases: FY 2019–20 through FY 2021–22, with a June
   2022 utilisation snapshot.
 - National NCAP/XV-FC finance and physical progress: PRANA reporting snapshots
@@ -181,7 +185,9 @@ every few hours and the history grows; `--backfill START END` with
 
 `backend/firms_fires.py` bins detections onto a grid sized to the area (0.25°
 for India, 0.1° or finer for a state or district) and reuses the gridded map
-format, so zoom, outlines, animation and downloads work as elsewhere:
+format, so zoom, outlines, animation and downloads work as elsewhere. Fire maps
+draw on the street basemap (`src/GridBasemap.tsx`), with cells that had no
+detections left clear:
 
 - `fire_map`: detection counts or fire radiative power, as a total or a daily
   animation, with the most active districts listed.
@@ -226,13 +232,106 @@ joins the resulting city changes to the bundled funding fields. The NCAP
 release data end in FY 2021–22 and utilisation is dated June 2022, so joined
 results are reported as associations and context—not causal effects.
 
+## OAQ station data
+
+CPCB station-day readings come from OAQ's CPCB provider. OAQ serves files from
+a Cloud CDN under `https://oaq.notf.in/v1/`; each request carries a URL
+signature that OAQ's data broker issues for 24 hours in exchange for the API
+key in `oaq_key`. `backend/oaq.py` handles the handshake and re-signs when a
+session expires. VayuChat uses two endpoints:
+
+| Endpoint | Used for |
+| --- | --- |
+| `provider=cpcb/meta/devices.csv` | station names, cities, states, coordinates |
+| `provider=cpcb/history/aggregates/{id}/annual_{year}.json` | one row per station and IST day, 14 parameters |
+
+Questions never wait on the network. `scripts/sync_oaq.py` mirrors the data
+into `data/oaq/` (`cpcb_station_day.parquet`, `stations.csv`,
+`provenance.json`), and the database loads that cache:
+
+```bash
+python scripts/sync_oaq.py              # first run: 2021 onwards; later: the last two years
+python scripts/sync_oaq.py --all        # re-fetch every year
+python scripts/sync_oaq.py --years 2024
+```
+
+When the cache is missing, the app fetches it on start. While it runs, it
+re-syncs the current and previous year every `OAQ_REFRESH_HOURS` (default 6;
+0 turns it off) and swaps the reloaded tables in without pausing queries. A
+station-year is replaced only when OAQ returns data for it, and a sync with
+more than 10% failed downloads changes nothing. The current IST day is left
+out until it is complete, so the data end yesterday. The year range offered to
+Gemini is read from `provenance.json` at start, so a new calendar year
+appears after a restart.
+
+OAQ station `1406` is the archive's `site_1406`. Where both sources cover a
+station-year, OAQ's values are used. Over the 600,000 station-days both hold
+for 2021–2025, PM2.5, PM10, NO₂, ozone, temperature and humidity correlate at
+0.999 or more, 58–72% of days match exactly, and means differ by under 0.5%.
+OAQ publishes CPCB history only from 2021, so the archive CSVs
+(`data/AQ_met_data*.csv`) still supply 2017–2020 and the station-years OAQ
+lacks. Each row's `source` column says which source supplied it. Delete the
+CSVs to run on OAQ alone: the period then starts in 2021.
+
+Three differences from the archive are handled explicitly:
+
+- **Rainfall.** OAQ's `rf` is the day's total. It matches the archive's
+  `TOT-RF` and is about 96 times its `RF` (the mean of 15-minute readings), so
+  it is loaded as `total_rainfall`; `rainfall` is empty on OAQ rows. Station
+  questions about rainfall use `total_rainfall`, which covers every year.
+- **CO, January 2025 to February 2026.** OAQ's CO falls to monthly medians of
+  0.00–0.33 mg/m³ (0.5–0.9 before and after, 0.64 in CPCB's own 2025 archive),
+  so it is off the mg/m³ scale. `SUSPECT_VALUES` in `backend/oaq.py` marks it
+  missing; the archive's value for the same station-day replaces it where one
+  exists. Remove the entry once OAQ corrects the data.
+- **Missing fields.** OAQ does not publish NO, pressure or vertical wind
+  speed, so those are empty on OAQ rows.
+
+Names follow OAQ's registry in every year, so the four Pimpri-Chinchwad
+stations the archive filed under Pune are now listed under Pimpri-Chinchwad.
+The registry also adds stations the archive never had, such as 21 DPCC and
+IITM monitors in Delhi.
+
+### Particular days
+
+The other station functions average whole years or months. `station_days`
+answers any IST day window up to the latest complete day ("yesterday", "on 1
+November", "last week", "the last 30 days", "today"), with three views:
+
+| View | Answers | Shape |
+| --- | --- | --- |
+| `daily` | one city or station, day by day (≤92 days) | city mean of reporting stations, with the lowest and highest station |
+| `rank` | cities, states or stations over the window (≤366 days) | equal station weighting; a station needs readings on 50% of the days |
+| `map` | stations on the basemap over the window | each station's window mean |
+
+The router is told today's date, the latest station day, and what "yesterday"
+and "the last 7 days" resolve to. There are no live readings: for "now" or
+"today" the app asks for today's date, and the function shows the latest
+complete day with a sentence saying so. A plan that answers a particular-days
+question with a whole-year function is rejected and re-routed.
+
+It is one function rather than three because Gemini refuses the whole function
+set ("too many states for serving") once the declared schemas pass a size
+limit, and the existing functions sit close to it. `tests/test_date_tools.py`
+sends the real declarations to Gemini to catch that before deployment.
+
+### Station maps
+
+Station maps (`src/PointMap.tsx`) draw on Esri's light grey basemap with
+Leaflet, colour PM2.5 and PM10 by CPCB AQI band, show CPCB monitors as circles, and open fitted to the stations in the
+answer, so a question about one city opens on that city. Esri's public tiles
+need no key but are meant for light use; for heavy production traffic, switch
+`BASE_TILES`/`LABEL_TILES` to a keyed provider and update the `img-src` entry in
+the Content Security Policy in `backend/app.py`.
+
 ## Required Hugging Face secrets
 
-Add both values under **Space settings → Variables and secrets → Secrets**:
+Add these values under **Space settings → Variables and secrets → Secrets**:
 
 - `GEMINI_API_KEYS`: one or more Google Gemini API keys, separated by commas
   or newlines. `GEMINI_API_KEY` is still accepted for a single key.
 - `APP_PASSWORD`: the shared password required by the sign-in screen
+- `oaq_key`: the OAQ API key, used to sync the CPCB station data
 
 Optionally add `GEMINI_MODEL` as a public variable to override the default
 `gemini-3.5-flash-lite`.
@@ -252,6 +351,8 @@ pip install -r requirements.txt
 
 export GEMINI_API_KEYS="key-one,key-two"
 export APP_PASSWORD="..."
+export oaq_key="..."
+python scripts/sync_oaq.py
 uvicorn backend.app:app --host 0.0.0.0 --port 7860
 ```
 

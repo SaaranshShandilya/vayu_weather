@@ -24,3 +24,6 @@ data/cams/
 
 # NASA FIRMS fire detections (rebuilt by scripts/update_firms.py)
 data/firms/
+
+# Partial OAQ sync files (scripts/sync_oaq.py)
+data/oaq/*.part

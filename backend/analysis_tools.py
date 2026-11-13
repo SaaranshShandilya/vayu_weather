@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+import datetime as dt
+import math
+import re
 from dataclasses import dataclass
-from typing import Any, Literal
+from typing import Any, ClassVar, Literal
 
 from pydantic import BaseModel, Field, model_validator
 
+from . import oaq
 from .catalog import AIR_QUALITY_END_YEAR, AIR_QUALITY_START_YEAR
 from .cams_forecast import (
     CAMS_TOOL_NAMES,
@@ -500,8 +504,88 @@ class StateChoroplethArgs(YearRangeArgs):
         "humidity",
         "wind_speed",
         "rainfall",
+        "total_rainfall",
     ] = "station_count"
     minimum_station_days: int = Field(default=30, ge=1, le=2_922)
+
+
+# Date-window station functions --------------------------------------------
+# The functions above answer whole years and months. These answer any IST day
+# window (yesterday, one date, the last N days) from the daily station rows,
+# which OAQ keeps current to the latest complete day.
+
+# One function with three views: Gemini rejects the whole function set once
+# its schema grows past a size limit, and three separate functions crossed it.
+DATE_TOOL_NAMES = frozenset({"station_days"})
+DATE_FORMAT = re.compile(r"\d{4}-\d{2}-\d{2}")
+IST = dt.timezone(dt.timedelta(hours=5, minutes=30))
+MAX_SERIES_DAYS = 92
+MAX_WINDOW_DAYS = 366
+
+
+def station_data_end() -> dt.date:
+    """The latest complete IST day of station data; it moves with each OAQ sync."""
+    record = oaq.provenance()
+    if record and record.get("date_end"):
+        return dt.date.fromisoformat(str(record["date_end"])[:10])
+    return dt.date(AIR_QUALITY_END_YEAR, 12, 31)
+
+
+def station_data_context() -> str:
+    """The station-data day window, with relative days already resolved, for the router.
+
+    The router model gets "yesterday" wrong now and then when left to subtract
+    dates itself, so the common ones are spelled out.
+    """
+    end = station_data_end()
+    yesterday = dt.datetime.now(IST).date() - dt.timedelta(days=1)
+    week_start = end - dt.timedelta(days=6)
+    return (
+        f"CPCB station data are daily IST values from {AIR_QUALITY_START_YEAR}-01-01 to "
+        f"{end:%Y-%m-%d}, the latest complete day; there are no live or same-day "
+        f"station readings. Yesterday was {yesterday:%Y-%m-%d}. For station data, "
+        f"'the last 7 days' or 'last week' is {week_start:%Y-%m-%d} to {end:%Y-%m-%d}."
+    )
+
+
+class StationDaysArgs(StrictArgs):
+    view: Literal["daily", "rank", "map"] = "daily"
+    pollutant: Metric
+    # The format is checked below, not as a schema pattern: regex constraints
+    # count heavily against Gemini's schema limit.
+    start_date: str | None = Field(default=None, max_length=10, description="IST date, YYYY-MM-DD.")
+    end_date: str | None = Field(default=None, max_length=10, description="IST date, YYYY-MM-DD.")
+    cities: list[str] = Field(default_factory=list, max_length=12)
+    station: str | None = Field(default=None, max_length=160)
+    state: str | None = Field(default=None, max_length=120)
+    group_by: Literal["city", "state", "station"] = "city"
+    limit: int = Field(default=10, ge=1, le=50)
+    order: Literal["highest", "lowest"] = "highest"
+    minimum_coverage_pct: int = Field(default=50, ge=1, le=100)
+
+    @model_validator(mode="after")
+    def validate_window(self):
+        for value in (self.start_date, self.end_date):
+            if value is not None and not DATE_FORMAT.fullmatch(value):
+                raise ValueError("dates must be written YYYY-MM-DD")
+        start = dt.date.fromisoformat(self.start_date) if self.start_date else None
+        end = dt.date.fromisoformat(self.end_date) if self.end_date else None
+        max_days = MAX_SERIES_DAYS if self.view == "daily" else MAX_WINDOW_DAYS
+        if start and end:
+            if start > end:
+                raise ValueError("start_date must not be later than end_date")
+            if (end - start).days + 1 > max_days:
+                raise ValueError(
+                    f'view="{self.view}" can cover at most {max_days} days; use the '
+                    "year and month functions for longer periods"
+                )
+        if self.view == "daily" and not self.station and len(self.cities) != 1:
+            raise ValueError('view="daily" needs exactly one city in cities, or a station')
+        return self
+
+    @property
+    def city(self) -> str | None:
+        return self.cities[0] if self.cities else None
 
 
 class DataCatalogArgs(StrictArgs):
@@ -1012,6 +1096,32 @@ TOOL_DEFINITIONS = (
             + COMPARE_TOOL_GUIDE
         ),
         StateCompareArgs,
+    ),
+    ToolDefinition(
+        "station_days",
+        (
+            "Measured CPCB station data on particular IST days rather than whole "
+            "years or months: yesterday, one date, a week, the last N days or a "
+            "day-by-day series, up to the latest complete day given in the "
+            "conversation context. view='daily': one city (cities=[city]; the mean "
+            "of its monitors with the lowest and highest station) or one station "
+            "(with its city), day by day: 'PM2.5 in Delhi yesterday', 'each day "
+            "over the last 7 days', 'daily PM2.5 in October 2026'; at most 92 days; "
+            "both dates omitted means the last 7 days. For one value averaged over "
+            "several days ('Mumbai's average PM2.5 last week'), use view='rank' with "
+            "cities=[city] instead. view='rank': rank cities, "
+            "states or stations (group_by), optionally within cities or one state: "
+            "'which city had the highest PM2.5 yesterday', 'most polluted Delhi "
+            "stations last week', 'compare Delhi and Mumbai yesterday' (both in "
+            "cities); a station counts when it reported on minimum_coverage_pct of "
+            "the days. view='map': stations on a map, optionally within cities or "
+            "one state: 'map PM2.5 at Delhi's stations yesterday'. For rank and map, "
+            "both dates omitted means the latest complete day; at most 366 days. "
+            "end_date omitted means start_date alone. For 'now', 'today' or 'what "
+            "is the air like', pass today's date: the latest complete day is shown "
+            "with a note."
+        ),
+        StationDaysArgs,
     ),
     ToolDefinition(
         "clarify_question",
@@ -1603,11 +1713,13 @@ def _strongest_weather_relationship(
 ) -> QueryPlan:
     pollutant_label = METRIC_LABELS[args.pollutant]
     period = _period_label(args.start_year, args.end_year)
+    # Daily total rainfall: OAQ publishes it for every year; the 15-minute
+    # mean ("rainfall") stops with the archive in 2020.
     weather_metrics = (
         "temperature",
         "humidity",
         "wind_speed",
-        "rainfall",
+        "total_rainfall",
         "solar_radiation",
         "pressure",
     )
@@ -3333,7 +3445,7 @@ def _station_map(args: StationMapArgs) -> QueryPlan:
                 "with matched coordinates."
             ),
             method=(
-                "Used the static CPCB station-location table. Coordinates are "
+                "Used the OAQ CPCB station registry. Coordinates are "
                 "shown as recorded; no geographic positions were inferred."
             ),
             visualization="map_points",
@@ -3399,7 +3511,328 @@ def _station_map(args: StationMapArgs) -> QueryPlan:
             "excluded and coordinates came from the separate station registry."
         ),
         visualization="map_points",
-        title=f"Station mean {label}, {period}",
+        title=f"Station mean {label}, {', '.join(args.cities) + ', ' if args.cities else ''}{period}",
+        x_key="longitude",
+        y_keys=["latitude", value_key],
+    )
+
+
+@dataclass(frozen=True)
+class DayWindow:
+    start: dt.date
+    end: dt.date
+    note: str
+
+    @property
+    def days(self) -> int:
+        return (self.end - self.start).days + 1
+
+    @property
+    def label(self) -> str:
+        if self.start == self.end:
+            return f"{self.start.day} {self.start:%b %Y}"
+        if self.start.year == self.end.year:
+            return f"{self.start.day} {self.start:%b} – {self.end.day} {self.end:%b %Y}"
+        return f"{self.start.day} {self.start:%b %Y} – {self.end.day} {self.end:%b %Y}"
+
+    @property
+    def where(self) -> str:
+        return f"timestamp BETWEEN DATE '{self.start}' AND DATE '{self.end}'"
+
+    def minimum_days(self, coverage_pct: int) -> int:
+        return max(1, math.ceil(self.days * coverage_pct / 100))
+
+
+def _day_window(args: StationDaysArgs, default_days: int) -> DayWindow:
+    """Resolve the requested dates against the station data, saying what changed."""
+    latest = station_data_end()
+    first = dt.date(AIR_QUALITY_START_YEAR, 1, 1)
+    start = dt.date.fromisoformat(args.start_date) if args.start_date else None
+    end = dt.date.fromisoformat(args.end_date) if args.end_date else None
+    if start is None and end is None:
+        end = latest
+        start = latest - dt.timedelta(days=default_days - 1)
+    elif start is None:
+        start = end
+    elif end is None:
+        end = start
+    note = ""
+    if start > latest:
+        note = (
+            "CPCB stations have not yet reported complete days for the requested dates "
+            "(there are no live readings), so this shows the latest complete day, "
+            f"{latest.day} {latest:%b %Y}. "
+        )
+        start = end = latest
+    elif end > latest:
+        note = (
+            f"Station data end on {latest.day} {latest:%b %Y}, the latest complete day, "
+            "so the window ends there. "
+        )
+        end = latest
+    if end < first:
+        raise ValueError(f"station data start on {first}")
+    if start < first:
+        note += f"Station data start on {first.day} {first:%b %Y}. "
+        start = first
+    return DayWindow(start, end, note)
+
+
+def _daily_values(args: StationDaysArgs) -> QueryPlan:
+    window = _day_window(args, default_days=7)
+    label = METRIC_LABELS[args.pollutant]
+    unit = METRIC_UNITS[args.pollutant]
+    value_key = f"mean_{args.pollutant}"
+    filters = [window.where, _valid_metric(args.pollutant)]
+    if args.city:
+        filters.append(f"lower(trim(city)) = lower(trim({_quoted(args.city)}))")
+    if args.station:
+        filters.append(f"strpos(lower(station), lower(trim({_quoted(args.station)}))) > 0")
+    place = args.station or args.city
+    if args.station:
+        sql = f"""
+            SELECT
+                strftime(timestamp, '%Y-%m-%d') AS date,
+                station,
+                city,
+                ROUND(AVG({args.pollutant}), 2) AS {value_key}
+            FROM air_quality
+            WHERE {" AND ".join(filters)}
+            GROUP BY timestamp, station, city
+            ORDER BY timestamp, station
+        """
+        method_place = (
+            f"monitoring stations whose name contains '{args.station}'"
+            + (f" in {args.city}" if args.city else "")
+        )
+        summary = (
+            f"{window.note}{{{{station}}}} recorded a daily {label} of "
+            f"{{{{{value_key}}}}} {unit} on {{{{date}}}}"
+            + ("." if window.days == 1 else f"; the series covers {window.label}.")
+        )
+        y_keys = [value_key]
+    else:
+        sql = f"""
+            WITH station_days AS (
+                SELECT timestamp, city, station, AVG({args.pollutant}) AS value
+                FROM air_quality
+                WHERE {" AND ".join(filters)}
+                GROUP BY timestamp, city, station
+            )
+            SELECT
+                strftime(timestamp, '%Y-%m-%d') AS date,
+                city,
+                ROUND(AVG(value), 2) AS {value_key},
+                ROUND(MIN(value), 2) AS lowest_station_{args.pollutant},
+                ROUND(MAX(value), 2) AS highest_station_{args.pollutant},
+                COUNT(*) AS station_count
+            FROM station_days
+            GROUP BY timestamp, city
+            ORDER BY timestamp
+        """
+        method_place = f"CPCB monitors in {args.city}"
+        if window.days == 1:
+            summary = (
+                f"{window.note}{{{{city}}}}'s mean daily {label} on {window.label} was "
+                f"{{{{{value_key}}}}} {unit} across {{{{station_count}}}} reporting "
+                f"stations, ranging from {{{{lowest_station_{args.pollutant}}}}} to "
+                f"{{{{highest_station_{args.pollutant}}}}} {unit} by station."
+            )
+        else:
+            summary = (
+                f"{window.note}{{{{city}}}}'s daily mean {label} for {window.label} "
+                "has values on {{result_count}} days; on {{date}} it was "
+                f"{{{{{value_key}}}}} {unit} across {{{{station_count}}}} stations."
+            )
+        y_keys = [value_key]
+    return _plan(
+        sql=sql,
+        summary=summary,
+        method=(
+            f"{window.note}Used measured daily (IST) {label} at {method_place} for "
+            f"{window.label}. A city's value for a day is the mean of the stations "
+            "reporting that day, each weighted equally; days without valid readings "
+            "are absent and nothing is imputed. Station data are CPCB monitors via "
+            "OAQ, with the CPCB archive for station-years OAQ lacks."
+        ),
+        visualization="none" if window.days == 1 else "line",
+        title=f"Daily {label}, {place}, {window.label}",
+        x_key="date",
+        y_keys=y_keys,
+    )
+
+
+def _date_window_rank(args: StationDaysArgs) -> QueryPlan:
+    window = _day_window(args, default_days=1)
+    label = METRIC_LABELS[args.pollutant]
+    unit = METRIC_UNITS[args.pollutant]
+    value_key = f"mean_{args.pollutant}"
+    direction = "DESC" if args.order == "highest" else "ASC"
+    superlative = "highest" if args.order == "highest" else "lowest"
+    minimum_days = window.minimum_days(args.minimum_coverage_pct)
+    filters = [window.where, _valid_metric(args.pollutant)]
+    scope = ""
+    if args.cities:
+        filters.append(_string_filter("city", args.cities).removeprefix(" AND "))
+        scope = f" in {', '.join(args.cities)}"
+    if args.state:
+        filters.append(f"lower(trim(state)) = lower(trim({_quoted(args.state)}))")
+        scope += f" in {args.state}"
+    stations = f"""
+        station_estimates AS (
+            SELECT
+                state,
+                city,
+                station,
+                AVG({args.pollutant}) AS station_average,
+                COUNT(DISTINCT timestamp) AS observation_days
+            FROM air_quality
+            WHERE {" AND ".join(filters)}
+            GROUP BY state, city, station
+            HAVING COUNT(DISTINCT timestamp) >= {minimum_days}
+        )
+    """
+    if args.group_by == "station":
+        sql = f"""
+            WITH {stations}
+            SELECT
+                station,
+                city,
+                state,
+                ROUND(station_average, 2) AS {value_key},
+                observation_days
+            FROM station_estimates
+            ORDER BY station_average {direction}, station
+            LIMIT {args.limit}
+        """
+        unit_of_rank = "station"
+        weighting = "Each station's own mean is ranked."
+    elif args.group_by == "state":
+        sql = f"""
+            WITH {stations},
+            city_estimates AS (
+                SELECT state, city, AVG(station_average) AS city_average,
+                       COUNT(*) AS station_count
+                FROM station_estimates
+                GROUP BY state, city
+            )
+            SELECT
+                state,
+                ROUND(AVG(city_average), 2) AS {value_key},
+                COUNT(*) AS city_count,
+                SUM(station_count) AS station_count
+            FROM city_estimates
+            GROUP BY state
+            ORDER BY AVG(city_average) {direction}, state
+            LIMIT {args.limit}
+        """
+        unit_of_rank = "state"
+        weighting = (
+            "Stations were weighted equally within cities, then cities equally "
+            "within states."
+        )
+    else:
+        sql = f"""
+            WITH {stations}
+            SELECT
+                city,
+                state,
+                ROUND(AVG(station_average), 2) AS {value_key},
+                COUNT(*) AS station_count,
+                MIN(observation_days) AS min_observation_days
+            FROM station_estimates
+            GROUP BY city, state
+            ORDER BY AVG(station_average) {direction}, city
+            LIMIT {args.limit}
+        """
+        unit_of_rank = "city"
+        weighting = "Stations were weighted equally within each city."
+    plural = {"city": "cities", "state": "states", "station": "stations"}[unit_of_rank]
+    when = f"on {window.label}" if window.days == 1 else f"over {window.label}"
+    return _plan(
+        sql=sql,
+        summary=(
+            f"{window.note}{{{{{unit_of_rank}}}}} had the {superlative} mean {label}"
+            f"{scope} {when}: {{{{{value_key}}}}} {unit}. The table ranks "
+            f"{{{{result_count}}}} {plural}."
+        ),
+        method=(
+            f"{window.note}Averaged measured daily (IST) {label} over {window.label} "
+            f"({window.days} day{'s' if window.days != 1 else ''}), counting a station "
+            f"only when it reported on at least {minimum_days} of those days. "
+            f"{weighting} Nothing was imputed. Station data are CPCB monitors via OAQ, "
+            "with the CPCB archive for station-years OAQ lacks."
+        ),
+        visualization="bar",
+        title=f"Mean {label} by {unit_of_rank}{scope}, {window.label}",
+        x_key=unit_of_rank,
+        y_keys=[value_key],
+    )
+
+
+def _date_window_map(args: StationDaysArgs) -> QueryPlan:
+    window = _day_window(args, default_days=1)
+    label = METRIC_LABELS[args.pollutant]
+    unit = METRIC_UNITS[args.pollutant]
+    value_key = f"mean_{args.pollutant}"
+    minimum_days = window.minimum_days(args.minimum_coverage_pct)
+    states = [args.state] if args.state else []
+    places = ", ".join([*args.cities, *states])
+    sql = f"""
+        WITH station_values AS (
+            SELECT
+                site_id,
+                station,
+                AVG({args.pollutant}) AS average_value,
+                COUNT(DISTINCT timestamp) AS observation_days
+            FROM air_quality
+            WHERE {window.where} AND {_valid_metric(args.pollutant)}
+            GROUP BY site_id, station
+            HAVING COUNT(DISTINCT timestamp) >= {minimum_days}
+        )
+        SELECT
+            locations.state,
+            locations.city,
+            locations.station,
+            locations.site_id,
+            locations.address,
+            ROUND(locations.latitude, 5) AS latitude,
+            ROUND(locations.longitude, 5) AS longitude,
+            ROUND(measured.average_value, 2) AS {value_key},
+            measured.observation_days
+        FROM stations AS locations
+        INNER JOIN station_values AS measured
+            ON (
+                locations.site_id = measured.site_id
+                OR (
+                    measured.site_id IS NULL
+                    AND locations.station = measured.station
+                )
+            )
+        WHERE
+            locations.latitude IS NOT NULL
+            AND locations.longitude IS NOT NULL
+            {_string_filter("locations.state", states)}
+            {_string_filter("locations.city", args.cities)}
+        ORDER BY {value_key} DESC, locations.state, locations.city
+        LIMIT 600
+    """
+    return _plan(
+        sql=sql,
+        summary=(
+            f"{window.note}The map shows {{{{result_count}}}} stations with measured "
+            f"{label} on {window.label}" if window.days == 1 else
+            f"{window.note}The map shows {{{{result_count}}}} stations with measured "
+            f"{label} over {window.label}"
+        ) + f"; the highest, {{{{station}}}}, averaged {{{{{value_key}}}}} {unit}.",
+        method=(
+            f"{window.note}Mapped each station's mean measured daily (IST) {label} over "
+            f"{window.label}, requiring readings on at least {minimum_days} of the "
+            f"{window.days} day{'s' if window.days != 1 else ''}. Coordinates come from "
+            "the OAQ CPCB station registry; nothing was imputed."
+        ),
+        visualization="map_points",
+        title=f"Station mean {label}, {places + ', ' if places else ''}{window.label}",
         x_key="longitude",
         y_keys=["latitude", value_key],
     )
@@ -3477,7 +3910,7 @@ def _state_choropleth(args: StateChoroplethArgs) -> QueryPlan:
 
 def _data_catalog(args: DataCatalogArgs) -> QueryPlan:
     topic_ids = {
-        "air_quality": ["cpcb_historical", "cpcb_2025"],
+        "air_quality": ["oaq_cpcb", "cpcb_historical", "cpcb_2025"],
         "funding": [
             "ncap_funding",
             "ncap_program_finance_2025",
@@ -3732,6 +4165,10 @@ def build_analysis(name: str, raw_arguments: dict[str, Any]) -> ToolAnalysis:
         plan = _threshold_frequency(arguments)
     elif name == "station_map":
         plan = _station_map(arguments)
+    elif name == "station_days":
+        plan = {"daily": _daily_values, "rank": _date_window_rank, "map": _date_window_map}[
+            arguments.view
+        ](arguments)
     elif name == "state_choropleth":
         plan = _state_choropleth(arguments)
     elif name == "data_catalog":

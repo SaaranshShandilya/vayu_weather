@@ -156,6 +156,8 @@ const statisticalPrefixes: Array<[string, string]> = [
   ["start_", "Start "],
   ["end_", "End "],
   ["change_", "Change in "],
+  ["lowest_station_", "Lowest station "],
+  ["highest_station_", "Highest station "],
 ];
 
 function metricParts(key: string) {

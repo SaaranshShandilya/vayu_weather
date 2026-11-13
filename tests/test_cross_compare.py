@@ -38,7 +38,11 @@ def test_ratio_ranking_is_sorted_and_skips_small_denominators():
     assert "not measurements" in result.plan.method_note and "FIRMS" in result.plan.method_note
 
 
-def test_non_overlapping_datasets_are_refused_with_the_reason():
+def test_non_overlapping_datasets_are_refused_with_the_reason(monkeypatch):
+    import backend.cross_compare as cross_compare
+
+    covered = {"station_pm25": ("2021-01-01", "2025-12-31"), "fire_detections": ("2026-10-01", "2026-11-10")}
+    monkeypatch.setattr(cross_compare, "_coverage", covered.get)
     result = ask(x_measure="station_pm25", y_measure="fire_detections")
     assert not result.plan.in_scope
     assert "no days in common" in result.plan.refusal and "CAMS PM2.5" in result.plan.refusal

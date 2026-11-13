@@ -18,18 +18,24 @@ import {
   formatChartTick,
 } from "./chartMetadata";
 import { GeoMap } from "./GeoMap";
+import { PointMap } from "./PointMap";
+import { GridBasemap } from "./GridBasemap";
 import { GridHeatmap } from "./GridHeatmap";
 
 const seriesColors = ["#36589f", "#6379ad", "#8e9bc0", "#203968"];
 
 export function AnalysisChart({ result }: { result: ResultData }) {
   if (result.visualization === "grid_heatmap") {
-    return result.grid ? <GridHeatmap grid={result.grid} title={result.title} /> : null;
+    if (!result.grid) return null;
+    // CAMS forecasts and FIRMS fires sit on the street basemap; WRF grids keep the heatmap.
+    return result.grid.domain === "cams" || result.grid.domain === "firms"
+      ? <GridBasemap grid={result.grid} title={result.title} />
+      : <GridHeatmap grid={result.grid} title={result.title} />;
   }
-  if (
-    result.visualization === "map_points" ||
-    result.visualization === "choropleth"
-  ) {
+  if (result.visualization === "map_points") {
+    return <PointMap result={result} />;
+  }
+  if (result.visualization === "choropleth") {
     return <GeoMap result={result} />;
   }
   if (

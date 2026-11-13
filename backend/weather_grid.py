@@ -37,6 +37,7 @@ import xarray as xr
 from pydantic import BaseModel, Field, model_validator
 from shapely.geometry import box
 
+from .catalog import AIR_QUALITY_END_YEAR, AIR_QUALITY_START_YEAR
 from .models import QueryPlan
 from .places import Place, places
 
@@ -869,7 +870,7 @@ class WeatherGrid:
                 f"The WRF weather grid covers {FIRST_DAY} to {LAST_DAY}, so "
                 f"{self._window_label(arguments)} is outside it. Measured "
                 "station weather (temperature, humidity, wind, rainfall) "
-                "for 2017–2025 is available through station rankings and "
+                f"for {AIR_QUALITY_START_YEAR}–{AIR_QUALITY_END_YEAR} is available through station rankings and "
                 "pollution–weather relationships."
             )
         if name == "weather_grid_map":

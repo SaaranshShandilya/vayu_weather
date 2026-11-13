@@ -14,9 +14,34 @@ from sqlglot import exp, parse_one
 from sqlglot.errors import ParseError
 
 from .catalog import DATA_SOURCES
+from .oaq import (
+    ARCHIVE_GLOB,
+    PARAMETERS,
+    STATION_COLUMNS,
+    STATION_DAY_PATH,
+    SUSPECT_VALUES,
+    station_records,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_DIR = PROJECT_ROOT / "data"
+# The air_quality table's columns, in order, before its source label.
+AIR_QUALITY_COLUMNS = (
+    ("timestamp", "DATE"),
+    ("state", "VARCHAR"),
+    ("city", "VARCHAR"),
+    ("station", "VARCHAR"),
+    ("site_id", "VARCHAR"),
+    ("year", "INTEGER"),
+    *(
+        (name, "DOUBLE")
+        for name in (
+            "pm25", "pm10", "no", "no2", "nox", "nh3", "so2", "co", "ozone",
+            "temperature", "humidity", "wind_speed", "wind_direction", "rainfall",
+            "total_rainfall", "solar_radiation", "pressure", "vertical_wind_speed",
+        )
+    ),
+)
 ALLOWED_TABLES = {
     "air_quality",
     "stations",
@@ -54,10 +79,13 @@ class AirQualityDatabase:
         self._funding_cities: list[str] = []
 
     def initialize(self) -> None:
+        """Build every table in a new connection, then swap it in.
+
+        Also used to pick up a refreshed OAQ cache: queries keep running on
+        the old connection until the new one is complete.
+        """
         required = [
-            DATA_DIR / "AQ_met_data.csv",
-            DATA_DIR / "AQ_met_data_2025.csv",
-            DATA_DIR / "stations.csv",
+            STATION_DAY_PATH,
             DATA_DIR / "states_data.csv",
             DATA_DIR / "ncap_funding_data.csv",
             DATA_DIR / "census_state_context.csv",
@@ -68,62 +96,33 @@ class AirQualityDatabase:
         ]
         missing = [str(path) for path in required if not path.exists()]
         if missing:
-            raise RuntimeError(f"Missing data files: {', '.join(missing)}")
+            hint = " Run scripts/sync_oaq.py to fetch the OAQ data." if not STATION_DAY_PATH.exists() else ""
+            raise RuntimeError(f"Missing data files: {', '.join(missing)}.{hint}")
 
         connection = duckdb.connect(database=":memory:")
         connection.execute("SET threads = 2")
         connection.execute(
             """
-            CREATE TABLE air_quality AS
-            SELECT
-                TRY_CAST("Timestamp" AS DATE) AS timestamp,
-                "State" AS state,
-                "City" AS city,
-                "Station" AS station,
-                "site_id" AS site_id,
-                TRY_CAST("Year" AS INTEGER) AS year,
-                TRY_CAST("PM2.5 (µg/m³)" AS DOUBLE) AS pm25,
-                TRY_CAST("PM10 (µg/m³)" AS DOUBLE) AS pm10,
-                TRY_CAST("NO (µg/m³)" AS DOUBLE) AS no,
-                TRY_CAST("NO2 (µg/m³)" AS DOUBLE) AS no2,
-                TRY_CAST("NOx (ppb)" AS DOUBLE) AS nox,
-                TRY_CAST("NH3 (µg/m³)" AS DOUBLE) AS nh3,
-                TRY_CAST("SO2 (µg/m³)" AS DOUBLE) AS so2,
-                TRY_CAST("CO (mg/m³)" AS DOUBLE) AS co,
-                TRY_CAST("Ozone (µg/m³)" AS DOUBLE) AS ozone,
-                TRY_CAST("AT (°C)" AS DOUBLE) AS temperature,
-                TRY_CAST("RH (%)" AS DOUBLE) AS humidity,
-                TRY_CAST("WS (m/s)" AS DOUBLE) AS wind_speed,
-                TRY_CAST("WD (deg)" AS DOUBLE) AS wind_direction,
-                TRY_CAST("RF (mm)" AS DOUBLE) AS rainfall,
-                TRY_CAST("TOT-RF (mm)" AS DOUBLE) AS total_rainfall,
-                TRY_CAST("SR (W/mt2)" AS DOUBLE) AS solar_radiation,
-                TRY_CAST("BP (mmHg)" AS DOUBLE) AS pressure,
-                TRY_CAST("VWS (m/s)" AS DOUBLE) AS vertical_wind_speed
-            FROM read_csv_auto(
-                ?,
-                header = true,
-                ignore_errors = true,
-                union_by_name = true
+            CREATE TABLE stations (
+                site_id VARCHAR,
+                state VARCHAR,
+                city VARCHAR,
+                station VARCHAR,
+                address VARCHAR,
+                latitude DOUBLE,
+                longitude DOUBLE
             )
-            """,
-            [str(DATA_DIR / "AQ_met_data*.csv")],
-        )
-        connection.execute(
             """
-            CREATE TABLE stations AS
-            SELECT
-                site_id,
-                state,
-                city,
-                station,
-                address,
-                TRY_CAST(latitude AS DOUBLE) AS latitude,
-                TRY_CAST(longitude AS DOUBLE) AS longitude
-            FROM read_csv_auto(?, header = true, ignore_errors = true)
-            """,
-            [str(DATA_DIR / "stations.csv")],
         )
+        connection.executemany(
+            "INSERT INTO stations VALUES (?, ?, ?, ?, NULLIF(?, ''), TRY_CAST(? AS DOUBLE), TRY_CAST(? AS DOUBLE))",
+            [
+                tuple(row[column] or None for column in STATION_COLUMNS[:4])
+                + tuple(row[column] for column in STATION_COLUMNS[4:])
+                for row in station_records()
+            ],
+        )
+        self._load_air_quality(connection)
         connection.execute(
             """
             CREATE TABLE states AS
@@ -134,7 +133,7 @@ class AirQualityDatabase:
                 TRY_CAST(isUnionTerritory AS BOOLEAN) AS is_union_territory
             FROM read_csv_auto(?, header = true, ignore_errors = true)
             """,
-            [str(required[3])],
+            [str(DATA_DIR / "states_data.csv")],
         )
         connection.execute(
             """
@@ -149,7 +148,7 @@ class AirQualityDatabase:
                 TRY_CAST("Utilisation as on June 2022" AS DOUBLE) AS utilisation_june_2022
             FROM read_csv_auto(?, header = true, ignore_errors = true)
             """,
-            [str(required[4])],
+            [str(DATA_DIR / "ncap_funding_data.csv")],
         )
         connection.execute(
             """
@@ -164,7 +163,7 @@ class AirQualityDatabase:
                     AS population_density_2011_per_km2
             FROM read_csv_auto(?, header = true, ignore_errors = true)
             """,
-            [str(required[5])],
+            [str(DATA_DIR / "census_state_context.csv")],
         )
         connection.execute(
             """
@@ -179,7 +178,7 @@ class AirQualityDatabase:
                 TRY_CAST(notification_year AS INTEGER) AS notification_year
             FROM read_csv_auto(?, header = true, ignore_errors = true)
             """,
-            [str(required[6])],
+            [str(DATA_DIR / "air_quality_standards.csv")],
         )
         connection.execute(
             """
@@ -193,7 +192,7 @@ class AirQualityDatabase:
                 TRY_CAST(reporting_date AS DATE) AS reporting_date
             FROM read_csv_auto(?, header = true, ignore_errors = true)
             """,
-            [str(required[7])],
+            [str(DATA_DIR / "ncap_program_finance_2025.csv")],
         )
         connection.execute(
             """
@@ -209,7 +208,7 @@ class AirQualityDatabase:
                 TRY_CAST(reporting_date AS DATE) AS reporting_date
             FROM read_csv_auto(?, header = true, ignore_errors = true)
             """,
-            [str(required[8])],
+            [str(DATA_DIR / "ncap_physical_progress_2025.csv")],
         )
         connection.execute(
             """
@@ -249,7 +248,7 @@ class AirQualityDatabase:
             ],
         )
         connection.execute("ANALYZE")
-        self._air_quality_cities = [
+        air_quality_cities = [
             row[0]
             for row in connection.execute(
                 """
@@ -260,7 +259,7 @@ class AirQualityDatabase:
                 """
             ).fetchall()
         ]
-        self._funding_cities = [
+        funding_cities = [
             row[0]
             for row in connection.execute(
                 """
@@ -271,7 +270,128 @@ class AirQualityDatabase:
                 """
             ).fetchall()
         ]
-        self._connection = connection
+        with self._lock:
+            previous = self._connection
+            self._connection = connection
+            self._air_quality_cities = air_quality_cities
+            self._funding_cities = funding_cities
+        if previous is not None:
+            previous.close()
+
+    @staticmethod
+    def _load_air_quality(connection: duckdb.DuckDBPyConnection) -> None:
+        """OAQ station-days, plus archive station-years OAQ does not publish.
+
+        Names come from the stations table, so a station reads the same in
+        every year whichever source supplied it. OAQ does not publish NO,
+        rainfall as a 15-minute mean, pressure or vertical wind speed; those
+        stay NULL on OAQ rows. OAQ values listed in ``SUSPECT_VALUES`` are
+        treated as missing and take the archive's value for the same
+        station-day when the archive has one.
+        """
+        archives = sorted(str(path) for path in ARCHIVE_GLOB.parent.glob(ARCHIVE_GLOB.name))
+        if archives:
+            connection.execute(
+                """
+                CREATE TEMP TABLE archive_all AS
+                SELECT
+                    TRY_CAST("Timestamp" AS DATE) AS timestamp,
+                    "State" AS state,
+                    "City" AS city,
+                    "Station" AS station,
+                    "site_id" AS site_id,
+                    TRY_CAST("Year" AS INTEGER) AS year,
+                    TRY_CAST("PM2.5 (µg/m³)" AS DOUBLE) AS pm25,
+                    TRY_CAST("PM10 (µg/m³)" AS DOUBLE) AS pm10,
+                    TRY_CAST("NO (µg/m³)" AS DOUBLE) AS no,
+                    TRY_CAST("NO2 (µg/m³)" AS DOUBLE) AS no2,
+                    TRY_CAST("NOx (ppb)" AS DOUBLE) AS nox,
+                    TRY_CAST("NH3 (µg/m³)" AS DOUBLE) AS nh3,
+                    TRY_CAST("SO2 (µg/m³)" AS DOUBLE) AS so2,
+                    TRY_CAST("CO (mg/m³)" AS DOUBLE) AS co,
+                    TRY_CAST("Ozone (µg/m³)" AS DOUBLE) AS ozone,
+                    TRY_CAST("AT (°C)" AS DOUBLE) AS temperature,
+                    TRY_CAST("RH (%)" AS DOUBLE) AS humidity,
+                    TRY_CAST("WS (m/s)" AS DOUBLE) AS wind_speed,
+                    TRY_CAST("WD (deg)" AS DOUBLE) AS wind_direction,
+                    TRY_CAST("RF (mm)" AS DOUBLE) AS rainfall,
+                    TRY_CAST("TOT-RF (mm)" AS DOUBLE) AS total_rainfall,
+                    TRY_CAST("SR (W/mt2)" AS DOUBLE) AS solar_radiation,
+                    TRY_CAST("BP (mmHg)" AS DOUBLE) AS pressure,
+                    TRY_CAST("VWS (m/s)" AS DOUBLE) AS vertical_wind_speed,
+                    'CPCB archive' AS source
+                FROM read_csv_auto(
+                    ?,
+                    header = true,
+                    ignore_errors = true,
+                    union_by_name = true
+                )
+                """,
+                [archives],
+            )
+        else:
+            connection.execute(
+                f"CREATE TEMP TABLE archive_all AS SELECT {', '.join(f'NULL::{kind} AS {name}' for name, kind in AIR_QUALITY_COLUMNS)}, NULL::VARCHAR AS source WHERE false"
+            )
+        suspect = {column: (first, last) for column, first, last, _ in SUSPECT_VALUES}
+
+        def measure(column: str) -> str:
+            if column not in suspect:
+                return f"published.{column}"
+            first, last = suspect[column]
+            return (
+                f"CASE WHEN published.timestamp BETWEEN DATE '{first}' AND DATE '{last}' "
+                f"THEN archive.{column} ELSE published.{column} END"
+            )
+
+        oaq_columns = {"timestamp", "state", "city", "station", "site_id", "year", *PARAMETERS.values()}
+        selected = ", ".join(
+            (measure(name) if name in PARAMETERS.values() else f"published.{name}")
+            if name in oaq_columns
+            else f"NULL::{kind}"
+            for name, kind in AIR_QUALITY_COLUMNS
+        )
+        aliases = ", ".join(name for name, _ in AIR_QUALITY_COLUMNS)
+        connection.execute(
+            f"""
+            CREATE TEMP TABLE oaq_rows AS
+            SELECT * FROM (
+                SELECT {selected}, 'OAQ'
+                FROM read_parquet(?) AS published
+                LEFT JOIN archive_all AS archive
+                    ON archive.site_id = published.site_id
+                    AND archive.timestamp = published.timestamp
+            ) AS oaq_values({aliases}, source)
+            """,
+            [str(STATION_DAY_PATH)],
+        )
+        connection.execute(
+            """
+            CREATE TEMP TABLE archive_rows AS
+            SELECT * FROM archive_all
+            WHERE NOT EXISTS (
+                SELECT 1
+                FROM (SELECT DISTINCT site_id, year FROM oaq_rows) AS published
+                WHERE published.site_id = archive_all.site_id
+                    AND published.year = archive_all.year
+            )
+            """
+        )
+        connection.execute(
+            """
+            CREATE TABLE air_quality AS
+            SELECT
+                rows.timestamp,
+                COALESCE(stations.state, rows.state) AS state,
+                COALESCE(stations.city, rows.city) AS city,
+                COALESCE(stations.station, rows.station) AS station,
+                rows.* EXCLUDE (timestamp, state, city, station)
+            FROM (SELECT * FROM oaq_rows UNION ALL SELECT * FROM archive_rows) AS rows
+            LEFT JOIN stations USING (site_id)
+            """
+        )
+        for table in ("oaq_rows", "archive_rows", "archive_all"):
+            connection.execute(f"DROP TABLE {table}")
 
     @staticmethod
     def validate_sql(sql: str) -> str:

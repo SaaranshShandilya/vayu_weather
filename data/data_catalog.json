@@ -3,8 +3,35 @@
   "air_quality_end_year": 2025,
   "sources": [
     {
+      "id": "oaq_cpcb",
+      "title": "CPCB air quality and meteorology via OAQ",
+      "provider": "OAQ – India's Open Air Quality Platform (oaq.notf.in); data from the Central Pollution Control Board (CPCB)",
+      "date_start": "2021-01-01",
+      "date_end": "rolling (refreshed from OAQ)",
+      "temporal_granularity": "Daily station observations (IST days)",
+      "geographic_granularity": "CPCB CAAQMS reference stations",
+      "records": null,
+      "fields": [
+        "PM2.5",
+        "PM10",
+        "NO2",
+        "NOx",
+        "NH3",
+        "SO2",
+        "CO",
+        "ozone",
+        "temperature",
+        "humidity",
+        "wind",
+        "total rainfall",
+        "solar radiation"
+      ],
+      "quality": "Daily station means as published by OAQ's CPCB provider; metric-level missing values remain missing and are never imputed. The current year is partial. OAQ's rainfall is the daily total (total rainfall). OAQ's CO from January 2025 to February 2026 is off the mg/m³ scale and is treated as missing, replaced by the CPCB archive's value for the same station-day where one exists. OAQ does not publish NO, 15-minute-mean rainfall, pressure or vertical wind speed.",
+      "provenance": "Fetched from https://oaq.notf.in/v1/provider=cpcb/ (station registry and per-station annual daily aggregates) by scripts/sync_oaq.py; attribution: Central Pollution Control Board (MoEFCC), Govt. of India, via OAQ."
+    },
+    {
       "id": "cpcb_historical",
-      "title": "CPCB air quality and meteorology",
+      "title": "CPCB air quality and meteorology (archive)",
       "provider": "Central Pollution Control Board (CPCB)",
       "date_start": "2017-01-01",
       "date_end": "2024-12-31",
@@ -28,7 +55,7 @@
         "solar radiation",
         "pressure"
       ],
-      "quality": "Daily values are used as published; metric-level missing values remain missing and are never imputed.",
+      "quality": "Daily values are used as published; metric-level missing values remain missing and are never imputed. Used only for station-years OAQ does not publish, chiefly 2017–2020.",
       "provenance": "Bundled historical station table from the Sustainability Lab VayuChat project, derived from CPCB CAAQMS observations."
     },
     {
@@ -57,18 +84,18 @@
         "solar radiation",
         "pressure"
       ],
-      "quality": "Only station-years with at least 330 days reporting a core pollutant were retained. 112 partial station-years and 11 unavailable archives were excluded; no values were imputed.",
+      "quality": "Only station-years with at least 330 days reporting a core pollutant were retained. 112 partial station-years and 11 unavailable archives were excluded; no values were imputed. Used only for station-years OAQ does not publish.",
       "provenance": "Downloaded from CPCB's 1-day raw station archives and retained at station-day grain."
     },
     {
       "id": "station_locations",
       "title": "Monitoring-station locations",
-      "provider": "CPCB station metadata bundled by the Sustainability Lab",
+      "provider": "OAQ CPCB station registry (oaq.notf.in), with addresses from the bundled CPCB station metadata",
       "date_start": null,
       "date_end": null,
       "temporal_granularity": "Static metadata",
-      "geographic_granularity": "535 station points · 277 cities",
-      "records": 535,
+      "geographic_granularity": "OAQ CPCB stations plus archive-only stations",
+      "records": null,
       "fields": [
         "station",
         "site ID",
@@ -78,8 +105,8 @@
         "city",
         "state"
       ],
-      "quality": "Every station in the historical air-quality table has one matched coordinate pair.",
-      "provenance": "Deduplicated from the original VayuChat station metadata table."
+      "quality": "Names and coordinates follow OAQ's registry; stations OAQ no longer lists keep their archive coordinates. Addresses come from the bundled metadata where OAQ has none.",
+      "provenance": "provider=cpcb/meta/devices.csv from OAQ, synced by scripts/sync_oaq.py, merged with the original VayuChat station metadata table."
     },
     {
       "id": "ncap_funding",
